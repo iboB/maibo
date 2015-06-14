@@ -11,11 +11,17 @@ using namespace std;
 
 bool BlockOut::initialize()
 {
-    cout << "Blook!!!" << endl;
+    if (!Application::initialize())
+    {
+        return false;
+    }
+
+    cout << "Works!" << endl;
 
     return true;
 }
 
+// maibo integration
 namespace maibo
 {
     namespace

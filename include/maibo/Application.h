@@ -19,7 +19,25 @@ namespace maibo
         virtual ~Application();
     
     public:
-        virtual bool initialize() = 0;
+        bool isRunning() const { return m_isRunning; }
+
+        // Returns false on error
+        virtual bool initialize();
+        virtual void deinitialize();
+
+        // Function to be called for each appliacation frame
+        void mainLoop();
+
+    protected:
+
+        virtual void beginFrame();
+        virtual void handleInput();
+        virtual void update();
+        virtual void render();
+        virtual void endFrame();
+
+    private:
+        bool m_isRunning = false;
     };
 
     // Users must give body to these functions, creating, returning, and destroying

@@ -12,3 +12,5 @@
 // The best choice is to include those in the library's precompiled header
 
 #include <iostream>
+#include <vector>
+#include <string>

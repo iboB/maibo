@@ -79,6 +79,23 @@ src_group(Maibo sources
     ${INC}/Dependencies.h
 )
 
+src_group(Resources sources
+    ${SRC}/ResourceManager.cpp
+    ${INC}/ResourceManager.h
+    ${INC}/ResourceFuture.h
+)
+
+src_group(Lib sources
+    ${INC}/ExplicitSingleton.h
+    ${INC}/ImplicitSingleton.h
+)
+
+src_group(Tasks sources
+    ${SRC}/TaskManager.cpp
+    ${INC}/TaskManager.h
+    ${INC}/Task.h
+)
+
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/include
 )

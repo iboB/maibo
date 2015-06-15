@@ -30,3 +30,6 @@ Copyright &copy; 2015 Borislav Stanimirov.
 The author would like to thank [Chobolabs](http://www.chobolabs.com/) for their
 support and some pieces of the CMake code which were initially developed at Chobolabs and
 are used here
+
+And, of course, thanks to my lovely wife Maya who was the inspiration behind
+MaiBo and also supplied the first half of the name :)

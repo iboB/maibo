@@ -28,5 +28,5 @@ Copyright &copy; 2015 Borislav Stanimirov.
 ### Thanks to
 
 The author would like to thank [Chobolabs](http://www.chobolabs.com/) for their
-support and some pieces of the CMake code which were initially at Chobolabs and
+support and some pieces of the CMake code which were initially developed at Chobolabs and
 are used here

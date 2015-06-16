@@ -7,6 +7,8 @@
 //
 #include <maibo/Application.h>
 
+#include <maibo/TaskManager.h>
+
 using namespace maibo;
 
 Application::Application()
@@ -19,6 +21,7 @@ Application::~Application()
 
 bool Application::initialize()
 {
+    TaskManager::instance().setNumTasksPerUpdate(1);
     return true;
 }
 
@@ -39,7 +42,7 @@ void Application::handleInput()
 
 void Application::update()
 {
-
+    TaskManager::instance().update();
 }
 
 void Application::render()

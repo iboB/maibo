@@ -63,6 +63,7 @@ int main(int argc, char* argv[])
 #if defined(__EMSCRIPTEN__)
     emscripten_set_main_loop(MainLoop, 0, 1);
 #else
+    RunMainLoop = theApp.isRunning();
     while (RunMainLoop)
     {
         MainLoop();

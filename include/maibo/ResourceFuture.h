@@ -15,13 +15,24 @@
 
 namespace maibo
 {
-    template <typename T>
+    template <typename Resource>
     class ResourceFuture
     {
     public:
         ResourceFuture()
             : m_resource()
         {}
+
+        ResourceFuture(const Resource& resource)
+            : m_resource(resource)
+        {}
+
+        ResourceFuture(Resource&& resource)
+            : m_resource(resource)
+        {}
+
+        ResourceFuture(const ResourceFuture&) = default;
+        ResourceFuture(ResourceFuture&&) = default;
 
         // Is the looading job done 
         // (could be either because the resource is loaded or because of an error)
@@ -33,13 +44,22 @@ namespace maibo
         // 0 = no error
         int errorCode() const { return m_errorCode; }
 
-        T& resource() { return m_resource; }
+        Resource& resource() { return m_resource; }
+
+        // The following are supposed to be called by the various resource tasks
+        // Calling them from the outside may lead to undefined behaviour
+        void setDone() { m_isDone = true; }
+        void setProgress(float progress) { m_progress = progress; }
+        void setErrorCode(int code) { m_errorCode = code; }
 
     private:
         bool m_isDone = false;
         float m_progress = 0;
         int m_errorCode = 0;
 
-        T m_resource;
+        Resource m_resource;
     };
+
+    template <typename Resource>
+    using ResourceFuturePtr = std::shared_ptr<ResourceFuture<Resource>>;
 }

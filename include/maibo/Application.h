@@ -28,7 +28,12 @@ namespace maibo
         // Function to be called for each appliacation frame
         void mainLoop();
 
+        // total number of frames the aplication has run
+        size_t totalFrames() const { return m_totalFrames; }
+
     protected:
+        void startRunning() { m_isRunning = true; }
+        void stopRunning() { m_isRunning = false; }
 
         virtual void beginFrame();
         virtual void handleInput();
@@ -38,6 +43,8 @@ namespace maibo
 
     private:
         bool m_isRunning = false;
+
+        size_t m_totalFrames = 0;
     };
 
     // Users must give body to these functions, creating, returning, and destroying

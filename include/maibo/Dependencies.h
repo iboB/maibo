@@ -36,3 +36,9 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <list>
+#include <memory>
+#include <cassert>
+
+#if defined(__EMSCRIPTEN__)
+#   include <emscripten.h>
+#endif

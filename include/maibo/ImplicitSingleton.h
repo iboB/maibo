@@ -11,7 +11,7 @@
 // the first call of instance will create the object
 // usage: crtp: class SomeClass : public ImplicitSingleton<SomeClass>
 
-namespace
+namespace maibo
 {
     template <typename T>
     class ImplicitSingleton

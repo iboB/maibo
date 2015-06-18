@@ -52,7 +52,6 @@ void Application::render()
 
 void Application::endFrame()
 {
-
 }
 
 void Application::mainLoop()
@@ -62,4 +61,6 @@ void Application::mainLoop()
     update();
     render();
     endFrame();
+
+    ++m_totalFrames;
 }

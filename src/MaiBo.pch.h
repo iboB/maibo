@@ -5,7 +5,6 @@
 // See accompanying file LICENSE.txt or copy at
 // http://opensource.org/licenses/MIT
 //
-#pragma once
 
 // MaiBo precompiled header
 

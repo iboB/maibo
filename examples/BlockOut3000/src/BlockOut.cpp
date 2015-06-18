@@ -10,6 +10,9 @@
 #include <maibo/ResourceManager.h>
 
 using namespace std;
+using namespace maibo;
+
+ResourceFuturePtr<int> future;
 
 bool BlockOut::initialize()
 {
@@ -18,15 +21,29 @@ bool BlockOut::initialize()
         return false;
     }
 
-    cout << "Works!" << endl;
+    startRunning();
 
-    cout << "how about fopen: ";
-
-    int n = maibo::ResourceManager::instance().GetFile("test.txt");
-
-    cout << boolalpha << (n == 0) << endl;
+    future = ResourceManager::instance().GetFileAsync("test.txt");
 
     return true;
+}
+
+void BlockOut::deinitialize()
+{
+    Application::deinitialize();
+
+    cout << "Total frames: " << totalFrames() << endl;
+}
+
+void BlockOut::update()
+{
+    Application::update();
+
+    if (future->isDone())
+    {
+        cout << "Task done with result " << future->resource() << endl;
+        stopRunning();
+    }
 }
 
 // maibo integration

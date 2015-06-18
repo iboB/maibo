@@ -9,7 +9,7 @@
 
 // Resource manager singleton
 
-#include "ImplicitSingleton.h"
+#include "lib/ImplicitSingleton.h"
 #include "ResourceFuture.h"
 
 namespace maibo

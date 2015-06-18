@@ -8,11 +8,11 @@
 #include "BlockOut.h"
 
 #include <maibo/ResourceManager.h>
+#include <maibo/lib/high_res_clock.h>
 
 using namespace std;
 using namespace maibo;
 
-ResourceFuturePtr<vector<char>> future;
 
 bool BlockOut::initialize()
 {
@@ -21,9 +21,9 @@ bool BlockOut::initialize()
         return false;
     }
 
-    startRunning();
+    //startRunning();
 
-    future = ResourceManager::instance().ReadFileAsync("test.txt", true);
+    cout << sizeof(high_res_clock::rep) << endl;
 
     return true;
 }
@@ -38,18 +38,6 @@ void BlockOut::deinitialize()
 void BlockOut::update()
 {
     Application::update();
-
-    if (future->isDone())
-    {
-        cout << "Task done with result: " << endl;
-        for (auto c : future->resource())
-        {
-            cout << c;
-        }
-        cout << endl;
-
-        stopRunning();
-    }
 }
 
 // maibo integration

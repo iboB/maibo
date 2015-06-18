@@ -96,8 +96,10 @@ src_group(Resources sources
 )
 
 src_group(Lib sources
-    ${INC}/ExplicitSingleton.h
-    ${INC}/ImplicitSingleton.h
+    ${INC}/lib/ExplicitSingleton.h
+    ${INC}/lib/ImplicitSingleton.h
+    ${INC}/lib/high_res_clock.h
+    ${SRC}/lib/high_res_clock.cpp
 )
 
 src_group(Tasks sources

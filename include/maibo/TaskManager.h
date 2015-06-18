@@ -11,7 +11,7 @@
 // Since the application is single threaded, the taks will be executed
 // in the same thread in Application::Update
 
-#include "ImplicitSingleton.h"
+#include "lib/ImplicitSingleton.h"
 
 namespace maibo
 {

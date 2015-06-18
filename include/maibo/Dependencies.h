@@ -11,6 +11,22 @@
 // All of these should be included before any MaiBo file
 // The best choice is to include those in the library's precompiled header
 
+// sdl is not situated in a specific folder for msvc
+// who knows why...
+#if defined(_MSC_VER)
+#   include <SDL.h>
+#else
+#   include <SDL2/SDL.h>
+#endif
+
+#if defined(_WIN32)
+#    include <GL/glew.h> //no extensions are available for Windows so use glew
+#else
+#    define GL_GLEXT_PROTOTYPES
+#    include <GL/gl.h>
+#    include <GL/glext.h>
+#endif
+
 #include <iostream>
 #include <vector>
 #include <string>

@@ -7,6 +7,8 @@
 //
 #include "BlockOut.h"
 
+#include <maibo/ResourceManager.h>
+
 using namespace std;
 
 bool BlockOut::initialize()
@@ -17,6 +19,12 @@ bool BlockOut::initialize()
     }
 
     cout << "Works!" << endl;
+
+    cout << "how about fopen: ";
+
+    int n = maibo::ResourceManager::instance().GetFile("test.txt");
+
+    cout << boolalpha << (n == 0) << endl;
 
     return true;
 }

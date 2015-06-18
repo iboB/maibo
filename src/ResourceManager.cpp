@@ -12,6 +12,8 @@
 #include <maibo/Task.h>
 #include <maibo/TaskManager.h>
 
+#include <fstream>
+
 using namespace maibo;
 using namespace std;
 
@@ -37,9 +39,9 @@ namespace
     {
     public:
         GetFileTask(const std::string& path)
-            : m_path(path)
+            : future(new ResourceFuture<int>)
+            , m_path(path)
         {
-            future = make_shared<ResourceFuture<int>>();
         }
 
         bool Execute() override
@@ -176,3 +178,100 @@ ResourceFuturePtr<int> ResourceManager::GetFileAsync(const string& path)
 }
 
 #endif
+
+namespace
+{
+    int InternalReadFile(const char* path, vector<char>& outData)
+    {
+        ifstream fin(path, ios::in | ios::binary);
+
+        if (!fin.is_open())
+        {
+            return 1;
+        }
+
+        streamoff begin = fin.tellg();
+        fin.seekg(0, ios::end);
+        size_t fileSize = size_t(fin.tellg() - begin);
+        fin.seekg(0, ios::beg);
+
+        outData.resize(fileSize + 1);
+
+        fin.read(&outData.front(), fileSize);
+
+        return 0;
+    }
+}
+
+std::vector<char> ResourceManager::ReadFile(const string& path)
+{
+    vector<char> ret;
+    InternalReadFile(path.c_str(), ret);
+    return ret;
+}
+
+namespace
+{
+    class ReadFileTask : public Task
+    {
+    public:
+        ReadFileTask(const std::string& path, ConstResourceFuturePtr<int> getFileFuture = nullptr)
+            : future(new ResourceFuture<vector<char>>)
+            , m_path(path)
+            , m_getFileFuture(getFileFuture)
+        {
+        }
+
+        bool Execute() override
+        {
+            if (m_getFileFuture)
+            {
+                if (!m_getFileFuture->isDone())
+                {
+                    // if there is a getFile async task associated with this one, we must wait for it
+                    return false;
+                }
+
+                int error = m_getFileFuture->errorCode();
+                if (error != 0)
+                {
+                    future->setProgress(1.f);
+                    future->setErrorCode(error);
+                    future->setDone();
+                    return true;
+                }
+            }
+
+            // either we've gotten the resource or no get resource op was started, so just read it
+            int error = InternalReadFile(m_path.c_str(), future->resource());
+            future->setErrorCode(error);
+            future->setProgress(1.f);
+            future->setDone();
+            return true;
+        }
+        
+        ResourceFuturePtr<vector<char>> future;
+
+    private:
+        string m_path;
+        ConstResourceFuturePtr<int> m_getFileFuture;
+    };
+}
+
+ResourceFuturePtr<std::vector<char>> ResourceManager::ReadFileAsync(const string& path, bool alsoGetFile)
+{
+    ReadFileTask* task;
+
+    if (alsoGetFile)
+    {
+        auto future = GetFileAsync(path);
+        task = new ReadFileTask(path, future);
+    }
+    else
+    {
+        task = new ReadFileTask(path);
+    }
+
+    TaskManager::instance().pushTask(task);
+    return task->future;
+}

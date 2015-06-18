@@ -12,7 +12,7 @@
 using namespace std;
 using namespace maibo;
 
-ResourceFuturePtr<int> future;
+ResourceFuturePtr<vector<char>> future;
 
 bool BlockOut::initialize()
 {
@@ -23,7 +23,7 @@ bool BlockOut::initialize()
 
     startRunning();
 
-    future = ResourceManager::instance().GetFileAsync("test.txt");
+    future = ResourceManager::instance().ReadFileAsync("test.txt", true);
 
     return true;
 }
@@ -41,7 +41,13 @@ void BlockOut::update()
 
     if (future->isDone())
     {
-        cout << "Task done with result " << future->resource() << endl;
+        cout << "Task done with result: " << endl;
+        for (auto c : future->resource())
+        {
+            cout << c;
+        }
+        cout << endl;
+
         stopRunning();
     }
 }

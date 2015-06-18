@@ -32,7 +32,7 @@ namespace maibo
         // Reads a file from the fs and stores it to the vector
         // The manager does NOT check if the file has been read or obtained before
         // This means that the read op will happen every time when you request it
-        std::vector<char> ReadFile(const std::string& path, bool alsoGetFile = false);
+        std::vector<char> ReadFile(const std::string& path); // no alsoGetFile, since we don't support a synchronous get
         ResourceFuturePtr<std::vector<char>> ReadFileAsync(const std::string& path, bool alsoGetFile = false);
 
     };

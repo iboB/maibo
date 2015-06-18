@@ -62,4 +62,7 @@ namespace maibo
 
     template <typename Resource>
     using ResourceFuturePtr = std::shared_ptr<ResourceFuture<Resource>>;
+
+    template <typename Resource>
+    using ConstResourceFuturePtr = std::shared_ptr<const ResourceFuture<Resource>>;
 }

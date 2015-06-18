@@ -1,0 +1,6 @@
+# Windows libraries
+
+lib/SDL2-2.0.3
+lib/glew-1.11.0
+lib/SDL2_image-2.0.0
+

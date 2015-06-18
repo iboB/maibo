@@ -29,10 +29,19 @@ if(EMSCRIPTEN)
     set(MAIBO_PLATFORM_EMSCRIPTEN 1)
 elseif(CMAKE_HOST_WIN32)
     set(MAIBO_PLATFORM_WINDOWS 1)
+    set(MAIBO_PLATFORM_DESKTOP 1)
 elseif(CMAKE_HOST_UNIX)
     set(MAIBO_PLATFORM_UNIX 1)
+    set(MAIBO_PLATFORM_DESKTOP 1)
 else()
     message(FATAL_ERROR "Unknown target platform for the MAIBO build")
+endif()
+
+# Set target bitness
+if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+    set(MAIBO_64_BIT 1)
+else()
+    set(MAIBO_32_BIT 1)
 endif()
 
 # Set a default build type for non-multi build type platforms
@@ -63,6 +72,7 @@ set(SRC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(INC ${CMAKE_CURRENT_SOURCE_DIR}/include/maibo)
 
 # Set platform specific sources, include dirs, library dirs, and link libraries
+set(platformSources)
 if(MAIBO_PLATFORM_EMSCRIPTEN)
 elseif(MAIBO_PLATFORM_WINDOWS)
 elseif(MAIBO_PLATFORM_UNIX)
@@ -98,27 +108,44 @@ src_group(Tasks sources
 
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${THIRD_PARTY_INCLUDE_DIRS}
 )
 
+# add definitions
+if(MSVC)
+    add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+endif()
+
+if(MAIBO_PLATFORM_DESKTOP)
+    add_definitions(-DMAIBO_PLATFORM_DESKTOP)
+endif()
+
 add_library(maibo STATIC
+    ${platformSources}
     ${sources}
 )
 
 maibo_target_properties(maibo)
 add_precompiled_header(maibo ${SRC}/MaiBo.pch.h ${SRC}/MaiBo.pch.cpp)
 
+# third party libraries
+add_subdirectory(third_party/lib)
+
 set(MAIBO_INCLUDE_DIRS
     ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${THIRD_PARTY_INCLUDE_DIRS}
     CACHE STRING "MaiBo include paths"
 )
 
 set(MAIBO_LIB_DIRS
     ${CMAKE_CURRENT_BINARY_DIR}
+    ${THIRD_PARTY_LINK_DIRS}
     CACHE STRING "MaiBo library paths"
 )
 
 set(MAIBO_LIBS
     maibo
+    ${THIRD_PARTY_LIBS}
     CACHE STRING "MaiBo link libraries"
 )
 

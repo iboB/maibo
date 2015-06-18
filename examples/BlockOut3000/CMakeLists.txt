@@ -31,4 +31,8 @@ target_link_libraries(BlockOut3000 ${MAIBO_LIBS})
 maibo_target_properties(BlockOut3000)
 add_precompiled_header(BlockOut3000 ${SRC}/BlockOut.pch.h ${SRC}/BlockOut.pch.cpp)
 
+if(MSVC)
+    configure_msvc_user_file(BlockOut3000 ${CMAKE_CURRENT_SOURCE_DIR})
+endif()
+
 set_target_properties(BlockOut3000 PROPERTIES FOLDER Examples)

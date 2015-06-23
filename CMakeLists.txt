@@ -87,6 +87,8 @@ src_group(Maibo sources
     ${SRC}/MaiBo.pch.h
     ${SRC}/MaiBo.pch.cpp
     ${INC}/Dependencies.h
+    ${SRC}/MainWindow.cpp
+    ${INC}/MainWindow.h
 )
 
 src_group(Resources sources
@@ -107,6 +109,9 @@ src_group(Tasks sources
     ${INC}/TaskManager.h
     ${INC}/Task.h
 )
+
+# third party libraries
+add_subdirectory(third_party/lib)
 
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/include
@@ -129,9 +134,6 @@ add_library(maibo STATIC
 
 maibo_target_properties(maibo)
 add_precompiled_header(maibo ${SRC}/MaiBo.pch.h ${SRC}/MaiBo.pch.cpp)
-
-# third party libraries
-add_subdirectory(third_party/lib)
 
 set(MAIBO_INCLUDE_DIRS
     ${CMAKE_CURRENT_SOURCE_DIR}/include

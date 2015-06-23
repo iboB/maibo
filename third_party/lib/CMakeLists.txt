@@ -37,13 +37,13 @@ endif()
 
 set(THIRD_PARTY_INCLUDE_DIRS
     ${platformIncDirs}
+    ${CMAKE_CURRENT_SOURCE_DIR}/mathgp
     CACHE STRING "MaiBo third party include paths"
 )
 
 set(THIRD_PARTY_LINK_DIRS
     ${platformLinkDirs}
     CACHE STRING "MaiBo third party link paths"
-
 )
 
 set(THIRD_PARTY_LIBS

@@ -3,6 +3,10 @@
 
 project(SDL2_main)
 
+include_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}/../SDL2-2.0.3/include
+)
+
 add_library(SDL2_main STATIC
     SDL_windows_main.c
     SDL_windows.c

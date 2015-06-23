@@ -12,6 +12,8 @@
 
 namespace maibo
 {
+    class MainWindow;
+
     class Application
     {
     protected:
@@ -22,7 +24,7 @@ namespace maibo
         bool isRunning() const { return m_isRunning; }
 
         // Returns false on error
-        virtual bool initialize();
+        virtual bool initialize() = 0;
         virtual void deinitialize();
 
         // Function to be called for each appliacation frame
@@ -37,6 +39,31 @@ namespace maibo
         virtual void update();
         virtual void render();
         virtual void endFrame();
+
+        struct CreationParameters
+        {
+            // number of "async" tasks to execute per Application::update
+            uint32_t numTasksPerUpdate = 1;
+
+            // desired frame time in milliseconds
+            // ignored in emscripten (frame-rate is fixed by the browser)
+            // 0 means the fastest possible framerate
+            uint32_t desiredFrameTimeMs = 0;
+
+            ///////////////////////////////
+            // window creation
+            bool createMainWindow = true; // will there be a main window?
+            const char* mainWindowTitle = "MaiBo App";
+            mathgp::uvector2 mainWindowClientAreaSize = mathgp::v(800u, 600u);
+            bool isFullScreen = false;
+        };
+
+        // actual initialization function
+        // you must call it from you override of initialize()
+        // return false on error
+        bool initialize(const CreationParameters& creationParameters);
+
+        MainWindow* m_mainWindow = nullptr;
 
     private:
         bool m_isRunning = false;

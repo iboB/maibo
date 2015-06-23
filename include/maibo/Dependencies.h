@@ -42,3 +42,5 @@
 #if defined(__EMSCRIPTEN__)
 #   include <emscripten.h>
 #endif
+
+#include <mathgp/mathgp.h>

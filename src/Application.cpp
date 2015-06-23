@@ -9,6 +9,7 @@
 
 #include <maibo/TaskManager.h>
 #include <maibo/lib/high_res_clock.h>
+#include <maibo/MainWindow.h>
 
 #if !defined(__EMSCRIPTEN__)
 #   include <thread>
@@ -25,15 +26,41 @@ Application::~Application()
 {
 }
 
-bool Application::initialize()
+bool Application::initialize(const Application::CreationParameters& cp)
 {
-    TaskManager::instance().setNumTasksPerUpdate(1);
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) < 0)
+    {
+        cerr << "Couldn't init sdl" << endl;
+        return false;
+    }
+
+    MainWindow::CreationParameters mwc;
+    mwc.clientAreaSize = cp.mainWindowClientAreaSize;
+    mwc.isFullScreen = cp.isFullScreen;
+    mwc.title = cp.mainWindowTitle;
+    m_mainWindow = new MainWindow;
+    if (!m_mainWindow->create(mwc))
+    {
+        return false;
+    }
+
+#if defined(_WIN32)
+    if (glewInit() != GLEW_OK)
+    {
+        cerr << "couldn't init glew" << endl;
+    }
+#endif
+
+    TaskManager::instance().setNumTasksPerUpdate(cp.numTasksPerUpdate);
+
     return true;
 }
 
 void Application::deinitialize()
 {
-
+    delete m_mainWindow;
+    m_mainWindow = nullptr;
+    SDL_Quit();
 }
 
 void Application::beginFrame()

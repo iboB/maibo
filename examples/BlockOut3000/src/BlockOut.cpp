@@ -16,7 +16,9 @@ using namespace maibo;
 
 bool BlockOut::initialize()
 {
-    if (!Application::initialize())
+    Application::CreationParameters params;
+
+    if (!Application::initialize(params))
     {
         return false;
     }

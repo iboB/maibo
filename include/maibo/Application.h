@@ -68,6 +68,10 @@ namespace maibo
     private:
         bool m_isRunning = false;
 
+        // wireframe rendering
+        // not supported on WebGL or GL ES platforms
+        bool m_isWireframe = false;
+
         //////////////////////////////////////
         // time and fps stuff
     public:

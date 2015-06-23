@@ -23,7 +23,7 @@ bool BlockOut::initialize()
         return false;
     }
 
-    //startRunning();
+    startRunning();
 
     cout << sizeof(high_res_clock::rep) << endl;
 

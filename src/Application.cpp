@@ -11,6 +11,8 @@
 #include <maibo/lib/high_res_clock.h>
 #include <maibo/MainWindow.h>
 
+#include <sstream>
+
 #if !defined(__EMSCRIPTEN__)
 #   include <thread>
 #endif
@@ -70,7 +72,29 @@ void Application::beginFrame()
 
 void Application::handleInput()
 {
-
+    SDL_Event event;
+    while (SDL_PollEvent(&event))
+    {
+        if (event.type == SDL_QUIT)
+        {
+            m_isRunning = false;
+        }
+        else if (event.type == SDL_KEYUP)
+        {
+            switch (event.key.keysym.sym)
+            {
+            case SDLK_ESCAPE:
+                m_isRunning = false;
+                break;
+#if defined(MAIBO_PLATFORM_DESKTOP)
+            case SDLK_p:
+                m_isWireframe = !m_isWireframe;
+                glPolygonMode(GL_FRONT_AND_BACK, m_isWireframe ? GL_LINE : GL_FILL);
+                break;
+#endif
+            }
+        }
+    }
 }
 
 void Application::update()
@@ -85,6 +109,7 @@ void Application::render()
 
 void Application::endFrame()
 {
+    m_mainWindow->swapBuffers();
 }
 
 void Application::mainLoop()
@@ -125,9 +150,9 @@ void Application::updateFPSData()
         m_lastFPSStatusUpdateTime = now;
         m_lastFPSStatusUpdateFrame = m_totalFrames;
 
-        //ostringstream sout;
-        //sout << "mean frame time: " << m_meanFrameTime << " ms | fps: " << m_fps;
-        //m_mainWindow->setTitle(sout.str().c_str());
+        ostringstream sout;
+        sout << "ft: " << m_meanFrameTime << " ms | fps: " << m_fps;
+        m_mainWindow->setTitle(sout.str().c_str());
     }
 }
 

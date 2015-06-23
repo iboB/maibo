@@ -1,4 +1,4 @@
-// MaiBo
+// MaiBo - BlockOut3000
 // Copyright(c) 2015 Borislav Stanimirov
 //
 // Distributed under the MIT Software License

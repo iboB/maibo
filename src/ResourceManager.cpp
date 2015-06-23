@@ -8,6 +8,8 @@
 
 #include <maibo/ResourceManager.h>
 
+#include "ResourceTask.h"
+
 #include <maibo/ResourceFuture.h>
 #include <maibo/Task.h>
 #include <maibo/TaskManager.h>
@@ -44,7 +46,7 @@ namespace
         {
         }
 
-        bool Execute() override
+        bool execute() override
         {
             int result = ResourceManager::instance().checkFileExists(m_path);
             future->resource() = result;
@@ -212,49 +214,26 @@ std::vector<char> ResourceManager::ReadFile(const string& path)
 
 namespace
 {
-    class ReadFileTask : public Task
+    class ReadFileTask : public ResourceTask<vector<char>, int>
     {
     public:
         ReadFileTask(const std::string& path, ConstResourceFuturePtr<int> getFileFuture = nullptr)
-            : future(new ResourceFuture<vector<char>>)
+            : ResourceTask(getFileFuture)
             , m_path(path)
-            , m_getFileFuture(getFileFuture)
         {
         }
 
-        bool Execute() override
+        bool safeExecute() override
         {
-            if (m_getFileFuture)
-            {
-                if (!m_getFileFuture->isDone())
-                {
-                    // if there is a getFile async task associated with this one, we must wait for it
-                    return false;
-                }
-
-                int error = m_getFileFuture->errorCode();
-                if (error != 0)
-                {
-                    future->setProgress(1.f);
-                    future->setErrorCode(error);
-                    future->setDone();
-                    return true;
-                }
-            }
-
-            // either we've gotten the resource or no get resource op was started, so just read it
             int error = InternalReadFile(m_path.c_str(), future->resource());
             future->setErrorCode(error);
             future->setProgress(1.f);
             future->setDone();
             return true;
         }
-        
-        ResourceFuturePtr<vector<char>> future;
 
     private:
         string m_path;
-        ConstResourceFuturePtr<int> m_getFileFuture;
     };
 }
 

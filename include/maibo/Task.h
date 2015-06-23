@@ -18,6 +18,6 @@ namespace maibo
 
         // Return true if the task has been complete on this call of execute
         // Return false if execute needs to be called again on the next available opportunity
-        virtual bool Execute() = 0;
+        virtual bool execute() = 0;
     };
 }

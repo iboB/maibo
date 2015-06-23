@@ -26,7 +26,7 @@ void TaskManager::update()
         if (m_tasks.empty())
             break;
 
-        if (m_tasks.front()->Execute())
+        if (m_tasks.front()->execute())
         {
             delete m_tasks.front();
             m_tasks.pop();

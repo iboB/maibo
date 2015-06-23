@@ -95,6 +95,7 @@ src_group(Resources sources
     ${SRC}/ResourceManager.cpp
     ${INC}/ResourceManager.h
     ${INC}/ResourceFuture.h
+    ${SRC}/ResourceTask.h
 )
 
 src_group(Lib sources

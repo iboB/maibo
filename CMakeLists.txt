@@ -111,6 +111,12 @@ src_group(Tasks sources
     ${INC}/Task.h
 )
 
+src_group(States sources
+    ${SRC}/AppStateManager.cpp
+    ${INC}/AppStateManager.h
+    ${INC}/AppState.h
+)
+
 # third party libraries
 add_subdirectory(third_party/lib)
 

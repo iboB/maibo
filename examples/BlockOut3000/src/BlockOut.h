@@ -14,6 +14,7 @@ class BlockOut : public maibo::Application
 public:
     virtual bool initialize() override;
     virtual void deinitialize() override;
+    virtual void render() override;
 
     virtual void update() override;
 };

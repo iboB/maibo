@@ -23,9 +23,13 @@ bool BlockOut::initialize()
         return false;
     }
 
-    startRunning();
+    glEnable(GL_DEPTH_TEST); // z buffer
+    glEnable(GL_CULL_FACE); // cull back (CW) faces
 
-    cout << sizeof(high_res_clock::rep) << endl;
+    glClearColor(0.0f, 0.1f, 0.4f, 1); // backbuffer clear color
+    glClearDepth(1); // z buffer clear value
+
+    startRunning();
 
     return true;
 }
@@ -40,6 +44,13 @@ void BlockOut::deinitialize()
 void BlockOut::update()
 {
     Application::update();
+}
+
+void BlockOut::render()
+{
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    Application::render();
 }
 
 // maibo integration

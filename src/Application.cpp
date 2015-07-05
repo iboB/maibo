@@ -50,6 +50,7 @@ bool Application::initialize(const Application::CreationParameters& cp)
     if (glewInit() != GLEW_OK)
     {
         cerr << "couldn't init glew" << endl;
+        return false;
     }
 #endif
 

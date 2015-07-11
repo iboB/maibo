@@ -53,6 +53,11 @@ void BlockOut::render()
     Application::render();
 }
 
+void BlockOut::onSetStateError(AppState* state)
+{
+    // nothing to do yet
+}
+
 // maibo integration
 namespace maibo
 {

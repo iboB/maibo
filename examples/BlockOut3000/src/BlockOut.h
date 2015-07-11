@@ -17,4 +17,6 @@ public:
     virtual void render() override;
 
     virtual void update() override;
+
+    virtual void onSetStateError(maibo::AppState* state) override;
 };

@@ -13,6 +13,7 @@
 namespace maibo
 {
     class MainWindow;
+    class AppState;
 
     class Application
     {
@@ -71,6 +72,24 @@ namespace maibo
         // wireframe rendering
         // not supported on WebGL or GL ES platforms
         bool m_isWireframe = false;
+
+        //////////////////////////////////////
+        // states
+    public:
+        void setState(AppState* state);
+
+        // called when a state, set to the application failed to initialize
+        // it's parameter is the failed state
+        // WARNING: you must set a valid state if the state change fails
+        // the current application state will be set to nullptr
+        virtual void onSetStateError(AppState* state) = 0;
+
+    private:
+        // check if there is a state pending to be set
+        void checkForStateChange();
+
+        AppState* m_currentState = nullptr;
+        AppState* m_nextState = nullptr;
 
         //////////////////////////////////////
         // time and fps stuff

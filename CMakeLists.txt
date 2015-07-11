@@ -56,7 +56,7 @@ endif()
 if(MAIBO_PLATFORM_EMSCRIPTEN)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wno-warn-absolute-paths -s USE_SDL=2 -s USE_SDL_IMAGE=2")
 
-    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0 -g4")
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O2")
 elseif(MSVC)
     # Nothing for now
@@ -103,6 +103,7 @@ src_group(Lib sources
     ${INC}/lib/ImplicitSingleton.h
     ${INC}/lib/high_res_clock.h
     ${SRC}/lib/high_res_clock.cpp
+    ${INC}/lib/memory.h
 )
 
 src_group(Tasks sources
@@ -112,8 +113,6 @@ src_group(Tasks sources
 )
 
 src_group(States sources
-    ${SRC}/AppStateManager.cpp
-    ${INC}/AppStateManager.h
     ${INC}/AppState.h
 )
 

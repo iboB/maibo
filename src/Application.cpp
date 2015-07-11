@@ -10,6 +10,7 @@
 #include <maibo/TaskManager.h>
 #include <maibo/lib/high_res_clock.h>
 #include <maibo/MainWindow.h>
+#include <maibo/AppState.h>
 
 #include <sstream>
 
@@ -61,8 +62,12 @@ bool Application::initialize(const Application::CreationParameters& cp)
 
 void Application::deinitialize()
 {
-    delete m_mainWindow;
-    m_mainWindow = nullptr;
+    m_currentState->deinitialize();
+    safe_delete(m_currentState);
+    safe_delete(m_nextState);
+
+    safe_delete(m_mainWindow);
+
     SDL_Quit();
 }
 
@@ -128,6 +133,8 @@ void Application::mainLoop()
     ++m_totalFrames;
     updateFPSData();
 
+    checkForStateChange();
+
 #if !defined (__EMSCRIPTEN__)
     uint32_t frameLength = getTicks() - m_currentFrameTime;
     if (frameLength < m_desiredFrameTime)
@@ -165,4 +172,58 @@ uint32_t Application::getTicks() const
     static auto start = high_res_clock::now();
     auto time = high_res_clock::now() - start;
     return uint32_t(chrono::duration_cast<chrono::milliseconds>(time).count()) + 1;
+}
+
+void Application::setState(AppState* newState)
+{
+    if (m_currentState)
+    {
+        // if there is an existing state finish its cycle, and then 
+        // set the new state on the next update
+        if (m_nextState)
+        {
+            m_nextState->deinitialize();
+            delete m_nextState;
+        }
+
+        m_nextState = newState;
+    }
+    else
+    {
+        assert(!m_nextState);
+        
+        if (!newState->initialize())
+        {
+            onSetStateError(newState);
+        }
+        else
+        {
+            m_currentState = newState;
+        }
+    }
+}
+
+void Application::checkForStateChange()
+{
+    if (m_nextState)
+    {
+        // there is a next state to be set
+        // finish with the current one and set the next
+
+        assert(m_currentState);
+        m_currentState->deinitialize();
+        
+        safe_delete(m_currentState);
+
+        if (!m_nextState->initialize())
+        {
+            onSetStateError(m_nextState);
+        }
+        else
+        {
+            m_currentState = m_nextState;
+        }
+        
+        m_nextState = nullptr;
+    }
 }

@@ -1,0 +1,79 @@
+// MaiBo
+// Copyright(c) 2015 Borislav Stanimirov
+//
+// Distributed under the MIT Software License
+// See accompanying file LICENSE.txt or copy at
+// http://opensource.org/licenses/MIT
+//
+#include <maibo/Shader.h>
+
+using namespace std;
+using namespace maibo;
+
+Shader::Shader(ShaderType::Type t)
+    : Shader(t, "<unnamed shader>")
+{
+}
+
+Shader::Shader(ShaderType::Type t, const std::string& name)
+    : m_type(t)
+    , m_name(name)
+{
+    switch (t)
+    {
+    case ShaderType::Vertex:
+        m_glType = GL_VERTEX_SHADER;
+        break;
+    //case ShaderType::Geometry:
+    //    m_glType = GL_GEOMETRY_SHADER;
+    //    break;
+    case ShaderType::Fragment:
+        m_glType = GL_FRAGMENT_SHADER;
+        break;
+    default:
+        // unknown shader type
+        assert(false);
+    }
+
+    m_glHandle = glCreateShader(m_glType);
+
+    assert(m_glHandle);
+}
+
+Shader::~Shader()
+{
+    if (m_glHandle)
+        glDeleteShader(m_glHandle);
+}
+
+bool Shader::load(const char* buffer)
+{
+    glShaderSource(m_glHandle, 1, &buffer, nullptr);
+    glCompileShader(m_glHandle);
+
+    GLint isCompiled;
+    glGetShaderiv(m_glHandle, GL_COMPILE_STATUS, &isCompiled);
+
+    GLint infoLen = 0;
+    glGetShaderiv(m_glHandle, GL_INFO_LOG_LENGTH, &infoLen);
+
+    if (infoLen > 1)
+    {
+        std::unique_ptr<char[]> infoLog(new char[infoLen]);
+        glGetShaderInfoLog(m_glHandle, infoLen, nullptr, infoLog.get());
+
+        if (!isCompiled)
+        {
+            cerr << "errors compiling " << m_name << ":" << endl;
+            cerr << infoLog.get() << endl;
+            return false;
+        }
+        else
+        {
+            cout << "warnings compiling " << m_name << ":" << endl;
+            cout << infoLog.get() << endl;
+        }
+    }
+
+    return true;
+}

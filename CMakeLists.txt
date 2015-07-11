@@ -116,6 +116,17 @@ src_group(States sources
     ${INC}/AppState.h
 )
 
+src_group(Rendering~Material sources
+    ${SRC}/Shader.cpp
+    ${INC}/Shader.h
+    ${INC}/ShaderPtr.h
+    ${INC}/ShaderType.h
+    ${SRC}/GPUProgram.cpp
+    ${INC}/GPUProgram.h
+    ${INC}/GPUProgramPtr.h
+)
+
+
 # third party libraries
 add_subdirectory(third_party/lib)
 

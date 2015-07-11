@@ -44,3 +44,5 @@
 #endif
 
 #include <mathgp/mathgp.h>
+
+#include "lib/Macros.h"

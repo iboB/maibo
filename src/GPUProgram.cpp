@@ -89,7 +89,7 @@ void GPUProgram::resetUniforms()
 uint32_t GPUProgram::bindCustomAttribute(const char* name)
 {
     glBindAttribLocation(m_glHandle, m_boundAttribPtr, name);
-    return ++m_boundAttribPtr;
+    return m_boundAttribPtr++;
 }
 
 GLint GPUProgram::getParameterByName(const char* name) const

@@ -16,7 +16,7 @@
 bool LoadAllState::initialize()
 {
     auto& rm = maibo::ResourceManager::instance();
-    m_uniformColorFuture = rm.loadGPUProgramAsync("resources/pos.vert", "resources/u_color.vert", true);
+    m_uniformColorFuture = rm.loadGPUProgramAsync("resources/pos.vert", "resources/u_color.frag", true);
     addResourceFuture(m_uniformColorFuture);
 
     glClearColor(1, 0.1f, 0.4f, 1);

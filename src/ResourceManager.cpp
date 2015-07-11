@@ -200,7 +200,7 @@ namespace
         size_t fileSize = size_t(fin.tellg() - begin);
         fin.seekg(0, ios::beg);
 
-        outData.resize(fileSize + 1);
+        outData.resize(fileSize);
 
         fin.read(&outData.front(), fileSize);
 

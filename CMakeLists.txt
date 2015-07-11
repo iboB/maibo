@@ -104,6 +104,8 @@ src_group(Lib sources
     ${INC}/lib/high_res_clock.h
     ${SRC}/lib/high_res_clock.cpp
     ${INC}/lib/memory.h
+    ${INC}/lib/GLSentries.h
+    ${INC}/lib/Macros.h
 )
 
 src_group(Tasks sources

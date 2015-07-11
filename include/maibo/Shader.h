@@ -23,9 +23,14 @@ namespace maibo
         // buffer is simply the shader text
         bool load(const char* buffer);
 
+        // load through a vector of char
+        bool load(const std::vector<char>& buffer);
+
         ShaderType::Type type() const { return m_type; }
 
     private:
+        bool compile();
+
         friend class GPUProgram;
 
         ShaderType::Type m_type;

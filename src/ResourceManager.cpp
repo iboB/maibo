@@ -14,6 +14,9 @@
 #include <maibo/Task.h>
 #include <maibo/TaskManager.h>
 
+#include <maibo/Shader.h>
+#include <maibo/GPUProgram.h>
+
 #include <fstream>
 
 using namespace maibo;
@@ -64,7 +67,7 @@ namespace
     };
 }
 
-ResourceFuturePtr<int> ResourceManager::GetFileAsync(const string& path)
+ResourceFuturePtr<int> ResourceManager::getFileAsync(const string& path)
 {
     auto task = new GetFileTask(path);
     TaskManager::instance().pushTask(task);
@@ -152,7 +155,7 @@ namespace
     }
 }
 
-ResourceFuturePtr<int> ResourceManager::GetFileAsync(const string& path)
+ResourceFuturePtr<int> ResourceManager::getFileAsync(const string& path)
 {
     auto future = make_shared<ResourceFuture<int>>();
 
@@ -205,7 +208,7 @@ namespace
     }
 }
 
-std::vector<char> ResourceManager::ReadFile(const string& path)
+std::vector<char> ResourceManager::readFile(const string& path)
 {
     vector<char> ret;
     InternalReadFile(path.c_str(), ret);
@@ -237,13 +240,13 @@ namespace
     };
 }
 
-ResourceFuturePtr<std::vector<char>> ResourceManager::ReadFileAsync(const string& path, bool alsoGetFile)
+ResourceFuturePtr<std::vector<char>> ResourceManager::readFileAsync(const string& path, bool alsoGetFile)
 {
     ReadFileTask* task;
 
     if (alsoGetFile)
     {
-        auto future = GetFileAsync(path);
+        auto future = getFileAsync(path);
         task = new ReadFileTask(path, future);
     }
     else
@@ -252,5 +255,94 @@ ResourceFuturePtr<std::vector<char>> ResourceManager::ReadFileAsync(const string
     }
 
     TaskManager::instance().pushTask(task);
+    return task->future;
+}
+
+namespace
+{
+    class LoadShaderTask : public ResourceTask<ShaderPtr, vector<char>>
+    {
+    public:
+        LoadShaderTask(const string& shaderName, const ShaderType::Type shaderType, ConstResourceFuturePtr<vector<char>> readFileFuture)
+            : ResourceTask(readFileFuture)
+            , m_shaderName(shaderName)
+            , m_shaderType(shaderType)
+        {
+        }
+
+        bool safeExecute() override
+        {
+            future->resource() = make_shared<Shader>(m_shaderType, m_shaderName);
+            
+            int error = !future->resource()->load(m_dependentFuture->resource());
+            
+            future->setErrorCode(error);
+            future->setProgress(1.f);
+            future->setDone();
+            return true;
+        }
+
+    private:
+        const string m_shaderName;
+        const ShaderType::Type m_shaderType;
+    };
+}
+
+ResourceFuturePtr<ShaderPtr> ResourceManager::loadShaderAsync(const std::string& path, ShaderType::Type type, bool alsoGetFile)
+{
+    auto future = readFileAsync(path, alsoGetFile);
+
+    auto task = new LoadShaderTask(path, type, future);
+    TaskManager::instance().pushTask(task);
+
+    return task->future;
+}
+
+namespace
+{
+    class LoadGPUProgramTask : public ResourceTask<GPUProgramPtr, ShaderPtr>
+    {
+    public:
+        LoadGPUProgramTask(const string& programName, ConstResourceFuturePtr<ShaderPtr> vsFuture, ConstResourceFuturePtr<ShaderPtr> fsFuture)
+            : ResourceTask(fsFuture)
+            , m_programName(programName)
+            , m_vsFuture(vsFuture)
+            , m_fsFuture(fsFuture)
+        {
+        }
+
+        bool safeExecute() override
+        {
+            assert(m_vsFuture->isDone());
+            assert(m_fsFuture->isDone());
+
+            future->resource() = make_shared<GPUProgram>(m_programName);
+
+            future->resource()->attachShader(m_vsFuture->resource());
+            future->resource()->attachShader(m_fsFuture->resource());
+
+            int error = !future->resource()->link();
+
+            future->setErrorCode(error);
+            future->setProgress(1.f);
+            future->setDone();
+            return true;
+        }
+
+    private:
+        const string m_programName;
+        ConstResourceFuturePtr<ShaderPtr> m_vsFuture;
+        ConstResourceFuturePtr<ShaderPtr> m_fsFuture;
+    };
+}
+
+ResourceFuturePtr<GPUProgramPtr> ResourceManager::loadGPUProgramAsync(const std::string& vertexShaderPath, const std::string& fragmentShaderPath, bool alsoGetFiles)
+{
+    auto vsFuture = loadShaderAsync(vertexShaderPath, ShaderType::Vertex, alsoGetFiles);
+    auto fsFuture = loadShaderAsync(fragmentShaderPath, ShaderType::Fragment, alsoGetFiles);
+
+    auto task = new LoadGPUProgramTask(vertexShaderPath + fragmentShaderPath, vsFuture, fsFuture);
+    TaskManager::instance().pushTask(task);
+
     return task->future;
 }

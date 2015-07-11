@@ -73,7 +73,7 @@ void Application::deinitialize()
 
 void Application::beginFrame()
 {
-
+    m_currentState->beginFrame();
 }
 
 void Application::handleInput()
@@ -81,6 +81,12 @@ void Application::handleInput()
     SDL_Event event;
     while (SDL_PollEvent(&event))
     {
+        // let the state handle events with top priority
+        if (m_currentState->handleEvent(event))
+        {
+            continue;
+        }
+
         if (event.type == SDL_QUIT)
         {
             m_isRunning = false;
@@ -100,21 +106,25 @@ void Application::handleInput()
 #endif
             }
         }
+
+
     }
 }
 
 void Application::update()
 {
     TaskManager::instance().update();
+    m_currentState->update(m_timeSinceLastFrame);
 }
 
 void Application::render()
 {
-
+    m_currentState->render();
 }
 
 void Application::endFrame()
 {
+    m_currentState->render();
     m_mainWindow->swapBuffers();
 }
 

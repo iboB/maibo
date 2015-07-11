@@ -49,6 +49,19 @@ Shader::~Shader()
 bool Shader::load(const char* buffer)
 {
     glShaderSource(m_glHandle, 1, &buffer, nullptr);
+    return compile();
+}
+
+bool Shader::load(const vector<char>& buffer)
+{
+    const char* buf = &buffer.front();
+    GLint length = GLint(buffer.size());
+    glShaderSource(m_glHandle, 1, &buf, &length);
+    return compile();
+}
+
+bool Shader::compile()
+{
     glCompileShader(m_glHandle);
 
     GLint isCompiled;

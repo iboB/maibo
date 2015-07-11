@@ -114,6 +114,8 @@ src_group(Tasks sources
 
 src_group(States sources
     ${INC}/AppState.h
+    ${SRC}/ResourceFutureState.cpp
+    ${INC}/ResourceFutureState.h
 )
 
 src_group(Rendering~Material sources

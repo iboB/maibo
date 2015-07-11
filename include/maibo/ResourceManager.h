@@ -12,6 +12,10 @@
 #include "lib/ImplicitSingleton.h"
 #include "ResourceFuture.h"
 
+#include "ShaderPtr.h"
+#include "GPUProgramPtr.h"
+#include "ShaderType.h"
+
 namespace maibo
 {
     class ResourceManager : public ImplicitSingleton<ResourceManager>
@@ -27,13 +31,18 @@ namespace maibo
         // * Desktop OS: basically checks if the file exists
         // * Emscripten: First checks if the file exists on the local FS
         //   If it doesn't, try wgetting it
-        ResourceFuturePtr<int> GetFileAsync(const std::string& path);
+        ResourceFuturePtr<int> getFileAsync(const std::string& path);
 
         // Reads a file from the fs and stores it to the vector
         // The manager does NOT check if the file has been read or obtained before
         // This means that the read op will happen every time when you request it
-        std::vector<char> ReadFile(const std::string& path); // no alsoGetFile, since we don't support a synchronous get
-        ResourceFuturePtr<std::vector<char>> ReadFileAsync(const std::string& path, bool alsoGetFile = false);
+        std::vector<char> readFile(const std::string& path); // no alsoGetFile, since we don't support a synchronous get
+        ResourceFuturePtr<std::vector<char>> readFileAsync(const std::string& path, bool alsoGetFile = false);
 
+        // Loads a shader from a file
+        ResourceFuturePtr<ShaderPtr> loadShaderAsync(const std::string& path, ShaderType::Type type, bool alsoGetFile = false);
+
+        // Loads a GPU program from two shader types
+        ResourceFuturePtr<GPUProgramPtr> loadGPUProgramAsync(const std::string& vertexShaderPath, const std::string& fragmentShaderPath, bool alsoGetFiles = false);
     };
 }

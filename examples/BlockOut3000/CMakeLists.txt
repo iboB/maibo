@@ -20,10 +20,26 @@ src_group(BlockOut sources
     ${SRC}/BlockOut.h
     ${SRC}/BlockOut.pch.cpp
     ${SRC}/BlockOut.pch.h
+    ${SRC}/LoadAllState.cpp
+    ${SRC}/LoadAllState.h
+    ${SRC}/Resources.cpp
+    ${SRC}/Resources.h
 )
+
+src_group(Game sources
+    ${SRC}/PlayingState.cpp
+    ${SRC}/PlayingState.h
+    ${SRC}/Level.cpp
+    ${SRC}/Level.h
+)
+
+set(RES ${CMAKE_CURRENT_SOURCE_DIR}/resources)
 
 add_executable(BlockOut3000
     ${sources}
+
+    ${RES}/u_color.frag
+    ${RES}/pos.vert
 )
 
 target_link_libraries(BlockOut3000 ${MAIBO_LIBS})

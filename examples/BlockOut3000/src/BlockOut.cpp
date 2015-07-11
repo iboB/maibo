@@ -10,6 +10,9 @@
 #include <maibo/ResourceManager.h>
 #include <maibo/lib/high_res_clock.h>
 
+#include "LoadAllState.h"
+#include "Resources.h"
+
 using namespace std;
 using namespace maibo;
 
@@ -29,6 +32,9 @@ bool BlockOut::initialize()
     glClearColor(0.0f, 0.1f, 0.4f, 1); // backbuffer clear color
     glClearDepth(1); // z buffer clear value
 
+    Resources::createInstance();
+
+    setState(new LoadAllState);
     startRunning();
 
     return true;
@@ -36,6 +42,8 @@ bool BlockOut::initialize()
 
 void BlockOut::deinitialize()
 {
+    Resources::destroyInstance();
+    
     Application::deinitialize();
 
     cout << "Total frames: " << totalFrames() << endl;

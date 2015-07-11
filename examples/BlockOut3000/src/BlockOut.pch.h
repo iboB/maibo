@@ -9,3 +9,4 @@
 // BlockOut 3000 precompiled header
 
 #include <maibo/Dependencies.h>
+#include <maibo/lib/memory.h>

@@ -9,3 +9,4 @@
 // MaiBo precompiled header
 
 #include <maibo/Dependencies.h>
+#include <maibo/lib/memory.h>

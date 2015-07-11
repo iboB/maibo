@@ -68,7 +68,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${EMSCRIPTEN_ROOT_PATH}/cmake/Module
 set(CMAKE_FIND_ROOT_PATH "${EMSCRIPTEN_ROOT_PATH}/system")
 
 if (CMAKE_HOST_WIN32)
-	set(EMCC_SUFFIX ".exe")
+	set(EMCC_SUFFIX ".bat")
 else()
 	set(EMCC_SUFFIX "")
 endif()

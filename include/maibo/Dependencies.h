@@ -38,6 +38,8 @@
 #include <list>
 #include <memory>
 #include <cassert>
+#include <sstream>
+#include <array>
 
 #if defined(__EMSCRIPTEN__)
 #   include <emscripten.h>

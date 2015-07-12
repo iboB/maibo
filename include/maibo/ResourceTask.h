@@ -7,10 +7,10 @@
 //
 #pragma once
 
-#include <maibo/Task.h>
-#include <maibo/ResourceFuture.h>
+#include "Task.h"
+#include "ResourceFuture.h"
 
-// Internal class used as a parent and shared functionality for resource-loading tasks
+// Class used as a parent and shared functionality for resource-loading tasks
 
 namespace maibo
 {

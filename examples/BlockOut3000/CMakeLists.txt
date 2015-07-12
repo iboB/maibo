@@ -33,6 +33,28 @@ src_group(Game sources
     ${SRC}/Level.h
 )
 
+src_group(Game~Figure sources
+    ${SRC}/CubeTemplate.cpp
+    ${SRC}/CubeTemplate.h
+    ${SRC}/Primitives.h
+    ${SRC}/FigureTemplate.cpp
+    ${SRC}/FigureTemplate.h
+    ${SRC}/FigureSet.cpp
+    ${SRC}/FigureSet.h
+    ${SRC}/FigureManager.cpp
+    ${SRC}/FigureManager.h
+    ${SRC}/SimpleLexer.cpp
+    ${SRC}/SimpleLexer.h
+    ${SRC}/LoadFigureSetsTask.cpp
+    ${SRC}/LoadFigureSetsTask.h
+)
+
+src_group(Rendering sources
+    ${SRC}/UniformColorMaterial.cpp
+    ${SRC}/UniformColorMaterial.h
+)
+
+
 set(RES ${CMAKE_CURRENT_SOURCE_DIR}/resources)
 
 add_executable(BlockOut3000

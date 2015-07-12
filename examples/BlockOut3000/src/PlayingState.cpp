@@ -8,6 +8,9 @@
 #include "PlayingState.h"
 
 #include "Resources.h"
+#include "Level.h"
+#include "FigureManager.h"
+#include "FigureTemplate.h"
 
 #include <maibo/GPUProgram.h>
 #include <maibo/lib/GLSentries.h>
@@ -18,36 +21,20 @@ using namespace mathgp;
 using namespace maibo;
 
 GLuint buffer;
-GLint pvmLocation;
-GLint colorLocation;
-uint32_t vpos;
 
 bool PlayingState::initialize()
 {
     glClearColor(0.0f, 0.1f, 0.4f, 1);
 
-    auto prog = Resources::instance().uniformColorProgram.get();
-    vpos = prog->bindCustomAttribute("v_pos");
-    
-    pvmLocation = prog->getParameterByName("pvm");
-    colorLocation = prog->getParameterByName("color");
-
-    vector3 vertices[] = {
-        vc(0, 0, 0.1f),
-        vc(1, 0, 0.1f),
-        vc(0, 1, 0.1f),
-    };
-
-    glGenBuffers(1, &buffer);
-    glBindBuffer(GL_ARRAY_BUFFER, buffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    m_level = new Level(v(5u, 5u, 10u));
+    m_level->createBuffers();
 
     return true;
 }
 
 void PlayingState::deinitialize()
 {
-
+    safe_delete(m_level);
 }
 
 bool PlayingState::handleEvent(const SDL_Event&)
@@ -67,18 +54,22 @@ void PlayingState::update(uint32_t dt)
 
 void PlayingState::render()
 {
-    auto prog = Resources::instance().uniformColorProgram.get();
-    prog->use();
+    auto& mat = Resources::instance().uniformColorMaterial;
+    mat.begin();
+    mat.setColor(vc(0.4f, 1, 0.4f, 1));
 
-    prog->setParameter(colorLocation, vc(0.4f, 1, 0.4f, 1));
-    prog->setParameter(pvmLocation, matrix::identity());
+    matrix proj = matrix::perspective_fov_rh(mathgp::constants<float>::PI() / 2.3f, 800.f/600.f, 1, 100);
+    matrix view = matrix::look_towards_rh(vc(0, 0, 1.3f), vc(0, 0, -1), vc(0, 1, 0));
+    mat.setPVM(proj * view * m_level->viewTransform());
 
-    MAIBO_GL_SENTRY(GLEnableAttrib, vpos);
+    m_level->render();
 
-    glBindBuffer(GL_ARRAY_BUFFER, buffer);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vector3), OFFSET(0));
+    matrix figureTransform = matrix::translation(0, 0, 8);
+    mat.setPVM(proj * view * m_level->viewTransform() * figureTransform);
 
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+    FigureManager::instance().m_allFigureTemplates[1]->debugDraw();
+
+    mat.end();
 }
 
 void PlayingState::endFrame()

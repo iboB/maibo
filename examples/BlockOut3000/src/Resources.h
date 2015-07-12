@@ -8,7 +8,7 @@
 #pragma once
 
 #include <maibo/lib/ExplicitSingleton.h>
-#include <maibo/GPUProgramPtr.h>
+#include "UniformColorMaterial.h"
 
 // class that contains all resources for the game
 
@@ -17,5 +17,5 @@ class Resources : public maibo::ExplicitSingleton<Resources>
     MAIBO_DECLARE_EXPLICIT_SINGLETON(Resources);
 
 public:
-    maibo::GPUProgramPtr uniformColorProgram;
+    UniformColorMaterial uniformColorMaterial;
 };

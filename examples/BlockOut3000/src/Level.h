@@ -5,6 +5,8 @@
 // See accompanying file LICENSE.txt or copy at
 // http://opensource.org/licenses/MIT
 //
+#pragma once
+
 #include <maibo/Application.h>
 
 // Game level class
@@ -16,6 +18,10 @@ public:
 
     void createBuffers();
 
+    void render();
+
+    const mathgp::matrix& viewTransform() const { return m_viewTransfrosm; }
+
 private:
     GLuint m_wireBuffer;
     unsigned m_numWireVertices;
@@ -23,4 +29,9 @@ private:
     unsigned m_numSolidVertices;
 
     const mathgp::uvector3 m_size;
+
+    // we wat the camera to look at 000
+    // since the level takes dimensions from 000 to whd 
+    // we need this matrix to transform it to the appropriate place
+    mathgp::matrix m_viewTransfrosm;
 };

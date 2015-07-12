@@ -1,0 +1,56 @@
+set "Flat" # the simple flat 2d set
+{
+	desc "The simple flat set"
+	
+	figure "Square"
+	{
+		e 0 0 0
+		e 1 0 0
+		e 0 1 0
+		e 1 1 0
+		ca 1 1 0
+	}
+
+	# this is a 3d game... no need for a "reverse L"
+	figure "L"
+	{
+		e 0 2 0
+		e 0 1 0
+		e 0 0 0
+		e 1 0 0
+		cx 1 1.5 0.5
+		cy 0.5 1 0.5
+		cz 1 1 1
+	}
+
+	figure "Stair"
+	{
+		e 0 0 0
+		e 1 0 0
+		e 1 1 0
+		e 2 1 0
+		cx 1 1 0
+		cy 1.5 1 0.5
+		cz 1 1 1
+	}
+
+	# length is only 3. 4 is too long
+	figure "I"
+	{
+		e 0 0 0
+		e 0 1 0
+		e 0 2 0
+		ca 0.5 1.5 0.5
+	}
+}
+
+set "Extended"
+{
+	include "Flat"
+	
+	figure "Experiment"
+	{
+		e 0 0 0
+		ca 0.5 0.5 0.5
+	}
+}

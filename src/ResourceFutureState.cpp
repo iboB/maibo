@@ -10,7 +10,7 @@
 using namespace maibo;
 using namespace std;
 
-void ResourceFutureState::addResourceFuture(ConstResourceFutureBasePtr future)
+void ResourceFutureState::addFuture(ConstFuturePtr future)
 {
     m_pendingFutures.push_back(future);
 }

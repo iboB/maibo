@@ -1,4 +1,15 @@
+// MaiBo - BlockOut3000
+// Copyright(c) 2015 Borislav Stanimirov
+//
+// Distributed under the MIT Software License
+// See accompanying file LICENSE.txt or copy at
+// http://opensource.org/licenses/MIT
+//
 #include "Level.h"
+
+#include "Resources.h"
+
+#include <maibo/lib/GLSentries.h>
 
 using namespace mathgp;
 using namespace std;
@@ -8,11 +19,31 @@ Level::Level(const uvector3& size)
 {
 }
 
+void Level::render()
+{
+    MAIBO_GL_SENTRY(GLDisable, GL_DEPTH_TEST);
+
+    UniformColorMaterial& m = Resources::instance().uniformColorMaterial;
+
+    m.setColor(vc(0.066f, 0.066f, 0.15f, 1));
+    m.prepareBuffer(m_solidBuffer, sizeof(vector3), 0);
+    glDrawArrays(GL_TRIANGLES, 0, m_numSolidVertices);
+
+    m.setColor(vc(0.13f, 0.30f, 0.15f, 1));
+    m.prepareBuffer(m_wireBuffer, sizeof(vector3), 0);
+    glDrawArrays(GL_LINES, 0, m_numWireVertices);
+}
+
 void Level::createBuffers()
 {
     float w = float(m_size.x());
     float h = float(m_size.y());
     float d = float(m_size.z());
+
+    // biggest size of w and h tobe trunkated to 1
+    float dim = max(w, h)/2;
+
+    m_viewTransfrosm = matrix::scaling_uniform(1/dim) * matrix::translation(-w / 2, -h / 2, -d);
 
     point3 solidVertices[] =
     {

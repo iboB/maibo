@@ -12,12 +12,22 @@
 
 #include "PlayingState.h"
 #include "Resources.h"
+#include "FigureManager.h"
+#include "LoadFigureSetsTask.h"
+#include <maibo/TaskManager.h>
 
 bool LoadAllState::initialize()
 {
     auto& rm = maibo::ResourceManager::instance();
     m_uniformColorFuture = rm.loadGPUProgramAsync("resources/pos.vert", "resources/u_color.frag", true);
-    addResourceFuture(m_uniformColorFuture);
+    addFuture(m_uniformColorFuture);
+
+    m_figureDataFuture = rm.readFileAsync("resources/figures.dat", true);
+    addFuture(m_figureDataFuture);
+
+    auto task = new LoadFigureSetsTask(m_figureDataFuture);
+    maibo::TaskManager::instance().pushTask(task);
+    addFuture(task->future);
 
     glClearColor(1, 0.1f, 0.4f, 1);
 
@@ -53,7 +63,10 @@ void LoadAllState::onDone()
 {
     auto& r = Resources::instance();
 
-    r.uniformColorProgram = m_uniformColorFuture->resource();
+    r.uniformColorMaterial.m_program = m_uniformColorFuture->resource();
+    r.uniformColorMaterial.initialize();
+
+    FigureManager::instance().prepareFigureTemplatesPhysicalData();
 
     maibo::Application_Instance().setState(new PlayingState);
 }

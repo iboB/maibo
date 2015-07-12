@@ -11,6 +11,8 @@
 
 // main gameplay state
 
+class Level;
+
 class PlayingState : public maibo::AppState
 {
 public:
@@ -23,4 +25,7 @@ public:
     virtual void update(uint32_t dt) override;
     virtual void render() override;
     virtual void endFrame() override;
+
+private:
+    Level* m_level = nullptr;
 };

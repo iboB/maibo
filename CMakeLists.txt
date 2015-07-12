@@ -95,7 +95,7 @@ src_group(Resources sources
     ${SRC}/ResourceManager.cpp
     ${INC}/ResourceManager.h
     ${INC}/ResourceFuture.h
-    ${SRC}/ResourceTask.h
+    ${INC}/ResourceTask.h
 )
 
 src_group(Lib sources
@@ -106,12 +106,14 @@ src_group(Lib sources
     ${INC}/lib/memory.h
     ${INC}/lib/GLSentries.h
     ${INC}/lib/Macros.h
+    ${INC}/lib/string.h
 )
 
 src_group(Tasks sources
     ${SRC}/TaskManager.cpp
     ${INC}/TaskManager.h
     ${INC}/Task.h
+    ${INC}/Future.h
 )
 
 src_group(States sources

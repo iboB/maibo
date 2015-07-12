@@ -8,7 +8,7 @@
 
 #include <maibo/ResourceManager.h>
 
-#include "ResourceTask.h"
+#include <maibo/ResourceTask.h>
 
 #include <maibo/ResourceFuture.h>
 #include <maibo/Task.h>

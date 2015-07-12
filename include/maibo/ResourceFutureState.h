@@ -9,7 +9,7 @@
 
 #include "AppState.h"
 
-#include "ResourceFuture.h"
+#include "Future.h"
 
 // base class for states that load a bunch of resources
 
@@ -30,9 +30,9 @@ namespace maibo
         virtual void onDone() = 0;
 
         // call this to add the future to the pending list
-        void addResourceFuture(ConstResourceFutureBasePtr future);
+        void addFuture(ConstFuturePtr future);
 
-        typedef std::vector<ConstResourceFutureBasePtr> ResourceFutureBaseVector;
+        typedef std::vector<ConstFuturePtr> ResourceFutureBaseVector;
 
         // futures that are done
         ResourceFutureBaseVector m_doneFutures;

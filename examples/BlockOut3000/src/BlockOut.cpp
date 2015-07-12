@@ -12,6 +12,8 @@
 
 #include "LoadAllState.h"
 #include "Resources.h"
+#include "FigureManager.h"
+#include "CubeTemplate.h"
 
 using namespace std;
 using namespace maibo;
@@ -33,6 +35,8 @@ bool BlockOut::initialize()
     glClearDepth(1); // z buffer clear value
 
     Resources::createInstance();
+    CubeTemplate::createInstance();
+    FigureManager::createInstance();
 
     setState(new LoadAllState);
     startRunning();
@@ -42,6 +46,8 @@ bool BlockOut::initialize()
 
 void BlockOut::deinitialize()
 {
+    FigureManager::destroyInstance();
+    CubeTemplate::destroyInstance();
     Resources::destroyInstance();
     
     Application::deinitialize();

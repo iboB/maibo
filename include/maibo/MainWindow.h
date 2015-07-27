@@ -9,7 +9,11 @@
 
 // the main window class
 
-#include <SDL_syswm.h>
+#if defined(_MSC_VER)
+#   include <SDL_syswm.h>
+#else
+#   include <SDL2/SDL_syswm.h>
+#endif
 
 namespace maibo
 {

@@ -21,8 +21,8 @@ GPUProgram::GPUProgram()
 
 GPUProgram::GPUProgram(const std::string& name)
     : m_name(name)
-    , m_boundTextures(0)
     , m_boundAttribPtr(0)
+    , m_boundTextures(0)
 {
     m_glHandle = glCreateProgram();
 

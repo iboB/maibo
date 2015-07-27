@@ -33,6 +33,11 @@ if(MSVC)
 
         opengl32.lib
     )
+elseif(MAIBO_PLATFORM_UNIX)
+    set(platformLibs
+        SDL2.so
+        GL
+    )
 endif()
 
 set(THIRD_PARTY_INCLUDE_DIRS

@@ -13,8 +13,8 @@ using namespace std;
 using namespace maibo;
 
 MainWindow::CreationParameters::CreationParameters()
-    : clientAreaSize(mathgp::v(1024u, 768u))
-    , title("Main Window")
+    : title("Main Window")
+    , clientAreaSize(mathgp::v(1024u, 768u))
     , isFullScreen(false)
 {
 }

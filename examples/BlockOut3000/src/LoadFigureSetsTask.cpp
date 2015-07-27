@@ -17,8 +17,8 @@ using namespace mathgp;
 using namespace maibo;
 
 LoadFigureSetsTask::LoadFigureSetsTask(ConstResourceFuturePtr<std::vector<char>> readFigureSets)
-    : m_readFigureSetsFuture(readFigureSets)
-    , future(new Future)
+    : future(new Future)
+    , m_readFigureSetsFuture(readFigureSets)
 {
 }
 

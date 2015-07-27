@@ -78,8 +78,10 @@ macro(add_precompiled_header TARGET_NAME PRECOMPILED_HEADER PRECOMPILED_SOURCE)
         foreach(item ${DIRECTORY_FLAGS})
             list(APPEND COMPILER_FLAGS "-I${item}")
         endforeach(item)
-        get_directory_property(DIRECTORY_FLAGS DEFINITIONS)
-        list(APPEND COMPILER_FLAGS ${DIRECTORY_FLAGS})
+        get_directory_property(DIRECTORY_FLAGS COMPILE_DEFINITIONS)
+        foreach(item ${DIRECTORY_FLAGS})
+            list(APPEND COMPILER_FLAGS "-D${item}")
+        endforeach(item)
 
         # Add a custom target for building the precompiled header.
         separate_arguments(COMPILER_FLAGS)

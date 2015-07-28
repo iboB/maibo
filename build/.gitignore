@@ -1,3 +1,6 @@
+
 vs12x64/
 emcc_debug/
-makefile/
+emcc_release/
+makefile_debug/
+makefile_release/

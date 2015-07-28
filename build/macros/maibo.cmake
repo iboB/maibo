@@ -24,6 +24,12 @@ macro(maibo_target_properties TARGET_NAME)
         else()
             set(PLATFORM_PATH windows/x86)
         endif()
+    elseif(MAIBO_PLATFORM_UNIX)
+        if(MAIBO_64_BIT)
+            set(PLATFORM_PATH linux/amd64/${CMAKE_BUILD_TYPE})
+        else()
+            set(PLATFORM_PATH linux/i386/${CMAKE_BUILD_TYPE})
+        endif()
     endif()
 
     set_target_properties(${TARGET_NAME}

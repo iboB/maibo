@@ -16,7 +16,13 @@ using namespace std;
 
 Level::Level(const uvector3& size)
     : m_size(size)
+    , m_levelData(new char[size.x()*size.y()*size.z()])
 {
+}
+
+Level::~Level()
+{
+    delete[] m_levelData;
 }
 
 void Level::render()
@@ -24,6 +30,8 @@ void Level::render()
     MAIBO_GL_SENTRY(GLDisable, GL_DEPTH_TEST);
 
     UniformColorMaterial& m = Resources::instance().uniformColorMaterial;
+
+    m.setModel(matrix::identity());
 
     m.setColor(vc(0.066f, 0.066f, 0.15f, 1));
     m.prepareBuffer(m_solidBuffer, sizeof(vector3), 0);

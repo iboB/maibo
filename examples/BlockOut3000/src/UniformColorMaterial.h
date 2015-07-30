@@ -15,7 +15,8 @@ class UniformColorMaterial
 {
 public:
 
-    void setPVM(const mathgp::matrix& pvm);
+    void setProjView(const mathgp::matrix& pv);
+    void setModel(const mathgp::matrix& model);
     void setColor(const mathgp::float4& color);
 
     // call these before and after rendering with this material
@@ -31,7 +32,8 @@ private:
 
     maibo::GPUProgramPtr m_program;
 
-    GLint m_pvmLocation = -1;
+    GLint m_projViewLocation = -1;
+    GLint m_modelLocation = -1;
     GLint m_colorLocation = -1;
 
     uint32_t m_vposAttribute = 0;

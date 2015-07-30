@@ -37,8 +37,17 @@ void PlayingState::deinitialize()
     safe_delete(m_level);
 }
 
-bool PlayingState::handleEvent(const SDL_Event&)
+bool PlayingState::handleEvent(const SDL_Event& event)
 {
+    if (event.type == SDL_KEYUP)
+    {
+        switch (event.key.keysym.sym)
+        {
+        case SDLK_w:
+            return true;
+        }
+    }
+
     return false;
 }
 
@@ -56,18 +65,20 @@ void PlayingState::render()
 {
     auto& mat = Resources::instance().uniformColorMaterial;
     mat.begin();
-    mat.setColor(vc(0.4f, 1, 0.4f, 1));
+    // mat.setColor(vc(0.4f, 1, 0.4f, 1));
 
     matrix proj = matrix::perspective_fov_rh(mathgp::constants<float>::PI() / 2.3f, 800.f/600.f, 1, 100);
     matrix view = matrix::look_towards_rh(vc(0, 0, 1.3f), vc(0, 0, -1), vc(0, 1, 0));
-    mat.setPVM(proj * view * m_level->viewTransform());
+    matrix projView = proj * view * m_level->viewTransform();
+
+    mat.setProjView(projView);
 
     m_level->render();
 
     matrix figureTransform = matrix::translation(0, 0, 8);
-    mat.setPVM(proj * view * m_level->viewTransform() * figureTransform);
+    mat.setModel(figureTransform);
 
-    FigureManager::instance().m_allFigureTemplates[1]->debugDraw();
+    FigureManager::instance().m_allFigureTemplates[1]->draw(vc(0.9f, 0.5f, 0.5f, 0.1f), vc(1, 1, 1, 1));
 
     mat.end();
 }

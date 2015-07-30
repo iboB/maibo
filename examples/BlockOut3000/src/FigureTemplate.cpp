@@ -106,20 +106,20 @@ void FigureTemplate::preparePhysicalData()
 }
 
 
-void FigureTemplate::debugDraw() const
+void FigureTemplate::draw(const vector4& solidColor, const vector4& wireColor) const
 {
     MAIBO_GL_SENTRY(GLDisable, GL_DEPTH_TEST);
 
     UniformColorMaterial& m = Resources::instance().uniformColorMaterial;
 
-    m.setColor(vc(1, 1, 1, 1));
+    m.setColor(wireColor);
     m.prepareBuffer(m_wireBuffer, sizeof(vector3), 0);
     glDrawArrays(GL_LINES, 0, uint32_t(m_wireSegments.size() * 2));
 
     MAIBO_GL_SENTRY(GLEnable, GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    m.setColor(vc(0.9f, 0.5f, 0.5f, 0.1f));
+    m.setColor(solidColor);
     m.prepareBuffer(m_solidBuffer, sizeof(vector3), 0);
     glDepthMask(GL_FALSE);
     glCullFace(GL_FRONT);

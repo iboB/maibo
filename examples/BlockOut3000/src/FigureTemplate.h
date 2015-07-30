@@ -19,7 +19,7 @@ public:
 
     void preparePhysicalData();
 
-    void debugDraw() const;
+    void draw(const mathgp::vector4& solidColor, const mathgp::vector4& wireColor) const;
 
     const std::string& name() const { return m_name; }
     void setName(const std::string& name) { m_name = name; }

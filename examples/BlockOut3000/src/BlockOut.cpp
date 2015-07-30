@@ -23,6 +23,8 @@ bool BlockOut::initialize()
 {
     Application::CreationParameters params;
 
+    params.desiredFrameTimeMs = 10;
+
     if (!Application::initialize(params))
     {
         return false;

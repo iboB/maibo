@@ -57,6 +57,8 @@ bool Application::initialize(const Application::CreationParameters& cp)
 
     TaskManager::instance().setNumTasksPerUpdate(cp.numTasksPerUpdate);
 
+    m_desiredFrameTime = cp.desiredFrameTimeMs;
+
     return true;
 }
 

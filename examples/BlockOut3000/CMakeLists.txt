@@ -43,6 +43,8 @@ src_group(Game~Figure sources
     ${SRC}/FigureSet.h
     ${SRC}/FigureManager.cpp
     ${SRC}/FigureManager.h
+    ${SRC}/Figure.cpp
+    ${SRC}/Figure.h
     ${SRC}/SimpleLexer.cpp
     ${SRC}/SimpleLexer.h
     ${SRC}/LoadFigureSetsTask.cpp
@@ -62,6 +64,7 @@ add_executable(BlockOut3000
 
     ${RES}/u_color.frag
     ${RES}/pos.vert
+    ${RES}/figures.dat
 )
 
 target_link_libraries(BlockOut3000 ${MAIBO_LIBS})

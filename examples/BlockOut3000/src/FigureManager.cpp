@@ -32,3 +32,13 @@ void FigureManager::prepareFigureTemplatesPhysicalData()
         fig->preparePhysicalData();
     }
 }
+
+const FigureSet* FigureManager::getFigureSet(const string& name) const
+{
+    auto s = m_figureSets.find(name);
+
+    if (s == m_figureSets.end())
+        return nullptr;
+
+    return s->second;
+}

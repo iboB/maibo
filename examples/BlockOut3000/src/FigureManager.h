@@ -23,11 +23,14 @@ public:
 
     void prepareFigureTemplatesPhysicalData();
 
-    std::vector<FigureTemplate*> m_allFigureTemplates; // debug here
+    // return nullptr if no such set exists
+    const FigureSet* getFigureSet(const std::string& name) const;
+
 private:
     MAIBO_DECLARE_EXPLICIT_SINGLETON(FigureManager);
 
     friend class LoadFigureSetsTask;
 
     std::unordered_map<std::string, FigureSet*> m_figureSets;
+    std::vector<FigureTemplate*> m_allFigureTemplates;
 };

@@ -12,6 +12,7 @@
 // main gameplay state
 
 class Level;
+class Figure;
 
 class PlayingState : public maibo::AppState
 {
@@ -28,4 +29,5 @@ public:
 
 private:
     Level* m_level = nullptr;
+    Figure* m_currentFigure = nullptr; // figure that is currently falling in the level
 };

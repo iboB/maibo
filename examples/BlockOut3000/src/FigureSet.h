@@ -23,6 +23,8 @@ public:
 
     void addFigure(FigureTemplate* f) { m_figureTemplates.push_back(f); }
     void addSet(const FigureSet* s);
+
+    const std::vector<FigureTemplate*>& figureTemplates() const { return m_figureTemplates; }
     
 private:
     std::string m_name;

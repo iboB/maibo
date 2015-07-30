@@ -102,15 +102,15 @@ void FigureTemplate::preparePhysicalData()
 
     glGenBuffers(1, &m_solidBuffer);
     glBindBuffer(GL_ARRAY_BUFFER, m_solidBuffer);
-    glBufferData(GL_ARRAY_BUFFER, data_size(m_triangles), m_triangles.data(), GL_STATIC_DRAW);    
+    glBufferData(GL_ARRAY_BUFFER, data_size(m_triangles), m_triangles.data(), GL_STATIC_DRAW);
 }
 
 
 void FigureTemplate::draw(const vector4& solidColor, const vector4& wireColor) const
 {
-    MAIBO_GL_SENTRY(GLDisable, GL_DEPTH_TEST);
-
     UniformColorMaterial& m = Resources::instance().uniformColorMaterial;
+
+    MAIBO_GL_SENTRY(GLDepthWrite, false);
 
     m.setColor(wireColor);
     m.prepareBuffer(m_wireBuffer, sizeof(vector3), 0);
@@ -121,10 +121,9 @@ void FigureTemplate::draw(const vector4& solidColor, const vector4& wireColor) c
 
     m.setColor(solidColor);
     m.prepareBuffer(m_solidBuffer, sizeof(vector3), 0);
-    glDepthMask(GL_FALSE);
+
     glCullFace(GL_FRONT);
     glDrawArrays(GL_TRIANGLES, 0, uint32_t(m_triangles.size() * 3));
     glCullFace(GL_BACK);
     glDrawArrays(GL_TRIANGLES, 0, uint32_t(m_triangles.size() * 3));
-    glDepthMask(GL_TRUE);
 }

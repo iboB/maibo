@@ -18,6 +18,8 @@ public:
     const std::vector<LineSegment>& wireVertices() const { return m_wireSegments; }
     const std::vector<Triangle>& triangles() const { return m_triangles; }
 
+    GLuint solidBuffer() const { return m_solidBuffer; }
+
 private:
     MAIBO_DECLARE_EXPLICIT_SINGLETON(CubeTemplate);
 

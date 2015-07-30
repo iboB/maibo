@@ -202,7 +202,7 @@ namespace
 
         outData.resize(fileSize);
 
-        fin.read(&outData.front(), fileSize);
+        fin.read(outData.data(), fileSize);
 
         return 0;
     }
@@ -273,9 +273,9 @@ namespace
         bool safeExecute() override
         {
             future->resource() = make_shared<Shader>(m_shaderType, m_shaderName);
-            
+
             int error = !future->resource()->load(m_dependentFuture->resource());
-            
+
             future->setErrorCode(error);
             future->setProgress(1.f);
             future->setDone();

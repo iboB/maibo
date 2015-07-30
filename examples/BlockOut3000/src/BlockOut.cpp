@@ -34,7 +34,6 @@ bool BlockOut::initialize()
     glEnable(GL_CULL_FACE); // cull back (CW) faces
 
     glClearColor(0.0f, 0.1f, 0.4f, 1); // backbuffer clear color
-    glClearDepth(1); // z buffer clear value
 
     Resources::createInstance();
     CubeTemplate::createInstance();
@@ -51,7 +50,7 @@ void BlockOut::deinitialize()
     FigureManager::destroyInstance();
     CubeTemplate::destroyInstance();
     Resources::destroyInstance();
-    
+
     Application::deinitialize();
 
     cout << "Total frames: " << totalFrames() << endl;
@@ -86,7 +85,7 @@ namespace maibo
     {
         app = new BlockOut();
     }
-    
+
     Application& Application_Instance()
     {
         return *app;

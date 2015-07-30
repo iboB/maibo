@@ -33,8 +33,8 @@ bool PlayingState::initialize()
 
     auto set = FigureManager::instance().getFigureSet("Flat");
     assert(set);
-    
-    m_currentFigure = new Figure(*set->figureTemplates()[3], *m_level);
+
+    m_currentFigure = new Figure(*set->figureTemplates()[1], *m_level);
 
     return true;
 }
@@ -98,6 +98,7 @@ void PlayingState::beginFrame()
 void PlayingState::update(uint32_t dt)
 {
     m_currentFigure->update(dt);
+    m_level->update(dt);
 }
 
 void PlayingState::render()

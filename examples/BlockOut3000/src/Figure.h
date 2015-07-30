@@ -24,16 +24,21 @@ public:
     // all functions are "try" because they wont perform the required transform
     // unless it's possible on the level
     // they return false if the transform was unsuccessful
-    
+
     // parameter is -1/1 for cw/ccw rotation
     bool tryRotateX(float dir);
     bool tryRotateY(float dir);
     bool tryRotateZ(float dir);
     bool tryMove(const mathgp::vector3& dir);
 
+    bool isFallen() const { return m_isFallen; }
+
 private:
     // axis is 0=x, 1=y, 2=z
     bool tryRotate(int axis, float dir);
+
+    // tries tryElems with level, sets element to the try ones, if possible
+    bool tryTransformWithLevel();
 
     //////////////////////////////////////////////////
     // logical data
@@ -52,7 +57,7 @@ private:
     //////////////////////////////////////////////////
     // physical data
     // used to draw the figure mesh
-    
+
     // model transformation matrix for drawing the figure
     // it is calculated every frame
     mathgp::matrix m_transform;
@@ -72,4 +77,10 @@ private:
     // timers for animation, when they reach 0, current = target
     int m_positionAnimationTimer;
     int m_rotationAnimationTimer;
+
+    // fall timer
+    int m_fallTimer;
+
+    // is figure fallen?
+    bool m_isFallen = false;
 };

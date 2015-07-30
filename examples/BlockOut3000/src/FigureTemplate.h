@@ -29,6 +29,7 @@ public:
 
     void addElement(const mathgp::ivector3& elem) { m_elements.push_back(elem); }
 
+    const std::vector<mathgp::ivector3>& elements() const { return m_elements; }
 private:
 
     //////////////////////////////////////

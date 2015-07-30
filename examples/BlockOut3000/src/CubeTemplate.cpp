@@ -114,7 +114,7 @@ CubeTemplate::CubeTemplate()
 
     glGenBuffers(1, &m_solidBuffer);
     glBindBuffer(GL_ARRAY_BUFFER, m_solidBuffer);
-    glBufferData(GL_ARRAY_BUFFER, data_size(m_triangles), m_triangles.data(), GL_STATIC_DRAW);    
+    glBufferData(GL_ARRAY_BUFFER, data_size(m_triangles), m_triangles.data(), GL_STATIC_DRAW);
 
 }
 

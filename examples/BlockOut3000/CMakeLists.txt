@@ -24,6 +24,8 @@ src_group(BlockOut sources
     ${SRC}/LoadAllState.h
     ${SRC}/Resources.cpp
     ${SRC}/Resources.h
+    ${SRC}/Preferences.cpp
+    ${SRC}/Preferences.h
 )
 
 src_group(Game sources

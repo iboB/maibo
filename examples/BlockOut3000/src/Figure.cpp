@@ -13,14 +13,28 @@
 #include "Resources.h"
 
 using namespace mathgp;
+using namespace std;
 
 // ms animations last
 const int ROTATION_ANIM_TIME = 200;
 const int TRANSLATION_ANIM_TIME = 100;
 
+const int FALL_TIME = 500; // 500 milliseconds to fall a unit
+
+namespace
+{
+    int FallTimeForSpeed(int speed)
+    {
+        int speedMultiplier = (FALL_TIME - TRANSLATION_ANIM_TIME) / Level::MAX_SPEED;
+        return TRANSLATION_ANIM_TIME + (Level::MAX_SPEED - speed) * speedMultiplier;
+    }
+}
+
 Figure::Figure(const FigureTemplate& tmpl, Level& level)
     : m_template(tmpl)
     , m_level(level)
+    , m_elements(m_template.elements())
+    , m_tryElements(m_template.elements())
     , m_currentPosition(vc(0, 0, 8))
     , m_currentRotation(quaternion::identity())
     , m_lastPosition(vector3::zero())
@@ -29,12 +43,43 @@ Figure::Figure(const FigureTemplate& tmpl, Level& level)
     , m_targetRotation(m_currentRotation)
     , m_positionAnimationTimer(0)
     , m_rotationAnimationTimer(0)
+    , m_fallTimer(FallTimeForSpeed(level.speed()))
 {
+    for (auto& e : m_elements)
+    {
+        e.z() += 8;
+    }
+}
 
+namespace
+{
+    // matrix that rotates around a certain center
+    matrix CreateOffCenterRotationMatrix(const quaternion& rot, const point3& center)
+    {
+        return matrix::translation(center)
+            * matrix::rotation_quaternion(rot)
+            * matrix::translation(-center);
+    }
 }
 
 void Figure::update(uint32_t dt)
 {
+    if (m_isFallen) return;
+    if (m_fallTimer -= dt)
+    {
+        if (m_fallTimer <= 0)
+        {
+            m_fallTimer = FallTimeForSpeed(m_level.speed()) + m_fallTimer;
+            if (!tryMove(vc(0, 0, -1)))
+            {
+                // if figgure cannot move down, it's fallen
+                m_level.adoptFigure(m_elements);
+                m_isFallen = true;
+                return;
+            }
+        }
+    }
+
     if (m_positionAnimationTimer)
     {
         m_positionAnimationTimer -= dt;
@@ -55,10 +100,8 @@ void Figure::update(uint32_t dt)
         m_currentRotation = slerp(m_lastRotation, m_targetRotation, f);
     }
 
-    m_transform = matrix::translation(m_currentPosition) 
-        * matrix::translation(m_template.rotationCenter())
-        * matrix::rotation_quaternion(m_currentRotation)
-        * matrix::translation(-m_template.rotationCenter());
+    m_transform = matrix::translation(m_currentPosition)
+        * CreateOffCenterRotationMatrix(m_currentRotation, m_template.rotationCenter());
 }
 
 void Figure::draw() const
@@ -87,13 +130,42 @@ bool Figure::tryRotateZ(float dir)
 
 bool Figure::tryRotate(int axis, float dir)
 {
+    assert(!m_isFallen);
     static vector3 axes[] = { vc(1, 0, 0), vc(0, 1, 0), vc(0, 0, 1) };
 
     quaternion rotation = quaternion::rotation_axis(axes[axis], dir * constants<float>::PI_HALF());
 
     // absolute transform for this rotation
     // based on it we will check if the figure can rotate like that
-    matrix transform = matrix::rotation_quaternion(rotation);
+    matrix transform = CreateOffCenterRotationMatrix(rotation, m_template.rotationCenter());
+
+    // this 0.5 translation is used in order to compensate for the discrepancy of the elements positions data
+    // and the rotation center. The rotation center being based on cubes from 000 to 111 and the elem data
+    // integer coordinates of cubes in a grid
+    vector<vector3> felems(m_elements.size());
+    for (size_t i = 0; i < m_elements.size(); ++i)
+    {
+        auto& e = m_elements[i];
+        felems[i] = v(float(e.x()), float(e.y()), float(e.z())) - m_targetPosition + vector3::uniform(0.5f);
+    }
+
+    for (auto& e : felems)
+    {
+        e = transform_coord(e, transform);
+        e += m_targetPosition - vector3::uniform(0.5f);
+    }
+
+    for (size_t i = 0; i < m_elements.size(); ++i)
+    {
+        auto& e = felems[i];
+        m_tryElements[i] = v(int(round(e.x())), int(round(e.y())), int(round(e.z())));
+    }
+
+    if (!tryTransformWithLevel())
+    {
+        //desired transform cannot fit with level
+        return false;
+    }
 
     // calculate transforms for the mesh
     m_lastRotation = m_currentRotation;
@@ -103,13 +175,37 @@ bool Figure::tryRotate(int axis, float dir)
     return true;
 }
 
-bool Figure::tryMove(const vector3& direction)
+bool Figure::tryMove(const vector3& d)
 {
-    
+    assert(!m_isFallen);
+    for (size_t i = 0; i < m_elements.size(); ++i)
+    {
+        m_tryElements[i] = m_elements[i] + v(int(round(d.x())), int(round(d.y())), int(round(d.z())));
+    }
+
+    if (!tryTransformWithLevel())
+    {
+        //desired transform cannot fit with level
+        return false;
+    }
+
     // update mesh transforms
     m_lastPosition = m_currentPosition;
-    m_targetPosition = m_currentPosition + direction;
+    m_targetPosition += d;
     m_positionAnimationTimer = TRANSLATION_ANIM_TIME;
+
+    return true;
+}
+
+bool Figure::tryTransformWithLevel()
+{
+    assert(!m_isFallen);
+    if (!m_level.canFitFigure(m_tryElements))
+    {
+        return false;
+    }
+
+    m_elements = m_tryElements;
 
     return true;
 }

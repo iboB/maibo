@@ -65,7 +65,6 @@ void PlayingState::render()
 {
     auto& mat = Resources::instance().uniformColorMaterial;
     mat.begin();
-    // mat.setColor(vc(0.4f, 1, 0.4f, 1));
 
     matrix proj = matrix::perspective_fov_rh(mathgp::constants<float>::PI() / 2.3f, 800.f/600.f, 1, 100);
     matrix view = matrix::look_towards_rh(vc(0, 0, 1.3f), vc(0, 0, -1), vc(0, 1, 0));
@@ -73,7 +72,7 @@ void PlayingState::render()
 
     mat.setProjView(projView);
 
-    m_level->render();
+    m_level->draw();
 
     matrix figureTransform = matrix::translation(0, 0, 8);
     mat.setModel(figureTransform);

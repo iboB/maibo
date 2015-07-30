@@ -19,7 +19,7 @@ public:
 
     void createBuffers();
 
-    void render();
+    void draw() const;
 
     const mathgp::matrix& viewTransform() const { return m_viewTransfrosm; }
 

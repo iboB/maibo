@@ -25,7 +25,7 @@ Level::~Level()
     delete[] m_levelData;
 }
 
-void Level::render()
+void Level::draw() const
 {
     MAIBO_GL_SENTRY(GLDisable, GL_DEPTH_TEST);
 

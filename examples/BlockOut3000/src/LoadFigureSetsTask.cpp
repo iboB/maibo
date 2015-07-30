@@ -102,8 +102,6 @@ FigureTemplate* LoadFigureSetsTask::parseFigureTemplate(Lexer& lex)
 
     readOpenBlock(lex);
 
-    bool x = false, y = false, z = false;
-
     while (true)
     {
         string token = lex.getNextToken();
@@ -112,52 +110,13 @@ FigureTemplate* LoadFigureSetsTask::parseFigureTemplate(Lexer& lex)
         {
             theFigure->addElement(parseFigureElement(lex));
         }
-        else if (token.length() == 2 && token.front() == 'c')
+        else if (token == "c")
         {
-            switch (token.back())
-            {
-            case 'a':
-            {
-                auto c = parseFigureRotationCenter(lex);
-                theFigure->setRotationCenterX(c);
-                theFigure->setRotationCenterY(c);
-                theFigure->setRotationCenterZ(c);
-            }
-            x = y = z = true;
-            break;
-            case 'x':
-                theFigure->setRotationCenterX(parseFigureRotationCenter(lex));
-                x = true;
-                break;
-            case 'y':
-                theFigure->setRotationCenterY(parseFigureRotationCenter(lex));
-                y = true;
-                break;
-            case 'z':
-                theFigure->setRotationCenterZ(parseFigureRotationCenter(lex));
-                z = true;
-                break;
-            default:
-                cerr << "\"c\" must be followed by an axis or \"a\" for all axes" << endl;
-                m_errorCode = 1;
-                return nullptr;
-            }
+            auto c = parseFigureRotationCenter(lex);
+            theFigure->setRotationCenter(c);            
         }
         else if (token == "}")
         {
-            char missing = 0;
-
-            if (!x) missing = 'x';
-            else if (!y) missing = 'y';
-            else if (!z) missing = 'z';
-
-            if (missing)
-            {
-                cerr << "Figure \"" << theFigure->name() << "\" missing rotation center for " << missing << endl;
-                m_errorCode = 1;
-                return nullptr;
-            }
-
             return theFigure.release();
         }
         else

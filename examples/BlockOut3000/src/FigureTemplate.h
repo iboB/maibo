@@ -24,14 +24,8 @@ public:
     const std::string& name() const { return m_name; }
     void setName(const std::string& name) { m_name = name; }
     
-    const mathgp::point3& rotationCenterX() const { return m_rotationCenterX; }
-    void setRotationCenterX(const mathgp::point3& x) { m_rotationCenterX = x; }
-
-    const mathgp::point3& rotationCenterY() const { return m_rotationCenterY; }
-    void setRotationCenterY(const mathgp::point3& y) { m_rotationCenterY = y; }
-
-    const mathgp::point3& rotationCenterZ() const { return m_rotationCenterZ; }
-    void setRotationCenterZ(const mathgp::point3& z) { m_rotationCenterZ = z; }
+    const mathgp::point3& rotationCenter() const { return m_rotationCenter; }
+    void setRotationCenter(const mathgp::point3& c) { m_rotationCenter = c; }
 
     void addElement(const mathgp::ivector3& elem) { m_elements.push_back(elem); }
 
@@ -42,9 +36,7 @@ private:
     std::string m_name;
     std::vector<mathgp::ivector3> m_elements;
 
-    mathgp::point3 m_rotationCenterX;
-    mathgp::point3 m_rotationCenterY;
-    mathgp::point3 m_rotationCenterZ;
+    mathgp::point3 m_rotationCenter;
 
     //////////////////////////////////////
     // rendering (physical data)

@@ -13,3 +13,8 @@ void FigureSet::addSet(const FigureSet* s)
 {
     m_figureTemplates.insert(m_figureTemplates.end(), s->m_figureTemplates.begin(), s->m_figureTemplates.end());
 }
+
+const FigureTemplate* FigureSet::getRandomFigureTemplate() const
+{
+    return m_figureTemplates[rand() % m_figureTemplates.size()];
+}

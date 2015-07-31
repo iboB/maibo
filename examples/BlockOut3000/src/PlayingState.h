@@ -13,6 +13,7 @@
 
 class Level;
 class Figure;
+class FigureSet;
 
 class PlayingState : public maibo::AppState
 {
@@ -28,6 +29,11 @@ public:
     virtual void endFrame() override;
 
 private:
+
+    void spawnNextFigure();
+
     Level* m_level = nullptr;
+    const FigureSet* m_figureSet; // set that is currently being used
     Figure* m_currentFigure = nullptr; // figure that is currently falling in the level
+    Figure* m_nextFigure = nullptr; // figure that will be next
 };

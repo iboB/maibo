@@ -31,10 +31,10 @@ bool PlayingState::initialize()
     m_level = new Level(v(5u, 5u, 10u));
     m_level->createBuffers();
 
-    auto set = FigureManager::instance().getFigureSet("Flat");
-    assert(set);
+    m_figureSet = FigureManager::instance().getFigureSet("Flat");
 
-    m_currentFigure = new Figure(*set->figureTemplates()[1], *m_level);
+    m_nextFigure = new Figure(*m_figureSet->getRandomFigureTemplate(), *m_level);
+    spawnNextFigure();
 
     return true;
 }
@@ -42,6 +42,7 @@ bool PlayingState::initialize()
 void PlayingState::deinitialize()
 {
     safe_delete(m_currentFigure);
+    safe_delete(m_nextFigure);
     safe_delete(m_level);
 }
 
@@ -99,6 +100,9 @@ void PlayingState::update(uint32_t dt)
 {
     m_currentFigure->update(dt);
     m_level->update(dt);
+
+    if (m_currentFigure->isFallen())
+        spawnNextFigure();
 }
 
 void PlayingState::render()
@@ -121,4 +125,12 @@ void PlayingState::render()
 
 void PlayingState::endFrame()
 {
+}
+
+void PlayingState::spawnNextFigure()
+{
+    delete m_currentFigure;
+    m_currentFigure = m_nextFigure;
+    m_nextFigure = new Figure(*m_figureSet->getRandomFigureTemplate(), *m_level);
+    m_currentFigure->spawn();
 }

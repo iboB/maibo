@@ -19,7 +19,7 @@ using namespace std;
 const int ROTATION_ANIM_TIME = 200;
 const int TRANSLATION_ANIM_TIME = 100;
 
-const int FALL_TIME = 500; // 500 milliseconds to fall a unit
+const int FALL_TIME = 800; // milliseconds to fall a unit
 
 namespace
 {
@@ -35,7 +35,7 @@ Figure::Figure(const FigureTemplate& tmpl, Level& level)
     , m_level(level)
     , m_elements(m_template.elements())
     , m_tryElements(m_template.elements())
-    , m_currentPosition(vc(0, 0, 8))
+    , m_currentPosition(vc(0, 0, 0))
     , m_currentRotation(quaternion::identity())
     , m_lastPosition(vector3::zero())
     , m_targetPosition(m_currentPosition)
@@ -45,10 +45,6 @@ Figure::Figure(const FigureTemplate& tmpl, Level& level)
     , m_rotationAnimationTimer(0)
     , m_fallTimer(FallTimeForSpeed(level.speed()))
 {
-    for (auto& e : m_elements)
-    {
-        e.z() += 8;
-    }
 }
 
 namespace
@@ -175,7 +171,7 @@ bool Figure::tryRotate(int axis, float dir)
     return true;
 }
 
-bool Figure::tryMove(const vector3& d)
+bool Figure::tryMove(const vector3& d, bool animate)
 {
     assert(!m_isFallen);
     for (size_t i = 0; i < m_elements.size(); ++i)
@@ -190,9 +186,17 @@ bool Figure::tryMove(const vector3& d)
     }
 
     // update mesh transforms
-    m_lastPosition = m_currentPosition;
-    m_targetPosition += d;
-    m_positionAnimationTimer = TRANSLATION_ANIM_TIME;
+    if (animate)
+    {
+        m_lastPosition = m_currentPosition;
+        m_targetPosition += d;
+        m_positionAnimationTimer = TRANSLATION_ANIM_TIME;
+    }
+    else
+    {
+        m_currentPosition = m_targetPosition += d;
+        m_positionAnimationTimer = 0;
+    }
 
     return true;
 }
@@ -208,4 +212,24 @@ bool Figure::tryTransformWithLevel()
     m_elements = m_tryElements;
 
     return true;
+}
+
+bool Figure::spawn()
+{
+    // Find highest point of figure
+    int top = 0;
+    for (const auto& e : m_elements)
+    {
+        if (e.z() > top)
+            top = e.z();
+    }
+
+    float targetZ = float(m_level.size().z() - 1 - top);
+
+    // Fit rotation center of figure to center of level
+    auto levelCenter = vc(float(m_level.size().x()), float(m_level.size().y())) / 2;
+
+    auto translation = levelCenter - m_template.rotationCenter().xy();
+
+    return tryMove(vc(round(translation.x()), round(translation.y()), targetZ));
 }

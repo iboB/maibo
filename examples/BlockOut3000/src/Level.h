@@ -25,6 +25,8 @@ public:
 
     void draw() const;
 
+    const mathgp::uvector3& size() const { return m_size; }
+
     const mathgp::matrix& viewTransform() const { return m_viewTransfrosm; }
 
     bool canFitFigure(const std::vector<mathgp::ivector3>& elements) const;

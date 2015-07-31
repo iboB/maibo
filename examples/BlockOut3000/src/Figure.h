@@ -21,6 +21,10 @@ public:
 
     void draw() const;
 
+    // call for the figure to set itself at a starting position in the level
+    // return false if it cannot
+    bool spawn();
+
     // all functions are "try" because they wont perform the required transform
     // unless it's possible on the level
     // they return false if the transform was unsuccessful
@@ -29,7 +33,7 @@ public:
     bool tryRotateX(float dir);
     bool tryRotateY(float dir);
     bool tryRotateZ(float dir);
-    bool tryMove(const mathgp::vector3& dir);
+    bool tryMove(const mathgp::vector3& dir, bool animate = false);
 
     bool isFallen() const { return m_isFallen; }
 

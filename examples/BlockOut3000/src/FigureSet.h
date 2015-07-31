@@ -25,7 +25,9 @@ public:
     void addSet(const FigureSet* s);
 
     const std::vector<FigureTemplate*>& figureTemplates() const { return m_figureTemplates; }
-    
+
+    const FigureTemplate* getRandomFigureTemplate() const;
+
 private:
     std::string m_name;
     std::string m_description;

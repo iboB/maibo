@@ -25,7 +25,7 @@ public:
         : m_size(size)
         , m_data(new bool[size.x() * size.y()])
     {
-        zero_memory(m_data, size.x() * size.y());
+        reset();
         glGenBuffers(1, &m_solidBuffer);
     }
 
@@ -108,14 +108,28 @@ public:
         glDrawArrays(GL_TRIANGLES, 0, m_numElements * uint32_t(CubeTemplate::instance().triangles().size()) * 3);
     }
 
+    // animate drop after a layer has been erased
+    void drop(float distance)
+    {
+
+    }
+
+    // layer has been erased, to be pushed to the end
+    void reset()
+    {
+        zero_memory(m_data, m_size.x() * m_size.y());
+        m_isDirty = false;
+        m_numElements = 0;
+    }
+
 private:
     const uvector2 m_size;
     bool* m_data;
 
     // number of occupied fields
-    unsigned m_numElements = 0;
+    unsigned m_numElements;
 
-    bool m_isDirty = false; // buffers need regen
+    bool m_isDirty; // buffers need regen
 
     GLuint m_solidBuffer = 0;
     //Gluint m_wireBuffer;
@@ -329,6 +343,33 @@ void Level::adoptFigure(const vector<ivector3>& elements)
 
 void Level::update(uint32_t dt)
 {
+    // custom remove_if so as to drop layers efficiently
+    float drop = 0;
+
+    vector<LevelLayer*> fullLayers;
+    fullLayers.reserve(m_levelLayers.size());
+
+    auto available = m_levelLayers.begin();
+    for (auto i = m_levelLayers.begin(); i != m_levelLayers.end(); ++i)
+    {
+        if ((*i)->isFull())
+        {
+            fullLayers.push_back(*i);
+        }
+        else
+        {
+            (*i)->drop(float(i - available));
+            *available++ = *i;
+        }
+    }
+
+    assert(m_levelLayers.end() - available == fullLayers.size());
+    for (auto l : fullLayers)
+    {
+        *available++ = l;
+        l->reset();
+    }
+
     for (auto l : m_levelLayers)
     {
         l->update(dt);

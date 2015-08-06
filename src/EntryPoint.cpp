@@ -54,7 +54,7 @@ void MainLoop()
 int main(int argc, char* argv[])
 {
     Application_CreateInstance(argc, argv);
-    
+
     Application& theApp = Application_Instance();
 
     theApp.initialize();

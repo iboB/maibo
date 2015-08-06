@@ -1,7 +1,7 @@
 set "Flat" # the simple flat 2d set
 {
 	desc "The simple flat set"
-	
+
 	figure "Square"
 	{
 		e 0 0 0
@@ -43,7 +43,7 @@ set "Flat" # the simple flat 2d set
 set "Extended"
 {
 	include "Flat"
-	
+
 	figure "Experiment"
 	{
 		e 0 0 0

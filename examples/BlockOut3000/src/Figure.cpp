@@ -12,6 +12,8 @@
 
 #include "Resources.h"
 
+#include <mathgp/stdext.h>
+
 using namespace mathgp;
 using namespace std;
 
@@ -103,7 +105,6 @@ void Figure::update(uint32_t dt)
 void Figure::draw() const
 {
     UniformColorMaterial& m = Resources::instance().uniformColorMaterial;
-
     m.setModel(m_transform);
 
     m_template.draw(vc(0.9f, 0.5f, 0.5f, 0.1f), vc(1, 1, 1, 1));

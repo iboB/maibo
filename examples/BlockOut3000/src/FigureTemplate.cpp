@@ -43,7 +43,7 @@ void FigureTemplate::preparePhysicalData()
     {
         point3 elem = vc(float(ielem.x()), float(ielem.y()), float(ielem.z()));
 
-        for(LineSegment seg : theCube.wireVertices())
+        for(LineSegment seg : theCube.wireSegments())
         {
             seg.at(0) += elem;
             seg.at(1) += elem;

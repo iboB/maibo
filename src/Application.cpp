@@ -178,7 +178,7 @@ void Application::updateFPSData()
 
 uint32_t Application::getTicks() const
 {
-    // actually the time returned is since the first time this function is called 
+    // actually the time returned is since the first time this function is called
     // but this is very early in the execution time, so it's fine
 
     static auto start = high_res_clock::now();
@@ -190,7 +190,7 @@ void Application::setState(AppState* newState)
 {
     if (m_currentState)
     {
-        // if there is an existing state finish its cycle, and then 
+        // if there is an existing state finish its cycle, and then
         // set the new state on the next update
         if (m_nextState)
         {
@@ -203,7 +203,7 @@ void Application::setState(AppState* newState)
     else
     {
         assert(!m_nextState);
-        
+
         if (!newState->initialize())
         {
             onSetStateError(newState);
@@ -224,7 +224,7 @@ void Application::checkForStateChange()
 
         assert(m_currentState);
         m_currentState->deinitialize();
-        
+
         safe_delete(m_currentState);
 
         if (!m_nextState->initialize())
@@ -235,7 +235,7 @@ void Application::checkForStateChange()
         {
             m_currentState = m_nextState;
         }
-        
+
         m_nextState = nullptr;
     }
 }

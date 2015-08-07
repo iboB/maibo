@@ -32,7 +32,6 @@ CubeTemplate::CubeTemplate()
         { vc(0, 1, 0), vc(0, 1, 1) },
     };
 
-
     glGenBuffers(1, &m_wireBuffer);
     glBindBuffer(GL_ARRAY_BUFFER, m_wireBuffer);
     glBufferData(GL_ARRAY_BUFFER, data_size(m_wireSegments), m_wireSegments.data(), GL_STATIC_DRAW);

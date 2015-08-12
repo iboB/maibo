@@ -92,6 +92,11 @@ uint32_t GPUProgram::bindCustomAttribute(const char* name)
     return m_boundAttribPtr++;
 }
 
+GLint GPUProgram::getAttributeLocation(const char* name) const
+{
+    return glGetAttribLocation(m_glHandle, name);
+}
+
 GLint GPUProgram::getParameterByName(const char* name) const
 {
     return glGetUniformLocation(m_glHandle, name);

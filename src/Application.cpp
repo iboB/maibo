@@ -126,7 +126,7 @@ void Application::render()
 
 void Application::endFrame()
 {
-    m_currentState->render();
+    m_currentState->endFrame();
     m_mainWindow->swapBuffers();
 }
 

@@ -58,6 +58,6 @@ namespace maibo
         std::vector<ConstShaderPtr> m_shaders;
         uint32_t m_boundAttribPtr;
 
-        size_t m_boundTextures;
+        uint32_t m_boundTextures;
     };
 }

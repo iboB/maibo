@@ -9,6 +9,7 @@
 
 #include <maibo/ResourceManager.h>
 #include <maibo/lib/high_res_clock.h>
+#include <maibo/GUI/ImGui/ImGuiManager.h>
 
 #include "LoadAllState.h"
 #include "Resources.h"
@@ -40,6 +41,9 @@ bool BlockOut::initialize()
     FigureManager::createInstance();
 
     setState(new LoadAllState);
+
+    addManager(ImGuiManager::instance());
+
     startRunning();
 
     return true;

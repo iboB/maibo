@@ -14,13 +14,14 @@ namespace maibo
 {
     class MainWindow;
     class AppState;
+    class Manager;
 
     class Application
     {
     protected:
         Application();
         virtual ~Application();
-    
+
     public:
         bool isRunning() const { return m_isRunning; }
 
@@ -30,6 +31,8 @@ namespace maibo
 
         // Function to be called for each appliacation frame
         void mainLoop();
+
+        const MainWindow& mainWindow() const { return *m_mainWindow; }
 
     protected:
         void startRunning() { m_isRunning = true; }
@@ -90,6 +93,14 @@ namespace maibo
 
         AppState* m_currentState = nullptr;
         AppState* m_nextState = nullptr;
+
+        //////////////////////////////////////
+        // managers
+    public:
+        void addManager(Manager& m);
+
+    private:
+        std::vector<Manager*> m_managers;
 
         //////////////////////////////////////
         // time and fps stuff

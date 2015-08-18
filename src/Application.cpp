@@ -11,6 +11,7 @@
 #include <maibo/lib/high_res_clock.h>
 #include <maibo/MainWindow.h>
 #include <maibo/AppState.h>
+#include <maibo/Manager.h>
 
 #include <sstream>
 
@@ -64,6 +65,9 @@ bool Application::initialize(const Application::CreationParameters& cp)
 
 void Application::deinitialize()
 {
+    for (auto& m : m_managers)
+        m->deinitialize();
+
     m_currentState->deinitialize();
     safe_delete(m_currentState);
     safe_delete(m_nextState);
@@ -75,6 +79,9 @@ void Application::deinitialize()
 
 void Application::beginFrame()
 {
+    for (auto& m : m_managers)
+        m->beginFrame();
+
     m_currentState->beginFrame();
 }
 
@@ -83,6 +90,20 @@ void Application::handleInput()
     SDL_Event event;
     while (SDL_PollEvent(&event))
     {
+        auto managerIterator = m_managers.begin();
+        for (; managerIterator != m_managers.end(); ++managerIterator)
+        {
+            if ((*managerIterator)->handleEvent(event))
+            {
+                break;
+            }
+        }
+        if (managerIterator != m_managers.end())
+        {
+            // some manager handled event
+            continue;
+        }
+
         // let the state handle events with top priority
         if (m_currentState->handleEvent(event))
         {
@@ -116,6 +137,10 @@ void Application::handleInput()
 void Application::update()
 {
     TaskManager::instance().update();
+
+    for (auto& m : m_managers)
+        m->update(m_timeSinceLastFrame);
+
     m_currentState->update(m_timeSinceLastFrame);
 }
 
@@ -127,6 +152,10 @@ void Application::render()
 void Application::endFrame()
 {
     m_currentState->endFrame();
+
+    for (auto& m : m_managers)
+        m->endFrame();
+
     m_mainWindow->swapBuffers();
 }
 
@@ -238,4 +267,10 @@ void Application::checkForStateChange()
 
         m_nextState = nullptr;
     }
+}
+
+void Application::addManager(Manager& m)
+{
+    m.initialize();
+    m_managers.push_back(&m);
 }

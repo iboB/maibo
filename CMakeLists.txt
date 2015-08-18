@@ -20,6 +20,10 @@ include(maibo)
 include(precompiled_header)
 include(src_group)
 
+# Options about components
+# All are enabled by default
+option(MAIBO_USE_IMGUI "Integrate the ImGui third party library" ON)
+
 # Options about example projects
 # All are enabled by default
 option(MAIBO_EXAMPLE_BLOCKOUT3000 "Also build the example BlockOut3000" ON)
@@ -89,6 +93,7 @@ src_group(Maibo sources
     ${INC}/Dependencies.h
     ${SRC}/MainWindow.cpp
     ${INC}/MainWindow.h
+    ${INC}/Manager.h
 )
 
 src_group(Resources sources
@@ -122,6 +127,12 @@ src_group(States sources
     ${INC}/ResourceFutureState.h
 )
 
+src_group(Rendering sources
+    ${SRC}/Texture.cpp
+    ${INC}/Texture.h
+    ${INC}/TexturePtr.h
+)
+
 src_group(Rendering~Material sources
     ${SRC}/Shader.cpp
     ${INC}/Shader.h
@@ -131,6 +142,13 @@ src_group(Rendering~Material sources
     ${INC}/GPUProgram.h
     ${INC}/GPUProgramPtr.h
 )
+
+if(MAIBO_USE_IMGUI)
+    src_group(GUI~ImGui sources
+        ${SRC}/ImGuiManager.cpp
+        ${INC}/GUI/ImGui/ImGuiManager.h
+    )
+endif(MAIBO_USE_IMGUI)
 
 
 # third party libraries

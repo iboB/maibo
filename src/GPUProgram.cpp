@@ -8,6 +8,7 @@
 // class for a GPU program (effect)
 #include <maibo/GPUProgram.h>
 #include <maibo/Shader.h>
+#include <maibo/Texture.h>
 
 using namespace std;
 using namespace mathgp;
@@ -129,9 +130,9 @@ void GPUProgram::setParameter(GLint param, const vector4& vec)
 
 void GPUProgram::setParameter(GLint param, const Texture& tex)
 {
-    //glActiveTexture(GL_TEXTURE0 + m_boundTextures);
-    //glBindTexture(tex.type(), tex.glHandle());
-    //glUniform1i(param, m_boundTextures);
+    glActiveTexture(GL_TEXTURE0 + m_boundTextures);
+    glBindTexture(tex.type(), tex.glHandle());
+    glUniform1i(param, m_boundTextures);
 
     ++m_boundTextures;
 }

@@ -19,6 +19,8 @@
 #   include <SDL2/SDL.h>
 #endif
 
+#include <SDL_image.h>
+
 #if defined(_WIN32)
 #    include <GL/glew.h> //no extensions are available for Windows so use glew
 #else

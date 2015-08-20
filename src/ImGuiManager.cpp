@@ -50,12 +50,14 @@ namespace
 
     const char* fragmentShaderSource =
         "\
+        #version 100 \n\
+        precision mediump float; \
         uniform sampler2D tex; \
         varying vec2 texCoord; \
         varying vec4 color; \
         void main() \
         { \
-            gl_FragColor = color * texture(tex, texCoord); \
+            gl_FragColor = color * texture2D(tex, texCoord); \
         } \
         ";
 }
@@ -65,72 +67,75 @@ namespace
     int Attrib_Position, Attrib_TexCoord, Attrib_Color;
 }
 
-namespace maibo
+void ImGuiManager::imguiRenderCallback(ImDrawData* data)
 {
-    static void Render(ImDrawData* data)
+    if (data->CmdListsCount == 0)
+        return;
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+    auto& gui = ImGuiManager::instance();
+
+    MAIBO_GL_SENTRY(GLEnable, GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    MAIBO_GL_SENTRY(GLDisable, GL_CULL_FACE);
+    MAIBO_GL_SENTRY(GLDisable, GL_DEPTH_TEST);
+    MAIBO_GL_SENTRY(GLEnable, GL_SCISSOR_TEST);
+
+    // custom ortho 2d matrix
+    const float w = ImGui::GetIO().DisplaySize.x;
+    const float h = ImGui::GetIO().DisplaySize.y;
+    //auto projection = matrix::ortho_rh(0, w, h, 0, 0, 1); // note the inverted height. ImGui uses 0,0 as top left
+    const float ortho_projection[4][4] =
     {
-        if (data->CmdListsCount == 0)
-            return;
+        { 2.0f / w, 0.0f, 0.0f, 0.0f },
+        { 0.0f, 2.0f / -h, 0.0f, 0.0f },
+        { 0.0f, 0.0f, -1.0f, 0.0f },
+        { -1.0f, 1.0f, 0.0f, 1.0f },
+    };
 
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    auto projection = matrix::from_ptr(*ortho_projection);
 
-        auto& gui = ImGuiManager::instance();
+    gui.m_gpuProgram->use();
+    gui.m_gpuProgram->setParameter(gui.m_projParam, projection);
 
-        MAIBO_GL_SENTRY(GLEnable, GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        MAIBO_GL_SENTRY(GLDisable, GL_CULL_FACE);
-        MAIBO_GL_SENTRY(GLDisable, GL_DEPTH_TEST);
-        MAIBO_GL_SENTRY(GLEnable, GL_SCISSOR_TEST);
+    MAIBO_GL_SENTRY(GLEnableAttrib, Attrib_Position);
+    MAIBO_GL_SENTRY(GLEnableAttrib, Attrib_TexCoord);
+    MAIBO_GL_SENTRY(GLEnableAttrib, Attrib_Color);
 
-        // custom ortho 2d matrix
-        const float w = ImGui::GetIO().DisplaySize.x;
-        const float h = ImGui::GetIO().DisplaySize.y;
-        //auto projection = matrix::ortho_rh(0, w, h, 0, 0, 1); // note the inverted height. ImGui uses 0,0 as top left
-        const float ortho_projection[4][4] =
+    glBindBuffer(GL_ARRAY_BUFFER, gui.m_vertexBuffer);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gui.m_indexBuffer);
+
+    glVertexAttribPointer(Attrib_Position, 2, GL_FLOAT, GL_FALSE, sizeof(ImDrawVert), OFFSET_OF(ImDrawVert, pos));
+    glVertexAttribPointer(Attrib_TexCoord, 2, GL_FLOAT, GL_FALSE, sizeof(ImDrawVert), OFFSET_OF(ImDrawVert, uv));
+    glVertexAttribPointer(Attrib_Color, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(ImDrawVert), OFFSET_OF(ImDrawVert, col));
+
+    for (int i = 0; i < data->CmdListsCount; ++i)
+    {
+        const auto list = data->CmdLists[i];
+
+        glBufferData(GL_ARRAY_BUFFER, sizeof(ImDrawVert) * list->VtxBuffer.size(), list->VtxBuffer.Data, GL_DYNAMIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(ImDrawIdx) * list->IdxBuffer.size(), list->IdxBuffer.Data, GL_DYNAMIC_DRAW);
+
+        ImDrawIdx* offsetPtr = nullptr;
+        for (const auto& cmd : list->CmdBuffer)
         {
-            { 2.0f / w, 0.0f, 0.0f, 0.0f },
-            { 0.0f, 2.0f / -h, 0.0f, 0.0f },
-            { 0.0f, 0.0f, -1.0f, 0.0f },
-            { -1.0f, 1.0f, 0.0f, 1.0f },
-        };
-
-        auto projection = matrix::from_ptr(*ortho_projection);
-
-        gui.m_gpuProgram->use();
-        gui.m_gpuProgram->setParameter(gui.m_projParam, projection);
-
-        MAIBO_GL_SENTRY(GLEnableAttrib, Attrib_Position);
-        MAIBO_GL_SENTRY(GLEnableAttrib, Attrib_TexCoord);
-        MAIBO_GL_SENTRY(GLEnableAttrib, Attrib_Color);
-
-        for (int i = 0; i < data->CmdListsCount; ++i)
-        {
-            const auto list = data->CmdLists[i];
-
-            glVertexAttribPointer(Attrib_Position, 2, GL_FLOAT, GL_FALSE, sizeof(ImDrawVert), &list->VtxBuffer.front().pos);
-            glVertexAttribPointer(Attrib_TexCoord, 2, GL_FLOAT, GL_FALSE, sizeof(ImDrawVert), &list->VtxBuffer.front().uv);
-            glVertexAttribPointer(Attrib_Color, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(ImDrawVert), &list->VtxBuffer.front().col);
-
-            int vertexOffset = 0;
-            for (const auto& cmd : list->CmdBuffer)
+            if (cmd.UserCallback)
             {
-                if (cmd.UserCallback)
-                {
-                    cmd.UserCallback(list, &cmd);
-                }
-                else
-                {
-                    // draw
-                    const Texture* t = reinterpret_cast<Texture*>(cmd.TextureId);
-                    assert(t);
-                    gui.m_gpuProgram->setParameter(gui.m_textureParam, *t);
-                    glScissor(int(cmd.ClipRect.x), (int)(h - cmd.ClipRect.w), int(cmd.ClipRect.z - cmd.ClipRect.x), int(cmd.ClipRect.w - cmd.ClipRect.y));
-                    glDrawElements(GL_TRIANGLES, cmd.ElemCount, GL_UNSIGNED_SHORT, list->IdxBuffer.Data + vertexOffset);
-                    gui.m_gpuProgram->resetUniforms();
-                }
-                vertexOffset += cmd.ElemCount;
+                cmd.UserCallback(list, &cmd);
             }
+            else
+            {
+                // draw
+                const Texture* t = reinterpret_cast<Texture*>(cmd.TextureId);
+                assert(t);
+                gui.m_gpuProgram->setParameter(gui.m_textureParam, *t);
+                glScissor(int(cmd.ClipRect.x), (int)(h - cmd.ClipRect.w), int(cmd.ClipRect.z - cmd.ClipRect.x), int(cmd.ClipRect.w - cmd.ClipRect.y));
+                glDrawElements(GL_TRIANGLES, cmd.ElemCount, GL_UNSIGNED_SHORT, offsetPtr);
+                gui.m_gpuProgram->resetUniforms();
+            }
+            offsetPtr += cmd.ElemCount;
         }
     }
 }
@@ -155,9 +160,12 @@ bool ImGuiManager::initialize()
     auto& io = ImGui::GetIO();
 
     // callbacks
-    io.RenderDrawListsFn = Render;
+    io.RenderDrawListsFn = &ImGuiManager::imguiRenderCallback;
     io.GetClipboardTextFn = GetClipboardText;
     io.SetClipboardTextFn = SetClipboardText;
+
+    // other config
+    io.IniFilename = nullptr;
 
 #if defined(_WIN32)
     // get hwnd for the hardware cursor
@@ -201,11 +209,16 @@ bool ImGuiManager::initialize()
     io.Fonts->ClearInputData();
     io.Fonts->ClearTexData();
 
+    glGenBuffers(1, &m_vertexBuffer);
+    glGenBuffers(1, &m_indexBuffer);
+
     return true;
 }
 
 void ImGuiManager::deinitialize()
 {
+    glDeleteBuffers(1, &m_vertexBuffer);
+    glDeleteBuffers(1, &m_indexBuffer);
     ImGui::GetIO().Fonts->TexID = nullptr;
     ImGui::Shutdown();
 }

@@ -114,6 +114,11 @@ src_group(Lib sources
     ${INC}/lib/string.h
 )
 
+src_group(Lib~Signals sources
+    ${INC}/lib/Signals/Signal.h
+    ${INC}/lib/Signals/AutoSlot.h
+)
+
 src_group(Tasks sources
     ${SRC}/TaskManager.cpp
     ${INC}/TaskManager.h

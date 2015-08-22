@@ -93,7 +93,6 @@ src_group(Maibo sources
     ${INC}/Dependencies.h
     ${SRC}/MainWindow.cpp
     ${INC}/MainWindow.h
-    ${INC}/Manager.h
 )
 
 src_group(Resources sources
@@ -146,6 +145,10 @@ src_group(Rendering~Material sources
     ${SRC}/GPUProgram.cpp
     ${INC}/GPUProgram.h
     ${INC}/GPUProgramPtr.h
+)
+
+src_group(Input sources
+    ${INC}/InputEventHandler.h
 )
 
 if(MAIBO_USE_IMGUI)

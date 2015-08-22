@@ -7,6 +7,8 @@
 //
 #pragma once
 
+#include <maibo/lib/Signals/Signal.h>
+
 // Main application class
 // Users must inherit from it and override its virtual methods
 
@@ -14,7 +16,7 @@ namespace maibo
 {
     class MainWindow;
     class AppState;
-    class Manager;
+    class InputEventHandler;
 
     class Application
     {
@@ -34,7 +36,17 @@ namespace maibo
 
         const MainWindow& mainWindow() const { return *m_mainWindow; }
 
+    public:
+
+        Signal<> OnBeginFrame;
+        Signal<uint32_t> OnPreUpdate;
+        Signal<uint32_t> OnPostUpdate;
+        Signal<> OnPreRender;
+        Signal<> OnPostRender;
+        Signal<> OnEndFrame;
+
     protected:
+
         void startRunning() { m_isRunning = true; }
         void stopRunning() { m_isRunning = false; }
 
@@ -95,12 +107,15 @@ namespace maibo
         AppState* m_nextState = nullptr;
 
         //////////////////////////////////////
-        // managers
+        // events
     public:
-        void addManager(Manager& m);
+        // Adds/Remove global event handlers
+        // Will sort them by priority
+        void addGlobalInputEventHandler(InputEventHandler* handler);
+        void removeGlobalInputEventHandler(InputEventHandler* handler);
 
     private:
-        std::vector<Manager*> m_managers;
+        std::vector<InputEventHandler*> m_globalInputEventHandlers;
 
         //////////////////////////////////////
         // time and fps stuff

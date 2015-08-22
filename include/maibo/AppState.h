@@ -21,13 +21,13 @@ namespace maibo
         virtual void deinitialize() = 0;
 
         // not pure virtual since you may want to create a state with no input
-        // return value is whether the event should be processed by others
+        // return value shows whether the event has been processed by this handler
         virtual bool handleEvent(const SDL_Event&) { return false; };
 
         // called at the start of each frame before anything else
         virtual void beginFrame() = 0;
 
-        // dt is time delta since last frame    
+        // dt is time delta since last frame
         virtual void update(uint32_t dt) = 0;
 
         // do your rendering here

@@ -9,7 +9,9 @@
 
 #include <maibo/GPUProgramPtr.h>
 #include <maibo/TexturePtr.h>
-#include <maibo/Manager.h>
+#include <maibo/InputEventHandler.h>
+#include <maibo/lib/ExplicitSingleton.h>
+#include <maibo/lib/Signals/AutoSlot.h>
 
 struct ImDrawData;
 
@@ -18,25 +20,15 @@ struct ImDrawData;
 
 namespace maibo
 {
-    class ImGuiManager : public Manager
+    class ImGuiManager : public ExplicitSingleton<ImGuiManager>, public AutoSlot, public InputEventHandler
     {
-    public:
-        ImGuiManager();
-        ~ImGuiManager();
+        MAIBO_DECLARE_EXPLICIT_SINGLETON(ImGuiManager);
 
-        static ImGuiManager& instance();
-
-    private:
-        virtual bool initialize() override;
-        virtual void deinitialize() override;
-
-        virtual const char* name() const override;
-
-        virtual void update(uint32_t dt) override;
+        void update(uint32_t dt);
 
         virtual bool handleEvent(const SDL_Event& event) override;
 
-        virtual void endFrame() override;
+        void endFrame();
         void render(); // called in endFrame in order to be last
 
         ///////////////////////////////////////

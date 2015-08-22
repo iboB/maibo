@@ -142,20 +142,6 @@ void ImGuiManager::imguiRenderCallback(ImDrawData* data)
 
 ImGuiManager::ImGuiManager()
 {
-
-}
-
-ImGuiManager::~ImGuiManager()
-{
-}
-
-const char* ImGuiManager::name() const
-{
-    return "ImGUI manager";
-}
-
-bool ImGuiManager::initialize()
-{
     m_mouseButtonState = {};
     auto& io = ImGui::GetIO();
 
@@ -167,9 +153,10 @@ bool ImGuiManager::initialize()
     // other config
     io.IniFilename = nullptr;
 
+    auto& app = Application_Instance();
 #if defined(_WIN32)
     // get hwnd for the hardware cursor
-    HWND wnd = Application_Instance().mainWindow().sdlSysWMInfo().info.win.window;
+    HWND wnd = app.mainWindow().sdlSysWMInfo().info.win.window;
     io.ImeWindowHandle = wnd;
 #endif
 
@@ -212,11 +199,16 @@ bool ImGuiManager::initialize()
     glGenBuffers(1, &m_vertexBuffer);
     glGenBuffers(1, &m_indexBuffer);
 
-    return true;
+    app.OnPreUpdate.connect<ImGuiManager, &ImGuiManager::update>(this);
+    app.OnPostRender.connect<ImGuiManager, &ImGuiManager::render>(this);
+    app.addGlobalInputEventHandler(this);
 }
 
-void ImGuiManager::deinitialize()
+ImGuiManager::~ImGuiManager()
 {
+    auto& app = Application_Instance();
+    app.removeGlobalInputEventHandler(this);
+
     glDeleteBuffers(1, &m_vertexBuffer);
     glDeleteBuffers(1, &m_indexBuffer);
     ImGui::GetIO().Fonts->TexID = nullptr;
@@ -273,10 +265,4 @@ bool ImGuiManager::handleEvent(const SDL_Event& event)
 void ImGuiManager::endFrame()
 {
     render();
-}
-
-ImGuiManager& ImGuiManager::instance()
-{
-    static ImGuiManager theInstance;
-    return theInstance;
 }

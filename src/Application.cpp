@@ -11,7 +11,7 @@
 #include <maibo/lib/high_res_clock.h>
 #include <maibo/MainWindow.h>
 #include <maibo/AppState.h>
-#include <maibo/Manager.h>
+#include <maibo/InputEventHandler.h>
 
 #include <sstream>
 
@@ -65,9 +65,6 @@ bool Application::initialize(const Application::CreationParameters& cp)
 
 void Application::deinitialize()
 {
-    for (auto& m : m_managers)
-        m->deinitialize();
-
     m_currentState->deinitialize();
     safe_delete(m_currentState);
     safe_delete(m_nextState);
@@ -79,8 +76,7 @@ void Application::deinitialize()
 
 void Application::beginFrame()
 {
-    for (auto& m : m_managers)
-        m->beginFrame();
+    OnBeginFrame.emit();
 
     m_currentState->beginFrame();
 }
@@ -90,17 +86,17 @@ void Application::handleInput()
     SDL_Event event;
     while (SDL_PollEvent(&event))
     {
-        auto managerIterator = m_managers.begin();
-        for (; managerIterator != m_managers.end(); ++managerIterator)
+        auto inputHandlerIterator = m_globalInputEventHandlers.begin();
+        for (; inputHandlerIterator != m_globalInputEventHandlers.end(); ++inputHandlerIterator)
         {
-            if ((*managerIterator)->handleEvent(event))
+            if ((*inputHandlerIterator)->handleEvent(event))
             {
                 break;
             }
         }
-        if (managerIterator != m_managers.end())
+        if (inputHandlerIterator != m_globalInputEventHandlers.end())
         {
-            // some manager handled event
+            // some global input event handler handled event
             continue;
         }
 
@@ -136,25 +132,28 @@ void Application::handleInput()
 
 void Application::update()
 {
+    OnPreUpdate.emit(m_timeSinceLastFrame);
     TaskManager::instance().update();
 
-    for (auto& m : m_managers)
-        m->update(m_timeSinceLastFrame);
-
     m_currentState->update(m_timeSinceLastFrame);
+
+    OnPostUpdate.emit(m_timeSinceLastFrame);
 }
 
 void Application::render()
 {
+    OnPreRender.emit();
+
     m_currentState->render();
+
+    OnPostRender.emit();
 }
 
 void Application::endFrame()
 {
     m_currentState->endFrame();
 
-    for (auto& m : m_managers)
-        m->endFrame();
+    OnEndFrame.emit();
 
     m_mainWindow->swapBuffers();
 }
@@ -269,8 +268,23 @@ void Application::checkForStateChange()
     }
 }
 
-void Application::addManager(Manager& m)
+void Application::addGlobalInputEventHandler(InputEventHandler* handler)
 {
-    m.initialize();
-    m_managers.push_back(&m);
+    auto pos = lower_bound(m_globalInputEventHandlers.begin(), m_globalInputEventHandlers.end(), handler,
+        [](const InputEventHandler* a, const InputEventHandler* b)
+        {
+            return a->priority() < b->priority();
+        });
+
+    m_globalInputEventHandlers.insert(pos, handler);
+}
+
+void Application::removeGlobalInputEventHandler(InputEventHandler* handler)
+{
+    auto pos = find(m_globalInputEventHandlers.begin(), m_globalInputEventHandlers.end(), handler);
+
+    if (pos != m_globalInputEventHandlers.end())
+    {
+        m_globalInputEventHandlers.erase(pos);
+    }
 }

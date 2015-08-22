@@ -42,7 +42,7 @@ bool BlockOut::initialize()
 
     setState(new LoadAllState);
 
-    addManager(ImGuiManager::instance());
+    ImGuiManager::createInstance();
 
     startRunning();
 
@@ -51,6 +51,7 @@ bool BlockOut::initialize()
 
 void BlockOut::deinitialize()
 {
+    ImGuiManager::destroyInstance();
     FigureManager::destroyInstance();
     CubeTemplate::destroyInstance();
     Resources::destroyInstance();

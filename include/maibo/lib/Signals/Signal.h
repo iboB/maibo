@@ -127,7 +127,7 @@ namespace maibo
         //void connect(const Slot* s, void(*func)(const Slot*, Args...));
 
         // emit a signal
-        void emit(Args&& ...args)
+        void emit(Args ...args)
         {
             for (auto& ps : m_connectedSlots)
             {

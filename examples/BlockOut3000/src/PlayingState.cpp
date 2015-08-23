@@ -17,8 +17,6 @@
 #include <maibo/GPUProgram.h>
 #include <maibo/lib/GLSentries.h>
 
-#include <imgui.h>
-
 // main gameplay state
 
 using namespace mathgp;
@@ -105,9 +103,6 @@ void PlayingState::update(uint32_t dt)
 
     if (m_currentFigure->isFallen())
         spawnNextFigure();
-
-    static bool show = true;
-    ImGui::ShowTestWindow(&show);
 }
 
 void PlayingState::render()

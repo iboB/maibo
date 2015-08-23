@@ -265,6 +265,7 @@ void ImGuiManager::update(uint32_t dt)
     swap(io.MouseDown[1], io.MouseDown[2]);
 
     bool hadMouseFocur = io.WantCaptureMouse;
+    bool wasInputtingText = io.WantInputCharacters;
 
     ImGui::NewFrame();
 
@@ -278,6 +279,15 @@ void ImGuiManager::update(uint32_t dt)
         m_oldSDLCursorState = SDL_ShowCursor(SDL_QUERY);
         SDL_ShowCursor(SDL_DISABLE);
         io.MouseDrawCursor = true;
+    }
+
+    if (wasInputtingText && !io.WantInputCharacters)
+    {
+        SDL_StopTextInput();
+    }
+    else if (!wasInputtingText && io.WantInputCharacters)
+    {
+        SDL_StartTextInput();
     }
 
     io.MouseWheel = 0;
@@ -339,6 +349,11 @@ bool ImGuiManager::handleEvent(const SDL_Event& event)
     else if (event.type == SDL_KEYUP)
     {
         io.KeysDown[event.key.keysym.scancode] = false;
+        thisEventType = Keyboard;
+    }
+    else if (event.type == SDL_TEXTINPUT)
+    {
+        io.AddInputCharactersUTF8(event.text.text);
         thisEventType = Keyboard;
     }
 

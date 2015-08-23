@@ -50,41 +50,45 @@ bool PlayingState::handleEvent(const SDL_Event& event)
 {
     if (event.type == SDL_KEYDOWN)
     {
-        switch (event.key.keysym.sym)
+        // ignore repeats
+        if (!event.key.repeat)
         {
-        case SDLK_q:
-            m_currentFigure->tryRotateX(1);
-            return true;
-        case SDLK_a:
-            m_currentFigure->tryRotateX(-1);
-            return true;
-        case SDLK_w:
-            m_currentFigure->tryRotateY(1);
-            return true;
-        case SDLK_s:
-            m_currentFigure->tryRotateY(-1);
-            return true;
-        case SDLK_e:
-            m_currentFigure->tryRotateZ(1);
-            return true;
-        case SDLK_d:
-            m_currentFigure->tryRotateZ(-1);
-            return true;
-        case SDLK_LEFT:
-            m_currentFigure->tryMove(vc(-1, 0, 0));
-            return true;
-        case SDLK_RIGHT:
-            m_currentFigure->tryMove(vc(1, 0, 0));
-            return true;
-        case SDLK_UP:
-            m_currentFigure->tryMove(vc(0, 1, 0));
-            return true;
-        case SDLK_DOWN:
-            m_currentFigure->tryMove(vc(0, -1, 0));
-            return true;
-        case SDLK_SPACE:
-            m_currentFigure->tryMove(vc(0, 0, -1));
-            return true;
+            switch (event.key.keysym.sym)
+            {
+            case SDLK_q:
+                m_currentFigure->tryRotateX(1);
+                return true;
+            case SDLK_a:
+                m_currentFigure->tryRotateX(-1);
+                return true;
+            case SDLK_w:
+                m_currentFigure->tryRotateY(1);
+                return true;
+            case SDLK_s:
+                m_currentFigure->tryRotateY(-1);
+                return true;
+            case SDLK_e:
+                m_currentFigure->tryRotateZ(1);
+                return true;
+            case SDLK_d:
+                m_currentFigure->tryRotateZ(-1);
+                return true;
+            case SDLK_LEFT:
+                m_currentFigure->tryMove(vc(-1, 0, 0));
+                return true;
+            case SDLK_RIGHT:
+                m_currentFigure->tryMove(vc(1, 0, 0));
+                return true;
+            case SDLK_UP:
+                m_currentFigure->tryMove(vc(0, 1, 0));
+                return true;
+            case SDLK_DOWN:
+                m_currentFigure->tryMove(vc(0, -1, 0));
+                return true;
+            case SDLK_SPACE:
+                m_currentFigure->tryMove(vc(0, 0, -1));
+                return true;
+            }
         }
     }
 

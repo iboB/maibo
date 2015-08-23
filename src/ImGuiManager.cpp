@@ -236,7 +236,26 @@ void ImGuiManager::update(uint32_t dt)
         m_mouseButtonState[i] = false;
     }
 
+    // sdl mouse 1 is middle, imgui mouse 1 is right
+    swap(io.MouseDown[1], io.MouseDown[2]);
+
+    bool hadMouseFocur = io.WantCaptureMouse;
+
     ImGui::NewFrame();
+
+    if (hadMouseFocur && !io.WantCaptureMouse)
+    {
+        SDL_ShowCursor(m_oldSDLCursorState);
+        io.MouseDrawCursor = false;
+    }
+    else if (!hadMouseFocur && io.WantCaptureMouse)
+    {
+        m_oldSDLCursorState = SDL_ShowCursor(SDL_QUERY);
+        SDL_ShowCursor(SDL_DISABLE);
+        io.MouseDrawCursor = true;
+    }
+
+    io.MouseWheel = 0;
 }
 
 void ImGuiManager::render()
@@ -246,20 +265,63 @@ void ImGuiManager::render()
 
 bool ImGuiManager::handleEvent(const SDL_Event& event)
 {
-    // for now, eat most events
+    enum EventType
+    {
+        Other,
+        Mouse,
+        Keyboard,
+    };
+
+    EventType thisEventType = Other;
+
+    auto& io = ImGui::GetIO();
+
     if (event.type == SDL_MOUSEBUTTONDOWN)
     {
         if (event.button.button - 1 < int(m_mouseButtonState.size()))
         {
             m_mouseButtonState[event.button.button - 1] = true;
         }
+        thisEventType = Mouse;
     }
-    else
+    else if (event.type == SDL_MOUSEMOTION)
     {
+        thisEventType = Mouse;
+    }
+    else if (event.type == SDL_MOUSEWHEEL)
+    {
+        float wheelY = float(event.wheel.y) / 5;
+
+#if defined(__EMSCRIPTEN__)
+        // curiously the browser sends us percent wheel values in sdl
+        wheelY /= 100;
+#endif
+
+        // SDL 2.0.4
+        //if (event.wheel.direction == SDL_MOUSEWHEEL_FLIPPED)
+        //{
+        //    wheelY *= -1;
+        //}
+
+        io.MouseWheel += wheelY;
+        thisEventType = Mouse;
+
+        cout << io.MouseWheel << endl;
+    }
+
+
+    switch (thisEventType)
+    {
+    case Mouse:
+        return io.WantCaptureMouse;
+    case Keyboard:
+        return io.WantCaptureKeyboard;
+    case Other: // preveting clang warnings
         return false;
     }
 
-    return true;
+    // don't eat other events
+    return false;
 }
 
 void ImGuiManager::endFrame()

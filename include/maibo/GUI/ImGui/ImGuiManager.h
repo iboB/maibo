@@ -32,6 +32,13 @@ namespace maibo
         void render(); // called in endFrame in order to be last
 
         ///////////////////////////////////////
+        // settings
+
+        // we're drawing the ImGui cursor when possible
+        // so preserve the sdl cursor state between update calls
+        int m_oldSDLCursorState = SDL_ENABLE;
+
+        ///////////////////////////////////////
         // input
 
         // in order to work correctly if a button was pressed and then released before the end of a frame

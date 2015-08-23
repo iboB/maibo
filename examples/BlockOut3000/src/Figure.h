@@ -37,12 +37,20 @@ public:
 
     bool isFallen() const { return m_isFallen; }
 
+    // figure will try to fall faster
+    void startDrop();
+    void stopDrop();
+
 private:
     // axis is 0=x, 1=y, 2=z
     bool tryRotate(int axis, float dir);
 
     // tries tryElems with level, sets element to the try ones, if possible
     bool tryTransformWithLevel();
+
+    // gives the fall time for a given speed
+    // if the figure dropped, it ignores the speed and just returns the drop fall time
+    int fallTimeForSpeed(int speed) const;
 
     //////////////////////////////////////////////////
     // logical data
@@ -57,6 +65,15 @@ private:
 
     // used when a transformation is performed to check if it's possible on the level
     std::vector<mathgp::ivector3> m_tryElements;
+
+    // is figure fallen?
+    bool m_isFallen = false;
+
+    // is figure falling faster (user wants it to fall)
+    bool m_isDropped = false;
+
+    // fall timer
+    int m_fallTimer;
 
     //////////////////////////////////////////////////
     // physical data
@@ -81,10 +98,4 @@ private:
     // timers for animation, when they reach 0, current = target
     int m_positionAnimationTimer;
     int m_rotationAnimationTimer;
-
-    // fall timer
-    int m_fallTimer;
-
-    // is figure fallen?
-    bool m_isFallen = false;
 };

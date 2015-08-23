@@ -11,6 +11,7 @@
 #include "FigureTemplate.h"
 
 #include "Resources.h"
+#include "Preferences.h"
 
 #include <mathgp/stdext.h>
 
@@ -23,20 +24,12 @@ const int TRANSLATION_ANIM_TIME = 100;
 
 const int FALL_TIME = 800; // milliseconds to fall a unit
 
-namespace
-{
-    int FallTimeForSpeed(int speed)
-    {
-        int speedMultiplier = (FALL_TIME - TRANSLATION_ANIM_TIME) / Level::MAX_SPEED;
-        return TRANSLATION_ANIM_TIME + (Level::MAX_SPEED - speed) * speedMultiplier;
-    }
-}
-
 Figure::Figure(const FigureTemplate& tmpl, Level& level)
     : m_template(tmpl)
     , m_level(level)
     , m_elements(m_template.elements())
     , m_tryElements(m_template.elements())
+    , m_fallTimer(fallTimeForSpeed(level.speed()))
     , m_currentPosition(vc(0, 0, 0))
     , m_currentRotation(quaternion::identity())
     , m_lastPosition(vector3::zero())
@@ -45,7 +38,6 @@ Figure::Figure(const FigureTemplate& tmpl, Level& level)
     , m_targetRotation(m_currentRotation)
     , m_positionAnimationTimer(0)
     , m_rotationAnimationTimer(0)
-    , m_fallTimer(FallTimeForSpeed(level.speed()))
 {
 }
 
@@ -67,7 +59,7 @@ void Figure::update(uint32_t dt)
     {
         if (m_fallTimer <= 0)
         {
-            m_fallTimer = FallTimeForSpeed(m_level.speed()) + m_fallTimer;
+            m_fallTimer = fallTimeForSpeed(m_level.speed()) + m_fallTimer;
             if (!tryMove(vc(0, 0, -1)))
             {
                 // if figgure cannot move down, it's fallen
@@ -233,4 +225,27 @@ bool Figure::spawn()
     auto translation = levelCenter - m_template.rotationCenter().xy();
 
     return tryMove(vc(round(translation.x()), round(translation.y()), targetZ));
+}
+
+void Figure::startDrop()
+{
+    tryMove(vc(0, 0, -1), true);
+    m_fallTimer = Preferences::instance().figureDropTime();
+    m_isDropped = true;
+}
+
+void Figure::stopDrop()
+{
+    m_isDropped = false;
+}
+
+int Figure::fallTimeForSpeed(int speed) const
+{
+    if (m_isDropped)
+    {
+        return Preferences::instance().figureDropTime();
+    }
+
+    int speedMultiplier = (FALL_TIME - TRANSLATION_ANIM_TIME) / Level::MAX_SPEED;
+    return TRANSLATION_ANIM_TIME + (Level::MAX_SPEED - speed) * speedMultiplier;
 }

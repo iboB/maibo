@@ -86,9 +86,16 @@ bool PlayingState::handleEvent(const SDL_Event& event)
                 m_currentFigure->tryMove(vc(0, -1, 0));
                 return true;
             case SDLK_SPACE:
-                m_currentFigure->tryMove(vc(0, 0, -1));
+                m_currentFigure->startDrop();
                 return true;
             }
+        }
+    }
+    else if (event.type == SDL_KEYUP)
+    {
+        if (event.key.keysym.sym == SDLK_SPACE)
+        {
+            m_currentFigure->stopDrop();
         }
     }
 

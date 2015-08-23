@@ -16,9 +16,13 @@ class Preferences : public maibo::ImplicitSingleton<Preferences>
 public:
     Preferences();
 
+    // time for the figure to fall a unit when dropped
+    int figureDropTime() const { return m_figureDropTime; }
+
     const mathgp::vector4& layerColor(uint32_t layer) const;
 
 private:
+    int m_figureDropTime;
 
     std::vector<mathgp::vector4> m_levelLayerColors;
 };

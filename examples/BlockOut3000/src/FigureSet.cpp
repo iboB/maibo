@@ -8,6 +8,7 @@
 
 // a named set of figures
 #include "FigureSet.h"
+#include "Random.h"
 
 void FigureSet::addSet(const FigureSet* s)
 {
@@ -16,5 +17,6 @@ void FigureSet::addSet(const FigureSet* s)
 
 const FigureTemplate* FigureSet::getRandomFigureTemplate() const
 {
-    return m_figureTemplates[rand() % m_figureTemplates.size()];
+
+    return m_figureTemplates[InGameRndU32() % m_figureTemplates.size()];
 }

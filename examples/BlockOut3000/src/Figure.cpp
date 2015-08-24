@@ -12,6 +12,7 @@
 
 #include "Resources.h"
 #include "Preferences.h"
+#include "Random.h"
 
 #include <mathgp/stdext.h>
 
@@ -39,6 +40,17 @@ Figure::Figure(const FigureTemplate& tmpl, Level& level)
     , m_positionAnimationTimer(0)
     , m_rotationAnimationTimer(0)
 {
+    //// add random transform
+    //for (int i = 0; i < 5; ++i)
+    //{
+    //    float dirs[] = { 0, -1, 1 };
+
+    //    auto dir = InGameRndU32() % 3;
+    //    if (!dir)
+    //        continue;
+
+    //    tryRotate(InGameRndU32() % 3, dirs[dir], false, true);
+    //}
 }
 
 namespace

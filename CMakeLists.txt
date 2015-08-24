@@ -110,6 +110,7 @@ src_group(Lib sources
     ${INC}/lib/memory.h
     ${INC}/lib/GLSentries.h
     ${INC}/lib/Macros.h
+    ${INC}/lib/simplified_rng.h
     ${INC}/lib/string.h
 )
 

@@ -33,7 +33,11 @@ public:
     bool tryRotateX(float dir);
     bool tryRotateY(float dir);
     bool tryRotateZ(float dir);
-    bool tryMove(const mathgp::vector3& dir, bool animate = false);
+
+    // axis is 0=x, 1=y, 2=z
+    bool tryRotate(int axis, float dir, bool animate = true, bool force = false);
+
+    bool tryMove(const mathgp::vector3& dir, bool animate = true, bool force = false);
 
     bool isFallen() const { return m_isFallen; }
 
@@ -42,11 +46,9 @@ public:
     void stopDrop();
 
 private:
-    // axis is 0=x, 1=y, 2=z
-    bool tryRotate(int axis, float dir);
 
-    // tries tryElems with level, sets element to the try ones, if possible
-    bool tryTransformWithLevel();
+    // check tryElems with level
+    bool checkTryElementsWithLevel() const;
 
     // gives the fall time for a given speed
     // if the figure dropped, it ignores the speed and just returns the drop fall time

@@ -69,6 +69,6 @@ void LoadAllState::onDone()
 
     FigureManager::instance().prepareFigureTemplatesPhysicalData();
 
-    //maibo::Application_Instance().setState(new PlayingState);
-    maibo::Application_Instance().setState(new MainMenuState);
+    maibo::Application_Instance().setState(new PlayingState);
+    //maibo::Application_Instance().setState(new MainMenuState);
 }

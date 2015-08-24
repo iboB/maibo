@@ -117,7 +117,7 @@ bool Figure::tryRotateZ(float dir)
     return tryRotate(2, dir);
 }
 
-bool Figure::tryRotate(int axis, float dir)
+bool Figure::tryRotate(int axis, float dir, bool animate /*= true*/, bool force /*= false*/)
 {
     assert(!m_isFallen);
     static vector3 axes[] = { vc(1, 0, 0), vc(0, 1, 0), vc(0, 0, 1) };
@@ -150,21 +150,32 @@ bool Figure::tryRotate(int axis, float dir)
         m_tryElements[i] = v(int(round(e.x())), int(round(e.y())), int(round(e.z())));
     }
 
-    if (!tryTransformWithLevel())
+    if (!force && !checkTryElementsWithLevel())
     {
-        //desired transform cannot fit with level
+        // desired transform cannot fit with level
         return false;
     }
 
-    // calculate transforms for the mesh
-    m_lastRotation = m_currentRotation;
-    m_targetRotation = rotation * m_targetRotation;
-    m_rotationAnimationTimer = ROTATION_ANIM_TIME;
+    m_elements = m_tryElements;
+
+    // update transforms for the mesh
+    if (animate)
+    {
+        m_lastRotation = m_currentRotation;
+        m_targetRotation = rotation * m_targetRotation;
+        m_rotationAnimationTimer = ROTATION_ANIM_TIME;
+    }
+    else
+    {
+        m_targetRotation = rotation * m_targetRotation;
+        m_currentRotation = m_targetRotation;
+        m_rotationAnimationTimer = 0;
+    }
 
     return true;
 }
 
-bool Figure::tryMove(const vector3& d, bool animate)
+bool Figure::tryMove(const vector3& d, bool animate /*= true*/, bool force /*= false*/)
 {
     assert(!m_isFallen);
     for (size_t i = 0; i < m_elements.size(); ++i)
@@ -172,11 +183,13 @@ bool Figure::tryMove(const vector3& d, bool animate)
         m_tryElements[i] = m_elements[i] + v(int(round(d.x())), int(round(d.y())), int(round(d.z())));
     }
 
-    if (!tryTransformWithLevel())
+    if (!force && !checkTryElementsWithLevel())
     {
-        //desired transform cannot fit with level
+        // desired transform cannot fit with level
         return false;
     }
+
+    m_elements = m_tryElements;
 
     // update mesh transforms
     if (animate)
@@ -194,15 +207,13 @@ bool Figure::tryMove(const vector3& d, bool animate)
     return true;
 }
 
-bool Figure::tryTransformWithLevel()
+bool Figure::checkTryElementsWithLevel() const
 {
     assert(!m_isFallen);
     if (!m_level.canFitFigure(m_tryElements))
     {
         return false;
     }
-
-    m_elements = m_tryElements;
 
     return true;
 }
@@ -224,12 +235,12 @@ bool Figure::spawn()
 
     auto translation = levelCenter - m_template.rotationCenter().xy();
 
-    return tryMove(vc(round(translation.x()), round(translation.y()), targetZ));
+    return tryMove(vc(round(translation.x()), round(translation.y()), targetZ), false);
 }
 
 void Figure::startDrop()
 {
-    tryMove(vc(0, 0, -1), true);
+    tryMove(vc(0, 0, -1));
     m_fallTimer = Preferences::instance().figureDropTime();
     m_isDropped = true;
 }

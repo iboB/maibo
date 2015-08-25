@@ -16,7 +16,8 @@ public:
     // random generator for a single game
     // seeded at the start of each one
     // (could potentially be used for replaying a game with the same figure order)
-    maibo::simplified_rng<std::minstd_rand> InGameRnd;
+    maibo::simplified_rng<std::mt19937> InGameRnd;
+    // using mersenne twister since it's the only one that seems to produce the same values on all platforms
 };
 
 inline uint32_t InGameRndU32()

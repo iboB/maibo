@@ -128,13 +128,22 @@ public:
 
             m_isDirty = false;
         }
+
+        if (m_currentDropTimer)
+        {
+            m_currentDropTimer -= dt;
+            if (m_currentDropTimer < 0)
+                m_currentDropTimer = 0;
+
+            m_posModifier = (m_currentDrop * float(m_currentDropTimer)) / DROP_TIME;
+        }
     }
 
     void draw(const float pos, const vector4& solidColor, const vector4& wireColor)
     {
         assert(!isEmpty());
         UniformColorMaterial& m = Resources::instance().uniformColorMaterial;
-        m.setModel(matrix::translation(0, 0, pos));
+        m.setModel(matrix::translation(0, 0, pos + m_posModifier));
         m.setColor(solidColor);
         m.prepareBuffer(m_solidBuffer, sizeof(vector3), 0);
         glDrawArrays(GL_TRIANGLES, 0, m_numElements * uint32_t(CubeTemplate::instance().triangles().size()) * 3);
@@ -147,7 +156,9 @@ public:
     // animate drop after a layer has been erased
     void drop(float distance)
     {
-
+        m_currentDrop = distance;
+        m_posModifier = distance;
+        m_currentDropTimer = DROP_TIME;
     }
 
     // layer has been erased, to be pushed to the end
@@ -169,6 +180,13 @@ private:
 
     GLuint m_solidBuffer = 0;
     GLuint m_wireBuffer = 0;
+
+    // used to animate drops
+    float m_posModifier = 0; // modify the position
+    float m_currentDrop = 0; // lerp value
+    int m_currentDropTimer = 0; // timer
+
+    static const int DROP_TIME = 150; // ms
 };
 
 Level::Level(const uvector3& size)
@@ -394,7 +412,11 @@ void Level::update(uint32_t dt)
         }
         else
         {
-            (*i)->drop(float(i - available));
+            if (i - available)
+            {
+                // at least one layer dropped before this one
+                (*i)->drop(float(i - available));
+            }
             *available++ = *i;
         }
     }

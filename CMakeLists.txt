@@ -148,6 +148,13 @@ src_group(Rendering~Material sources
     ${INC}/GPUProgramPtr.h
 )
 
+src_group(Rendering~RenderTarget sources
+    ${SRC}/RenderTarget.cpp
+    ${INC}/RenderTarget.h
+    ${SRC}/RenderTargetManager.cpp
+    ${INC}/RenderTargetManager.h
+)
+
 src_group(Input sources
     ${INC}/InputEventHandler.h
 )

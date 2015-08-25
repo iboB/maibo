@@ -8,6 +8,7 @@
 
 // the main window class definition
 #include <maibo/MainWindow.h>
+#include <maibo/RenderTargetManager.h>
 
 using namespace std;
 using namespace maibo;
@@ -50,6 +51,7 @@ bool MainWindow::create(const MainWindow::CreationParameters& params)
     SDL_VERSION(&m_sdlSysWMInfo.version);
     SDL_GetWindowWMInfo(m_sdlWindow, &m_sdlSysWMInfo);
 
+    RenderTargetManager::instance().setScreenRenderTarget(this);
     return true;
 }
 
@@ -68,4 +70,23 @@ void MainWindow::setTitle(const char* title)
 void MainWindow::swapBuffers()
 {
     SDL_GL_SwapWindow(m_sdlWindow);
+}
+
+// render target methods
+
+void MainWindow::activate()
+{
+    RenderTarget::activate();
+#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
+#   error "IOS's main framebuffer is not 0"
+#endif
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    // no MRTs support yet, so no need to take care of them
+    // but if we have MRTs, we should uncomment those lines
+//#if defined(__ANDROID__) || TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
+//#   error "OpenGL ES doesn't support MRTs"
+//#endif
+    //GLenum drawBuffers[] = { GL_COLOR_ATTACHMENT0 };
+    //glDrawBuffers(1, drawBuffers);
 }

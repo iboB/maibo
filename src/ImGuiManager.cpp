@@ -8,10 +8,14 @@
 #include <maibo/GUI/ImGui/ImGuiManager.h>
 #include <maibo/lib/GLSentries.h>
 #include <maibo/Application.h>
-#include <maibo/MainWindow.h>
+#if defined(_WIN32)
+// required only to get the hwnd
+#   include <maibo/MainWindow.h>
+#endif
 #include <maibo/GPUProgram.h>
 #include <maibo/Texture.h>
 #include <maibo/Shader.h>
+#include <maibo/RenderTargetManager.h>
 
 #include <imgui.h>
 
@@ -239,7 +243,7 @@ void ImGuiManager::update(uint32_t dt)
 {
     auto& io = ImGui::GetIO();
 
-    auto screenSize = Application_Instance().mainWindow().clientAreaSize();
+    auto screenSize = RenderTargetManager::instance().currentRenderTargetSize();
     io.DisplaySize = ImVec2(float(screenSize.x()), float(screenSize.y()));
     io.DeltaTime = float(dt) / 1000;
 

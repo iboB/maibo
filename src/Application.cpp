@@ -56,6 +56,11 @@ bool Application::initialize(const Application::CreationParameters& cp)
     }
 #endif
 
+    if (cp.activateMainWindowAsRenderTarget)
+    {
+        m_mainWindow->activate();
+    }
+
     TaskManager::instance().setNumTasksPerUpdate(cp.numTasksPerUpdate);
 
     m_desiredFrameTime = cp.desiredFrameTimeMs;

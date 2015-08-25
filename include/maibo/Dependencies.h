@@ -29,6 +29,10 @@
 #    include <GL/glext.h>
 #endif
 
+#if defined(__APPLE__)
+#   include "TargetConditionals.h"
+#endif
+
 #include <iostream>
 #include <vector>
 #include <string>

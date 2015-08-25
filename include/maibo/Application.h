@@ -72,6 +72,8 @@ namespace maibo
             const char* mainWindowTitle = "MaiBo App";
             mathgp::uvector2 mainWindowClientAreaSize = mathgp::v(800u, 600u);
             bool isFullScreen = false;
+
+            bool activateMainWindowAsRenderTarget = true;
         };
 
         // actual initialization function

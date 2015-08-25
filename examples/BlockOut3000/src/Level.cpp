@@ -27,12 +27,14 @@ public:
     {
         reset();
         glGenBuffers(1, &m_solidBuffer);
+        glGenBuffers(1, &m_wireBuffer);
     }
 
     ~LevelLayer()
     {
         delete[] m_data;
         glDeleteBuffers(1, &m_solidBuffer);
+        glDeleteBuffers(1, &m_wireBuffer);
     }
 
     bool isEmpty() const
@@ -66,10 +68,14 @@ public:
         {
             if (!isEmpty())
             {
-                // time to recreate buffer
+                // time to recreate buffers
                 const auto& ct = CubeTemplate::instance();
+
                 vector<Triangle> solidTriangles;
                 solidTriangles.reserve(m_numElements * ct.triangles().size());
+
+                vector<LineSegment> wireSegments;
+                wireSegments.reserve(m_numElements * ct.wireSegments().size());
 
                 for (unsigned y = 0; y < m_size.y(); ++y)
                 {
@@ -77,14 +83,37 @@ public:
                     {
                         if (at(x, y))
                         {
-                            auto i = solidTriangles.insert(solidTriangles.end(), ct.triangles().begin(), ct.triangles().end());
-                            while (i != solidTriangles.end())
+                            auto s = solidTriangles.insert(solidTriangles.end(), ct.triangles().begin(), ct.triangles().end());
+                            while (s != solidTriangles.end())
                             {
-                                for (auto& elem : *i)
+                                for (auto& elem : *s)
                                 {
                                     elem += vc(float(x), float(y), 0);
                                 }
-                                ++i;
+                                ++s;
+                            }
+
+                            auto w = wireSegments.insert(wireSegments.end(), ct.wireSegments().begin(), ct.wireSegments().end());
+                            while (w != wireSegments.end())
+                            {
+                                for (auto& elem : *w)
+                                {
+                                    // first make the elements a tiny bit bigger in order to draw them with depth testing enabled
+                                    static const float e = 0.005f;
+                                    for (auto& c : elem)
+                                    {
+                                        if (c == 0)
+                                        {
+                                            c -= e;
+                                        }
+                                        else
+                                        {
+                                            c += e;
+                                        }
+                                    }
+                                    elem += vc(float(x), float(y), 0);
+                                }
+                                ++w;
                             }
                         }
                     }
@@ -92,26 +121,44 @@ public:
 
                 glBindBuffer(GL_ARRAY_BUFFER, m_solidBuffer);
                 glBufferData(GL_ARRAY_BUFFER, data_size(solidTriangles), solidTriangles.data(), GL_DYNAMIC_DRAW);
+
+                glBindBuffer(GL_ARRAY_BUFFER, m_wireBuffer);
+                glBufferData(GL_ARRAY_BUFFER, data_size(wireSegments), wireSegments.data(), GL_DYNAMIC_DRAW);
             }
 
             m_isDirty = false;
         }
+
+        if (m_currentDropTimer)
+        {
+            m_currentDropTimer -= dt;
+            if (m_currentDropTimer < 0)
+                m_currentDropTimer = 0;
+
+            m_posModifier = (m_currentDrop * float(m_currentDropTimer)) / DROP_TIME;
+        }
     }
 
-    void draw(const float pos, const vector4& m_solidColor, const vector4& m_wireColor)
+    void draw(const float pos, const vector4& solidColor, const vector4& wireColor)
     {
         assert(!isEmpty());
         UniformColorMaterial& m = Resources::instance().uniformColorMaterial;
-        m.setModel(matrix::translation(0, 0, pos));
-        m.setColor(m_solidColor);
+        m.setModel(matrix::translation(0, 0, pos + m_posModifier));
+        m.setColor(solidColor);
         m.prepareBuffer(m_solidBuffer, sizeof(vector3), 0);
         glDrawArrays(GL_TRIANGLES, 0, m_numElements * uint32_t(CubeTemplate::instance().triangles().size()) * 3);
+
+        m.setColor(wireColor);
+        m.prepareBuffer(m_wireBuffer, sizeof(vector3), 0);
+        glDrawArrays(GL_LINES, 0, m_numElements * uint32_t(CubeTemplate::instance().wireSegments().size()) * 2);
     }
 
     // animate drop after a layer has been erased
     void drop(float distance)
     {
-
+        m_currentDrop = distance;
+        m_posModifier = distance;
+        m_currentDropTimer = DROP_TIME;
     }
 
     // layer has been erased, to be pushed to the end
@@ -132,7 +179,14 @@ private:
     bool m_isDirty; // buffers need regen
 
     GLuint m_solidBuffer = 0;
-    //Gluint m_wireBuffer;
+    GLuint m_wireBuffer = 0;
+
+    // used to animate drops
+    float m_posModifier = 0; // modify the position
+    float m_currentDrop = 0; // lerp value
+    int m_currentDropTimer = 0; // timer
+
+    static const int DROP_TIME = 150; // ms
 };
 
 Level::Level(const uvector3& size)
@@ -358,7 +412,11 @@ void Level::update(uint32_t dt)
         }
         else
         {
-            (*i)->drop(float(i - available));
+            if (i - available)
+            {
+                // at least one layer dropped before this one
+                (*i)->drop(float(i - available));
+            }
             *available++ = *i;
         }
     }

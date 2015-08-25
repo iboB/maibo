@@ -4,6 +4,7 @@ using namespace mathgp;
 using namespace std;
 
 Preferences::Preferences()
+    : m_figureDropTime(100)
 {
     m_levelLayerColors =
     {

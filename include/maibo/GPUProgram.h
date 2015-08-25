@@ -31,8 +31,14 @@ namespace maibo
 
         GLint getParameterByName(const char* name) const;
 
+        // bind custom attribute
         // returns the index where the attrbute was bound
-        uint32_t bindCustomAttribute(const char* name); // bind custom attribute
+        // must link program after calling this in order for the changes to take place
+        uint32_t bindCustomAttribute(const char* name); 
+
+        // get attribute location
+        // return -1 if no such attribute exists
+        GLint getAttributeLocation(const char* name) const;
 
         uint32_t numBoundAttribs() const { return m_boundAttribPtr; }
 
@@ -52,6 +58,6 @@ namespace maibo
         std::vector<ConstShaderPtr> m_shaders;
         uint32_t m_boundAttribPtr;
 
-        size_t m_boundTextures;
+        uint32_t m_boundTextures;
     };
 }

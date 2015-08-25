@@ -15,7 +15,7 @@
 class CubeTemplate : public maibo::ExplicitSingleton<CubeTemplate>
 {
 public:
-    const std::vector<LineSegment>& wireVertices() const { return m_wireSegments; }
+    const std::vector<LineSegment>& wireSegments() const { return m_wireSegments; }
     const std::vector<Triangle>& triangles() const { return m_triangles; }
 
     GLuint solidBuffer() const { return m_solidBuffer; }

@@ -33,6 +33,9 @@ src_group(Game sources
     ${SRC}/PlayingState.h
     ${SRC}/Level.cpp
     ${SRC}/Level.h
+    ${SRC}/MainMenuState.cpp
+    ${SRC}/MainMenuState.h
+    ${SRC}/Random.h
 )
 
 src_group(Game~Figure sources

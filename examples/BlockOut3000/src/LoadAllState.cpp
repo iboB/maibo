@@ -11,6 +11,7 @@
 #include <maibo/ResourceManager.h>
 
 #include "PlayingState.h"
+#include "MainMenuState.h"
 #include "Resources.h"
 #include "FigureManager.h"
 #include "LoadFigureSetsTask.h"
@@ -69,4 +70,5 @@ void LoadAllState::onDone()
     FigureManager::instance().prepareFigureTemplatesPhysicalData();
 
     maibo::Application_Instance().setState(new PlayingState);
+    //maibo::Application_Instance().setState(new MainMenuState);
 }

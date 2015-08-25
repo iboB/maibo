@@ -20,7 +20,7 @@ void UniformColorMaterial::initialize()
     m_colorLocation = m_program->getParameterByName("color");
     assert(m_colorLocation >= 0);
 
-    m_vposAttribute = m_program->bindCustomAttribute("v_pos");
+    m_vposAttribute = m_program->getAttributeLocation("v_pos");
 }
 
 void UniformColorMaterial::setProjView(const mathgp::matrix& pv)

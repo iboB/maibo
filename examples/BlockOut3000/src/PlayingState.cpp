@@ -13,6 +13,7 @@
 #include "FigureSet.h"
 #include "FigureTemplate.h"
 #include "Figure.h"
+#include "Random.h"
 
 #include <maibo/GPUProgram.h>
 #include <maibo/lib/GLSentries.h>
@@ -26,6 +27,8 @@ GLuint buffer;
 
 bool PlayingState::initialize()
 {
+    Random::instance().InGameRnd.rng.seed(SDL_GetTicks());
+
     glClearColor(0.0f, 0.1f, 0.4f, 1);
 
     m_level = new Level(v(5u, 5u, 10u));
@@ -50,41 +53,52 @@ bool PlayingState::handleEvent(const SDL_Event& event)
 {
     if (event.type == SDL_KEYDOWN)
     {
-        switch (event.key.keysym.sym)
+        // ignore repeats
+        if (!event.key.repeat)
         {
-        case SDLK_q:
-            m_currentFigure->tryRotateX(1);
-            return true;
-        case SDLK_a:
-            m_currentFigure->tryRotateX(-1);
-            return true;
-        case SDLK_w:
-            m_currentFigure->tryRotateY(1);
-            return true;
-        case SDLK_s:
-            m_currentFigure->tryRotateY(-1);
-            return true;
-        case SDLK_e:
-            m_currentFigure->tryRotateZ(1);
-            return true;
-        case SDLK_d:
-            m_currentFigure->tryRotateZ(-1);
-            return true;
-        case SDLK_LEFT:
-            m_currentFigure->tryMove(vc(-1, 0, 0));
-            return true;
-        case SDLK_RIGHT:
-            m_currentFigure->tryMove(vc(1, 0, 0));
-            return true;
-        case SDLK_UP:
-            m_currentFigure->tryMove(vc(0, 1, 0));
-            return true;
-        case SDLK_DOWN:
-            m_currentFigure->tryMove(vc(0, -1, 0));
-            return true;
-        case SDLK_SPACE:
-            m_currentFigure->tryMove(vc(0, 0, -1));
-            return true;
+            switch (event.key.keysym.sym)
+            {
+            case SDLK_q:
+                m_currentFigure->tryRotateX(1);
+                return true;
+            case SDLK_a:
+                m_currentFigure->tryRotateX(-1);
+                return true;
+            case SDLK_w:
+                m_currentFigure->tryRotateY(1);
+                return true;
+            case SDLK_s:
+                m_currentFigure->tryRotateY(-1);
+                return true;
+            case SDLK_e:
+                m_currentFigure->tryRotateZ(1);
+                return true;
+            case SDLK_d:
+                m_currentFigure->tryRotateZ(-1);
+                return true;
+            case SDLK_LEFT:
+                m_currentFigure->tryMove(vc(-1, 0, 0));
+                return true;
+            case SDLK_RIGHT:
+                m_currentFigure->tryMove(vc(1, 0, 0));
+                return true;
+            case SDLK_UP:
+                m_currentFigure->tryMove(vc(0, 1, 0));
+                return true;
+            case SDLK_DOWN:
+                m_currentFigure->tryMove(vc(0, -1, 0));
+                return true;
+            case SDLK_SPACE:
+                m_currentFigure->startDrop();
+                return true;
+            }
+        }
+    }
+    else if (event.type == SDL_KEYUP)
+    {
+        if (event.key.keysym.sym == SDLK_SPACE)
+        {
+            m_currentFigure->stopDrop();
         }
     }
 

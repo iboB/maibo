@@ -40,18 +40,25 @@ elseif(MAIBO_PLATFORM_UNIX)
     )
 endif()
 
+if(MAIBO_USE_IMGUI)
+    add_subdirectory(imgui)
+endif(MAIBO_USE_IMGUI)
+
 set(THIRD_PARTY_INCLUDE_DIRS
     ${platformIncDirs}
+    ${IMGUI_INCLUDE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/mathgp
     CACHE STRING "MaiBo third party include paths"
 )
 
 set(THIRD_PARTY_LINK_DIRS
     ${platformLinkDirs}
+    ${IMGUI_LINK_DIR}
     CACHE STRING "MaiBo third party link paths"
 )
 
 set(THIRD_PARTY_LIBS
     ${platformLibs}
+    ${IMGUI_LIB}
     CACHE STRING "MaiBo third party libraries"
 )

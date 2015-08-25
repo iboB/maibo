@@ -44,7 +44,7 @@ namespace maibo
 }
 
 #define OFFSET(i) ((char *)nullptr + (i))
-#define OFFSET_OF(type, member) (&reinterpret_cast<type*>(nullptr)->member)
+#define OFFSET_OF(type, member) (&static_cast<type*>(nullptr)->member)
 
 #if !defined(_MSC_VER)
 #    define _countof(x) (sizeof(x)/sizeof(x[0]));

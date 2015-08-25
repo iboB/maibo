@@ -11,6 +11,7 @@
 #include <maibo/lib/high_res_clock.h>
 #include <maibo/MainWindow.h>
 #include <maibo/AppState.h>
+#include <maibo/InputEventHandler.h>
 
 #include <sstream>
 
@@ -75,6 +76,8 @@ void Application::deinitialize()
 
 void Application::beginFrame()
 {
+    OnBeginFrame.emit();
+
     m_currentState->beginFrame();
 }
 
@@ -83,6 +86,20 @@ void Application::handleInput()
     SDL_Event event;
     while (SDL_PollEvent(&event))
     {
+        auto inputHandlerIterator = m_globalInputEventHandlers.begin();
+        for (; inputHandlerIterator != m_globalInputEventHandlers.end(); ++inputHandlerIterator)
+        {
+            if ((*inputHandlerIterator)->handleEvent(event))
+            {
+                break;
+            }
+        }
+        if (inputHandlerIterator != m_globalInputEventHandlers.end())
+        {
+            // some global input event handler handled event
+            continue;
+        }
+
         // let the state handle events with top priority
         if (m_currentState->handleEvent(event))
         {
@@ -115,18 +132,29 @@ void Application::handleInput()
 
 void Application::update()
 {
+    OnPreUpdate.emit(m_timeSinceLastFrame);
     TaskManager::instance().update();
+
     m_currentState->update(m_timeSinceLastFrame);
+
+    OnPostUpdate.emit(m_timeSinceLastFrame);
 }
 
 void Application::render()
 {
+    OnPreRender.emit();
+
     m_currentState->render();
+
+    OnPostRender.emit();
 }
 
 void Application::endFrame()
 {
-    m_currentState->render();
+    m_currentState->endFrame();
+
+    OnEndFrame.emit();
+
     m_mainWindow->swapBuffers();
 }
 
@@ -178,7 +206,7 @@ void Application::updateFPSData()
 
 uint32_t Application::getTicks() const
 {
-    // actually the time returned is since the first time this function is called 
+    // actually the time returned is since the first time this function is called
     // but this is very early in the execution time, so it's fine
 
     static auto start = high_res_clock::now();
@@ -190,7 +218,7 @@ void Application::setState(AppState* newState)
 {
     if (m_currentState)
     {
-        // if there is an existing state finish its cycle, and then 
+        // if there is an existing state finish its cycle, and then
         // set the new state on the next update
         if (m_nextState)
         {
@@ -203,7 +231,7 @@ void Application::setState(AppState* newState)
     else
     {
         assert(!m_nextState);
-        
+
         if (!newState->initialize())
         {
             onSetStateError(newState);
@@ -224,7 +252,7 @@ void Application::checkForStateChange()
 
         assert(m_currentState);
         m_currentState->deinitialize();
-        
+
         safe_delete(m_currentState);
 
         if (!m_nextState->initialize())
@@ -235,7 +263,28 @@ void Application::checkForStateChange()
         {
             m_currentState = m_nextState;
         }
-        
+
         m_nextState = nullptr;
+    }
+}
+
+void Application::addGlobalInputEventHandler(InputEventHandler* handler)
+{
+    auto pos = lower_bound(m_globalInputEventHandlers.begin(), m_globalInputEventHandlers.end(), handler,
+        [](const InputEventHandler* a, const InputEventHandler* b)
+        {
+            return a->priority() < b->priority();
+        });
+
+    m_globalInputEventHandlers.insert(pos, handler);
+}
+
+void Application::removeGlobalInputEventHandler(InputEventHandler* handler)
+{
+    auto pos = find(m_globalInputEventHandlers.begin(), m_globalInputEventHandlers.end(), handler);
+
+    if (pos != m_globalInputEventHandlers.end())
+    {
+        m_globalInputEventHandlers.erase(pos);
     }
 }

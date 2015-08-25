@@ -11,6 +11,8 @@
 #include "FigureTemplate.h"
 
 #include "Resources.h"
+#include "Preferences.h"
+#include "Random.h"
 
 #include <mathgp/stdext.h>
 
@@ -23,20 +25,12 @@ const int TRANSLATION_ANIM_TIME = 100;
 
 const int FALL_TIME = 800; // milliseconds to fall a unit
 
-namespace
-{
-    int FallTimeForSpeed(int speed)
-    {
-        int speedMultiplier = (FALL_TIME - TRANSLATION_ANIM_TIME) / Level::MAX_SPEED;
-        return TRANSLATION_ANIM_TIME + (Level::MAX_SPEED - speed) * speedMultiplier;
-    }
-}
-
 Figure::Figure(const FigureTemplate& tmpl, Level& level)
     : m_template(tmpl)
     , m_level(level)
     , m_elements(m_template.elements())
     , m_tryElements(m_template.elements())
+    , m_fallTimer(fallTimeForSpeed(level.speed()))
     , m_currentPosition(vc(0, 0, 0))
     , m_currentRotation(quaternion::identity())
     , m_lastPosition(vector3::zero())
@@ -45,8 +39,18 @@ Figure::Figure(const FigureTemplate& tmpl, Level& level)
     , m_targetRotation(m_currentRotation)
     , m_positionAnimationTimer(0)
     , m_rotationAnimationTimer(0)
-    , m_fallTimer(FallTimeForSpeed(level.speed()))
 {
+    //// add random transform
+    //for (int i = 0; i < 5; ++i)
+    //{
+    //    float dirs[] = { 0, -1, 1 };
+
+    //    auto dir = InGameRndU32() % 3;
+    //    if (!dir)
+    //        continue;
+
+    //    tryRotate(InGameRndU32() % 3, dirs[dir], false, true);
+    //}
 }
 
 namespace
@@ -67,7 +71,7 @@ void Figure::update(uint32_t dt)
     {
         if (m_fallTimer <= 0)
         {
-            m_fallTimer = FallTimeForSpeed(m_level.speed()) + m_fallTimer;
+            m_fallTimer = fallTimeForSpeed(m_level.speed()) + m_fallTimer;
             if (!tryMove(vc(0, 0, -1)))
             {
                 // if figgure cannot move down, it's fallen
@@ -125,7 +129,7 @@ bool Figure::tryRotateZ(float dir)
     return tryRotate(2, dir);
 }
 
-bool Figure::tryRotate(int axis, float dir)
+bool Figure::tryRotate(int axis, float dir, bool animate /*= true*/, bool force /*= false*/)
 {
     assert(!m_isFallen);
     static vector3 axes[] = { vc(1, 0, 0), vc(0, 1, 0), vc(0, 0, 1) };
@@ -158,21 +162,32 @@ bool Figure::tryRotate(int axis, float dir)
         m_tryElements[i] = v(int(round(e.x())), int(round(e.y())), int(round(e.z())));
     }
 
-    if (!tryTransformWithLevel())
+    if (!force && !checkTryElementsWithLevel())
     {
-        //desired transform cannot fit with level
+        // desired transform cannot fit with level
         return false;
     }
 
-    // calculate transforms for the mesh
-    m_lastRotation = m_currentRotation;
-    m_targetRotation = rotation * m_targetRotation;
-    m_rotationAnimationTimer = ROTATION_ANIM_TIME;
+    m_elements = m_tryElements;
+
+    // update transforms for the mesh
+    if (animate)
+    {
+        m_lastRotation = m_currentRotation;
+        m_targetRotation = rotation * m_targetRotation;
+        m_rotationAnimationTimer = ROTATION_ANIM_TIME;
+    }
+    else
+    {
+        m_targetRotation = rotation * m_targetRotation;
+        m_currentRotation = m_targetRotation;
+        m_rotationAnimationTimer = 0;
+    }
 
     return true;
 }
 
-bool Figure::tryMove(const vector3& d, bool animate)
+bool Figure::tryMove(const vector3& d, bool animate /*= true*/, bool force /*= false*/)
 {
     assert(!m_isFallen);
     for (size_t i = 0; i < m_elements.size(); ++i)
@@ -180,11 +195,13 @@ bool Figure::tryMove(const vector3& d, bool animate)
         m_tryElements[i] = m_elements[i] + v(int(round(d.x())), int(round(d.y())), int(round(d.z())));
     }
 
-    if (!tryTransformWithLevel())
+    if (!force && !checkTryElementsWithLevel())
     {
-        //desired transform cannot fit with level
+        // desired transform cannot fit with level
         return false;
     }
+
+    m_elements = m_tryElements;
 
     // update mesh transforms
     if (animate)
@@ -202,15 +219,13 @@ bool Figure::tryMove(const vector3& d, bool animate)
     return true;
 }
 
-bool Figure::tryTransformWithLevel()
+bool Figure::checkTryElementsWithLevel() const
 {
     assert(!m_isFallen);
     if (!m_level.canFitFigure(m_tryElements))
     {
         return false;
     }
-
-    m_elements = m_tryElements;
 
     return true;
 }
@@ -232,5 +247,28 @@ bool Figure::spawn()
 
     auto translation = levelCenter - m_template.rotationCenter().xy();
 
-    return tryMove(vc(round(translation.x()), round(translation.y()), targetZ));
+    return tryMove(vc(round(translation.x()), round(translation.y()), targetZ), false);
+}
+
+void Figure::startDrop()
+{
+    tryMove(vc(0, 0, -1));
+    m_fallTimer = Preferences::instance().figureDropTime();
+    m_isDropped = true;
+}
+
+void Figure::stopDrop()
+{
+    m_isDropped = false;
+}
+
+int Figure::fallTimeForSpeed(int speed) const
+{
+    if (m_isDropped)
+    {
+        return Preferences::instance().figureDropTime();
+    }
+
+    int speedMultiplier = (FALL_TIME - TRANSLATION_ANIM_TIME) / Level::MAX_SPEED;
+    return TRANSLATION_ANIM_TIME + (Level::MAX_SPEED - speed) * speedMultiplier;
 }

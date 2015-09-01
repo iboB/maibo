@@ -269,7 +269,7 @@ void ImGuiManager::update(uint32_t dt)
     swap(io.MouseDown[1], io.MouseDown[2]);
 
     bool hadMouseFocur = io.WantCaptureMouse;
-    bool wasInputtingText = io.WantInputCharacters;
+    bool wasInputtingText = io.WantTextInput;
 
     ImGui::NewFrame();
 
@@ -285,11 +285,11 @@ void ImGuiManager::update(uint32_t dt)
         io.MouseDrawCursor = true;
     }
 
-    if (wasInputtingText && !io.WantInputCharacters)
+    if (wasInputtingText && !io.WantTextInput)
     {
         SDL_StopTextInput();
     }
-    else if (!wasInputtingText && io.WantInputCharacters)
+    else if (!wasInputtingText && io.WantTextInput)
     {
         SDL_StartTextInput();
     }

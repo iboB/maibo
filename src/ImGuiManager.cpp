@@ -59,7 +59,7 @@ namespace
         uniform sampler2D tex; \
         varying vec2 texCoord; \
         varying vec4 color; \
-        void main() \
+        void main(void) \
         { \
             gl_FragColor = color * texture2D(tex, texCoord); \
         } \
@@ -76,9 +76,6 @@ void ImGuiManager::imguiRenderCallback(ImDrawData* data)
     if (data->CmdListsCount == 0)
         return;
 
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
     auto& gui = ImGuiManager::instance();
 
     MAIBO_GL_SENTRY(GLEnable, GL_BLEND);
@@ -90,16 +87,7 @@ void ImGuiManager::imguiRenderCallback(ImDrawData* data)
     // custom ortho 2d matrix
     const float w = ImGui::GetIO().DisplaySize.x;
     const float h = ImGui::GetIO().DisplaySize.y;
-    //auto projection = matrix::ortho_rh(0, w, h, 0, 0, 1); // note the inverted height. ImGui uses 0,0 as top left
-    const float ortho_projection[4][4] =
-    {
-        { 2.0f / w, 0.0f, 0.0f, 0.0f },
-        { 0.0f, 2.0f / -h, 0.0f, 0.0f },
-        { 0.0f, 0.0f, -1.0f, 0.0f },
-        { -1.0f, 1.0f, 0.0f, 1.0f },
-    };
-
-    auto projection = matrix::from_ptr(*ortho_projection);
+    auto projection = matrix::ortho_rh(0, w, h, 0, 0, 1); // note the inverted height. ImGui uses 0,0 as top left
 
     gui.m_gpuProgram->use();
     gui.m_gpuProgram->setParameter(gui.m_projParam, projection);
@@ -142,6 +130,9 @@ void ImGuiManager::imguiRenderCallback(ImDrawData* data)
             offsetPtr += cmd.ElemCount;
         }
     }
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
 ImGuiManager::ImGuiManager()

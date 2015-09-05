@@ -23,6 +23,7 @@ include(src_group)
 # Options about components
 # All are enabled by default
 option(MAIBO_USE_IMGUI "Integrate the ImGui third party library" ON)
+option(MAIBO_USE_LIBROCKET "Integrate the libRocket third party library" ON)
 
 # Options about example projects
 # All are enabled by default
@@ -166,6 +167,8 @@ if(MAIBO_USE_IMGUI)
     )
 endif(MAIBO_USE_IMGUI)
 
+if(MAIBO_USE_LIBROCKET)
+endif(MAIBO_USE_LIBROCKET)
 
 # third party libraries
 add_subdirectory(third_party/lib)

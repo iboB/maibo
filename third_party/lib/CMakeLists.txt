@@ -44,9 +44,18 @@ if(MAIBO_USE_IMGUI)
     add_subdirectory(imgui)
 endif(MAIBO_USE_IMGUI)
 
+if(MAIBO_USE_LIBROCKET)
+    add_subdirectory(freetype)
+    set(ROCKET_BUILD_SHARED_LIBS OFF
+        CACHE BOOL "Build libRocket shared"
+    )
+    add_subdirectory(libRocket)
+endif(MAIBO_USE_LIBROCKET)
+
 set(THIRD_PARTY_INCLUDE_DIRS
     ${platformIncDirs}
     ${IMGUI_INCLUDE_DIR}
+    ${LIBROCKET_INCLUDE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/mathgp
     CACHE STRING "MaiBo third party include paths"
 )
@@ -54,11 +63,13 @@ set(THIRD_PARTY_INCLUDE_DIRS
 set(THIRD_PARTY_LINK_DIRS
     ${platformLinkDirs}
     ${IMGUI_LINK_DIR}
+    ${LIBROCKET_LINK_DIR}
     CACHE STRING "MaiBo third party link paths"
 )
 
 set(THIRD_PARTY_LIBS
     ${platformLibs}
     ${IMGUI_LIB}
+    ${LIBROCKET_LIBS}
     CACHE STRING "MaiBo third party libraries"
 )

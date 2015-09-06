@@ -23,6 +23,6 @@ namespace maibo
 
     protected:
         // priority of the handler, to be compared by siblings in the handling loop
-        int m_priority;
+        int m_priority = 0;
     };
 }

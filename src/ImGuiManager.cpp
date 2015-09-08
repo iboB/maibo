@@ -25,7 +25,6 @@ using namespace maibo;
 
 namespace
 {
-
     void SetClipboardText(const char* text)
     {
         SDL_SetClipboardText(text);
@@ -64,10 +63,7 @@ namespace
             gl_FragColor = color * texture2D(tex, texCoord); \
         } \
         ";
-}
 
-namespace
-{
     int Attrib_Position, Attrib_TexCoord, Attrib_Color;
 }
 
@@ -157,13 +153,13 @@ ImGuiManager::ImGuiManager()
 
     // initialize buffers, textures and shaders
 
-    auto vs = make_shared<Shader>(ShaderType::Vertex, "gui vertex shader");
+    auto vs = make_shared<Shader>(ShaderType::Vertex, "imgui vertex shader");
     vs->load(vertexShaderSource);
 
-    auto fs = make_shared<Shader>(ShaderType::Fragment, "gui fragment shader");
+    auto fs = make_shared<Shader>(ShaderType::Fragment, "imgui fragment shader");
     fs->load(fragmentShaderSource);
 
-    m_gpuProgram = make_shared<GPUProgram>("gui program");
+    m_gpuProgram = make_shared<GPUProgram>("imgui program");
 
     m_gpuProgram->attachShader(vs);
     m_gpuProgram->attachShader(fs);

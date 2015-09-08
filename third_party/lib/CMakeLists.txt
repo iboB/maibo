@@ -60,6 +60,11 @@ set(THIRD_PARTY_INCLUDE_DIRS
     CACHE STRING "MaiBo third party include paths"
 )
 
+set(THIRD_PARTY_DEFINITIONS
+    ${LIBROCKET_DEFINITIONS}
+    CACHE STRING "Maibo definitions"
+)
+
 set(THIRD_PARTY_LINK_DIRS
     ${platformLinkDirs}
     ${IMGUI_LINK_DIR}

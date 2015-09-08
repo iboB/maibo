@@ -25,6 +25,10 @@ MIT Software License. See LICENSE.txt for further details or copy
 
 Copyright &copy; 2015 Borislav Stanimirov.
 
+### Other assets used
+
+* Atari true type font by [Genshichi Yasui](http://www.jttk.zaq.ne.jp/babwp701/index.html)
+
 ### Thanks to
 
 The author would like to thank [Chobolabs](http://www.chobolabs.com/) for their

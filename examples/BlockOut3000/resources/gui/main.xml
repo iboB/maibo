@@ -1,0 +1,32 @@
+<!-- named xml so it would get basic syntax highlighting from popular editors -->
+<rml>
+<head>
+    <title>Main Menu</title>
+    <link type="text/rcss" href="main.css"/>
+    <style>
+        body
+        {
+            width: 100%;
+            height: 100%;
+            margin: 0px;
+        }
+    </style>
+</head>
+<body class="menu">
+    <div id="menu">
+      <div id="content">
+        <p>GD Proto</p>
+        <button id="startGame">Start</button>
+        <br />
+        <button id="options">Options</button>
+        <br />
+        <button id="help">Help</button>
+        <br />
+		<button id="about">About</button>
+        <br />
+		<button id="exit">Exit</button>
+        <br/>
+      </div>
+    </div>
+</body>
+</rml>

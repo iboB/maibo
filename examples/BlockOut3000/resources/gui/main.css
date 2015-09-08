@@ -1,0 +1,105 @@
+div
+{
+    display: block;
+}
+
+p
+{
+    display: block;
+}
+
+h1
+{
+    display: block;
+}
+
+em
+{
+    font-style: italic;
+}
+
+strong
+{
+    font-weight: bold;
+}
+
+datagrid
+{
+    display: block;
+}
+
+select, dataselect, datacombo
+{
+    text-align: left;
+}
+
+tabset tabs
+{
+    display: block;
+}
+
+.hidden
+{
+    visibility: hidden;
+}
+
+body
+{
+    font-family: Atari Font Full Version;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 100%;
+    color: white;
+}
+
+body.menu
+{
+    min-width: 100px;
+    min-height: 100px;
+}
+
+div#menu
+{
+    width: auto;
+    padding: 25% 25%;
+    text-align: center;
+    background-color: transparent;
+}
+
+div#content
+{
+    z-index: 2;
+    padding: 20px 20px;
+    overflow: hidden auto;
+    background-color: green;
+    background-decorator: image;
+    background-image-src: ../sprites/test.png;
+}
+
+p
+{
+    margin-bottom: 1em;
+}
+
+button
+{
+    display: inline-block;
+    padding: 5px 5px;
+    margin: 5px;
+    text-align: center;
+    background-color: red;
+}
+
+button:focus
+{
+    font-weight: bold;
+
+    shadow-font-effect: shadow;
+    shadow-offset: 1px 1px;
+    shadow-color: black;
+}
+
+button:active
+{
+    background-color: maroon;
+}

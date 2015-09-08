@@ -16,10 +16,17 @@
 #include "FigureManager.h"
 #include "LoadFigureSetsTask.h"
 #include <maibo/TaskManager.h>
+#include <maibo/GUI/LibRocket/LibRocketManager.h>
+
+namespace
+{
+    const char* const MainFont_Filename = "resources/gui/fonts/atari.ttf";
+}
 
 bool LoadAllState::initialize()
 {
     auto& rm = maibo::ResourceManager::instance();
+
     m_uniformColorFuture = rm.loadGPUProgramAsync("resources/pos.vert", "resources/u_color.frag", true);
     addFuture(m_uniformColorFuture);
 
@@ -29,6 +36,10 @@ bool LoadAllState::initialize()
     auto task = new LoadFigureSetsTask(m_figureDataFuture);
     maibo::TaskManager::instance().pushTask(task);
     addFuture(task->future);
+
+    rm.getFileAsync(MainFont_Filename);
+    rm.getFileAsync("main.css");
+    rm.getFileAsync("main.xml");
 
     glClearColor(1, 0.1f, 0.4f, 1);
 
@@ -69,6 +80,8 @@ void LoadAllState::onDone()
 
     FigureManager::instance().prepareFigureTemplatesPhysicalData();
 
-    maibo::Application_Instance().setState(new PlayingState);
-    //maibo::Application_Instance().setState(new MainMenuState);
+    maibo::LibRocketManager::instance().loadFont(MainFont_Filename);
+
+    //maibo::Application_Instance().setState(new PlayingState);
+    maibo::Application_Instance().setState(new MainMenuState);
 }

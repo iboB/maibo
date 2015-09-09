@@ -38,8 +38,8 @@ bool LoadAllState::initialize()
     addFuture(task->future);
 
     rm.getFileAsync(MainFont_Filename);
-    rm.getFileAsync("main.css");
-    rm.getFileAsync("main.xml");
+    rm.getFileAsync("resources/gui/main.css");
+    rm.getFileAsync("resources/gui/main.xml");
 
     glClearColor(1, 0.1f, 0.4f, 1);
 

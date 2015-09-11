@@ -72,8 +72,10 @@ div#content
     padding: 20px 20px;
     overflow: hidden auto;
     background-color: green;
+    /*
     background-decorator: image;
     background-image-src: ../sprites/test.png;
+    */
 }
 
 p

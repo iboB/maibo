@@ -29,8 +29,6 @@ bool PlayingState::initialize()
 {
     Random::instance().InGameRnd.rng.seed(SDL_GetTicks());
 
-
-
     glClearColor(0.0f, 0.1f, 0.4f, 1);
 
     m_level = new Level(v(5u, 5u, 10u));

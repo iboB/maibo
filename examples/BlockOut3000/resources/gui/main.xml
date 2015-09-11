@@ -15,7 +15,7 @@
 <body class="menu">
     <div id="menu">
       <div id="content">
-        <p>GD Proto</p>
+        <p>Maibo</p>
         <button id="startGame">Start</button>
         <br />
         <button id="options">Options</button>

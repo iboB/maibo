@@ -9,6 +9,11 @@
 
 #include <maibo/AppState.h>
 
+namespace maibo
+{
+    class LibRocketLayer;
+}
+
 // main menu state
 // entry point state
 
@@ -22,4 +27,7 @@ public:
     virtual void update(uint32_t dt) override;
     virtual void render() override;
     virtual void endFrame() override;
+
+private:
+    maibo::LibRocketLayer* m_guiLayer = nullptr;
 };

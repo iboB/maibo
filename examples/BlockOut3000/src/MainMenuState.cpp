@@ -8,16 +8,23 @@
 #include "MainMenuState.h"
 
 #include <imgui.h>
+#include <maibo/GUI/LibRocket/LibRocketLayer.h>
+
+using namespace maibo;
 
 bool MainMenuState::initialize()
 {
     glClearColor(0.1f, 0.3f, 0.1f, 1);
+
+    m_guiLayer = new LibRocketLayer("gui");
+    m_guiLayer->loadRootRml("resources/gui/main.xml");
+
     return true;
 }
 
 void MainMenuState::deinitialize()
 {
-
+    safe_delete(m_guiLayer);
 }
 
 void MainMenuState::beginFrame()

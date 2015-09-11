@@ -124,6 +124,7 @@ src_group(Lib sources
 src_group(Lib~Signals sources
     ${INC}/lib/Signals/Signal.h
     ${INC}/lib/Signals/AutoSlot.h
+    ${INC}/lib/Signals/Slot.h
 )
 
 src_group(Tasks sources
@@ -181,6 +182,8 @@ if(MAIBO_USE_LIBROCKET)
         ${INC}/GUI/LibRocket/LibRocketSystemInterface.h
         ${SRC}/LibRocketRenderInterface.cpp
         ${INC}/GUI/LibRocket/LibRocketRenderInterface.h
+        ${SRC}/LibRocketLayer.cpp
+        ${INC}/GUI/LibRocket/LibRocketLayer.h
     )
 endif(MAIBO_USE_LIBROCKET)
 

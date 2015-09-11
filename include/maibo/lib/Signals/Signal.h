@@ -49,7 +49,7 @@ namespace maibo
     {
     public:
         // connect a slot to a signal by an instance and method
-        template <typename Slot, void (Slot::*Method)(Args...)>
+        template <typename Slot, slot (Slot::*Method)(Args...)>
         void connect(Slot* s, int priority = 0)
         {
             checkAutoSlotConnect(s, s);
@@ -63,7 +63,7 @@ namespace maibo
         }
 
         // disconnect a slot from a signal by an instance and method
-        template <typename Slot, void (Slot::*Method)(Args...)>
+        template <typename Slot, slot (Slot::*Method)(Args...)>
         void disconnect(Slot* s)
         {
             // no need to check autoslot disconnect
@@ -79,10 +79,10 @@ namespace maibo
         }
 
         //template <typename Slot>
-        //void connect(const Slot* s, void (Slot::*method)(Args...) const);
+        //void connect(const Slot* s, slot (Slot::*method)(Args...) const);
 
         // connect a slot to a signal by an instance and an external function
-        template <typename Slot, void(*Func)(Slot*, Args...)>
+        template <typename Slot, slot (*Func)(Slot*, Args...)>
         void connect(Slot* s, int priority = 0)
         {
             checkAutoSlotConnect(s, s);
@@ -96,7 +96,7 @@ namespace maibo
         }
 
         // disconnect a slot from a signal by an instance and an external function
-        template <typename Slot, void(*Func)(Slot*, Args...)>
+        template <typename Slot, slot (*Func)(Slot*, Args...)>
         void disconnect(Slot* s)
         {
             // no need to check autoslot disconnect
@@ -124,7 +124,7 @@ namespace maibo
         }
 
         //template <typename Slot>
-        //void connect(const Slot* s, void(*func)(const Slot*, Args...));
+        //void connect(const Slot* s, slot (*func)(const Slot*, Args...));
 
         // emit a signal
         void emit(Args ...args)
@@ -136,21 +136,21 @@ namespace maibo
         }
 
     private:
-        template <typename Slot, void(Slot::*Method)(Args...)>
+        template <typename Slot, slot (Slot::*Method)(Args...)>
         static void methodProxy(void* s, Args&& ...args)
         {
             Slot* slot = reinterpret_cast<Slot*>(s);
             (slot->*Method)(std::forward<Args>(args)...);
         }
 
-        template <typename Slot, void(*Func)(Slot*, Args...)>
+        template <typename Slot, slot (*Func)(Slot*, Args...)>
         static void externalProxy(void* s, Args&&... args)
         {
             Slot* slot = reinterpret_cast<Slot*>(s);
             Func(slot, std::forward<Args>(args)...);
         }
 
-        typedef void(*SlotFunc)(void*, Args&&...);
+        typedef slot (*SlotFunc)(void*, Args&&...);
 
         struct PrioritySlot
         {

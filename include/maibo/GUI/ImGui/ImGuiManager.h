@@ -24,12 +24,12 @@ namespace maibo
     {
         MAIBO_DECLARE_EXPLICIT_SINGLETON(ImGuiManager);
 
-        void update(uint32_t dt);
+        slot update(uint32_t dt);
 
+        slot render(); // called from OnPostRender
+
+        // from imput event handler
         virtual bool handleEvent(const SDL_Event& event) override;
-
-        void endFrame();
-        void render(); // called in endFrame in order to be last
 
         ///////////////////////////////////////
         // settings

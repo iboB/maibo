@@ -226,7 +226,7 @@ ImGuiManager::~ImGuiManager()
     ImGui::Shutdown();
 }
 
-void ImGuiManager::update(uint32_t dt)
+slot ImGuiManager::update(uint32_t dt)
 {
     auto& io = ImGui::GetIO();
 
@@ -284,7 +284,7 @@ void ImGuiManager::update(uint32_t dt)
     io.MouseWheel = 0;
 }
 
-void ImGuiManager::render()
+slot ImGuiManager::render()
 {
     ImGui::Render();
 }
@@ -361,9 +361,4 @@ bool ImGuiManager::handleEvent(const SDL_Event& event)
 
     // don't eat other events
     return false;
-}
-
-void ImGuiManager::endFrame()
-{
-    render();
 }

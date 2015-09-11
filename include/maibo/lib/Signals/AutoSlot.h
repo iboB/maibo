@@ -7,6 +7,8 @@
 //
 #pragma once
 
+#include "Slot.h"
+
 // Optional class to use with signals
 // You can iherit from this class and when your object is destroyed
 // It will automatically disconnect from all signals

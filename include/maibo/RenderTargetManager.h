@@ -23,7 +23,7 @@ namespace maibo
         const RenderTarget* screenRenderTarget() const { return m_screenRenderTarget; }
         void activateScreenRenderTarget();
 
-        RenderTarget* getCurrentRenderTarget() { return m_currentRenderTarget; }
+        RenderTarget* currentRenderTarget() { return m_currentRenderTarget; }
 
         // shorthand to get the size without having to include RenderTarget.h
         const mathgp::uvector2& currentRenderTargetSize() const;

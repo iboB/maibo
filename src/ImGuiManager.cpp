@@ -80,7 +80,7 @@ void ImGuiManager::imguiRenderCallback(ImDrawData* data)
     MAIBO_GL_SENTRY(GLDisable, GL_DEPTH_TEST);
     MAIBO_GL_SENTRY(GLEnable, GL_SCISSOR_TEST);
 
-    // custom ortho 2d matrix
+    // ortho 2d matrix
     const float w = ImGui::GetIO().DisplaySize.x;
     const float h = ImGui::GetIO().DisplaySize.y;
     auto projection = matrix::ortho_rh(0, w, h, 0, 0, 1); // note the inverted height. ImGui uses 0,0 as top left
@@ -164,9 +164,9 @@ ImGuiManager::ImGuiManager()
     m_gpuProgram->attachShader(vs);
     m_gpuProgram->attachShader(fs);
 
-    Attrib_Position = m_gpuProgram->bindCustomAttribute("v_pos");
-    Attrib_TexCoord = m_gpuProgram->bindCustomAttribute("v_texCoord");
-    Attrib_Color = m_gpuProgram->bindCustomAttribute("v_color");
+    Attrib_Position = m_gpuProgram->bindAttribute("v_pos");
+    Attrib_TexCoord = m_gpuProgram->bindAttribute("v_texCoord");
+    Attrib_Color = m_gpuProgram->bindAttribute("v_color");
 
     m_gpuProgram->link();
 

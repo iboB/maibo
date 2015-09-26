@@ -87,10 +87,15 @@ void GPUProgram::resetUniforms()
     m_boundTextures = 0;
 }
 
-uint32_t GPUProgram::bindCustomAttribute(const char* name)
+uint32_t GPUProgram::bindAttribute(const char* name)
 {
     glBindAttribLocation(m_glHandle, m_boundAttribPtr, name);
     return m_boundAttribPtr++;
+}
+
+void GPUProgram::bindAttributeAt(const char* name, uint32_t location)
+{
+    glBindAttribLocation(m_glHandle, location, name);
 }
 
 GLint GPUProgram::getAttributeLocation(const char* name) const

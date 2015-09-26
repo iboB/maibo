@@ -31,10 +31,14 @@ namespace maibo
 
         GLint getParameterByName(const char* name) const;
 
-        // bind custom attribute
+        // bind attribute at a generated location
         // returns the index where the attrbute was bound
         // must link program after calling this in order for the changes to take place
-        uint32_t bindCustomAttribute(const char* name); 
+        uint32_t bindAttribute(const char* name);
+
+        // bind attribute at a user-specified location
+        // must link program after calling this in order for the changes to take place
+        void bindAttributeAt(const char* name, uint32_t location);
 
         // get attribute location
         // return -1 if no such attribute exists

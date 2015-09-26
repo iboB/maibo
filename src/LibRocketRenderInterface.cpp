@@ -62,7 +62,12 @@ namespace
         } \
         ";
 
-    int Attrib_Position, Attrib_TexCoord, Attrib_Color;
+    enum
+    {
+        Attrib_Position,
+        Attrib_TexCoord,
+        Attrib_Color,
+    };
 }
 
 LibRocketRenderInterface::DrawBuffers::DrawBuffers()
@@ -95,9 +100,8 @@ LibRocketRenderInterface::LibRocketRenderInterface()
     m_colorProgram->attachShader(vs);
     m_colorProgram->attachShader(colorFS);
 
-    Attrib_Position = m_colorProgram->bindCustomAttribute("v_pos");
-    Attrib_Color = m_colorProgram->bindCustomAttribute("v_color");
-    Attrib_TexCoord = -1;
+    m_colorProgram->bindAttributeAt("v_pos", Attrib_Position);
+    m_colorProgram->bindAttributeAt("v_color", Attrib_Color);
 
     m_colorProgram->link();
 
@@ -110,9 +114,9 @@ LibRocketRenderInterface::LibRocketRenderInterface()
     m_textureProgram->attachShader(vs);
     m_textureProgram->attachShader(texFS);
 
-    Attrib_Position = m_textureProgram->bindCustomAttribute("v_pos");
-    Attrib_TexCoord = m_textureProgram->bindCustomAttribute("v_texCoord");
-    Attrib_Color = m_textureProgram->bindCustomAttribute("v_color");
+    m_textureProgram->bindAttributeAt("v_pos", Attrib_Position);
+    m_textureProgram->bindAttributeAt("v_texCoord", Attrib_TexCoord);
+    m_textureProgram->bindAttributeAt("v_color", Attrib_Color);
 
     m_textureProgram->link();
 
@@ -140,14 +144,8 @@ void LibRocketRenderInterface::RenderGeometry(Rocket::Core::Vertex* vertices, in
 
     auto size = GetContext()->GetDimensions();
 
-    // custom ortho 2d matrix
-    const matrix projection = matrix::rows(
-        2.f/size.x,   0,             0,  -1,
-        0,           -2.f/size.y,    0,   1,
-        0,            0,             0,   0,
-        0,            0,             0,   1
-        );
-    // matrix::ortho_rh(0, w, h, 0, 0, 1); // note the inverted height. LibRocket uses 0,0 as top left
+    // ortho 2d matrix
+    const matrix projection = matrix::ortho_rh(0, float(size.x), float(size.y), 0, 0, 1); // note the inverted height. LibRocket uses 0,0 as top left
 
     if (textureHandle)
     {

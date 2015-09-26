@@ -101,6 +101,11 @@ namespace maibo
         // the current application state will be set to nullptr
         virtual void onSetStateError(AppState* state) = 0;
 
+        // forcefully destroys current and pending states
+        // called by MaiBo before deinitializing the application
+        // if you call this yourself, be careful to set a valid state afterwards
+        void destroyStates();
+
     private:
         // check if there is a state pending to be set
         void checkForStateChange();

@@ -33,6 +33,7 @@ void Exit(int exitCode)
 {
     BreakMainLoop();
     Application& theApp = Application_Instance();
+    theApp.destroyStates();
     theApp.deinitialize();
     Application_DestroyInstance(exitCode);
 }

@@ -70,10 +70,6 @@ bool Application::initialize(const Application::CreationParameters& cp)
 
 void Application::deinitialize()
 {
-    m_currentState->deinitialize();
-    safe_delete(m_currentState);
-    safe_delete(m_nextState);
-
     safe_delete(m_mainWindow);
 
     SDL_Quit();
@@ -217,6 +213,13 @@ uint32_t Application::getTicks() const
     static auto start = high_res_clock::now();
     auto time = high_res_clock::now() - start;
     return uint32_t(chrono::duration_cast<chrono::milliseconds>(time).count()) + 1;
+}
+
+void Application::destroyStates()
+{
+    m_currentState->deinitialize();
+    safe_delete(m_currentState);
+    safe_delete(m_nextState);
 }
 
 void Application::setState(AppState* newState)

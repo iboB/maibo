@@ -13,6 +13,8 @@
 
 namespace maibo
 {
+    class Texture;
+
     class LibRocketRenderInterface : public Rocket::Core::RenderInterface
     {
     public:
@@ -68,5 +70,14 @@ namespace maibo
         };
 
         DrawBuffers m_immediateDrawBuffers;
+
+        struct CompiledGeometry
+        {
+            DrawBuffers buf;
+            Texture* texture;
+            int numIndices;
+        };
+
+        void Render(int numIndices, const Texture* texture, const Rocket::Core::Vector2f& translation);
     };
 }

@@ -132,22 +132,16 @@ LibRocketRenderInterface::~LibRocketRenderInterface()
 
 }
 
-void LibRocketRenderInterface::RenderGeometry(Rocket::Core::Vertex* vertices, int numVertices,
-    int* indices, int numIndices, Rocket::Core::TextureHandle textureHandle,
-    const Rocket::Core::Vector2f& translation)
+
+
+void LibRocketRenderInterface::Render(int numIndices, const Texture* texture, const Rocket::Core::Vector2f& translation)
 {
-    glBindBuffer(GL_ARRAY_BUFFER, m_immediateDrawBuffers.vertexBuffer);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_immediateDrawBuffers.indexBuffer);
-
-    glBufferData(GL_ARRAY_BUFFER, sizeof(Rocket::Core::Vertex) * numVertices, vertices, GL_DYNAMIC_DRAW);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int) * numIndices, indices, GL_DYNAMIC_DRAW);
-
     auto size = GetContext()->GetDimensions();
 
     // ortho 2d matrix
     const matrix projection = matrix::ortho_rh(0, float(size.x), float(size.y), 0, 0, 1); // note the inverted height. LibRocket uses 0,0 as top left
 
-    if (textureHandle)
+    if (texture)
     {
         m_textureProgram->use();
         m_textureProgram->setParameter(m_textureProjParam, projection);
@@ -166,30 +160,67 @@ void LibRocketRenderInterface::RenderGeometry(Rocket::Core::Vertex* vertices, in
     glVertexAttribPointer(Attrib_Position, 2, GL_FLOAT, GL_FALSE, sizeof(Rocket::Core::Vertex), OFFSET_OF(Rocket::Core::Vertex, position));
     glVertexAttribPointer(Attrib_Color, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(Rocket::Core::Vertex), OFFSET_OF(Rocket::Core::Vertex, colour));
 
-    if (textureHandle)
+    if (texture)
     {
-        auto tex = reinterpret_cast<Texture*>(textureHandle);
-        m_textureProgram->setParameter(m_textureParam, *tex);
+        m_textureProgram->setParameter(m_textureParam, *texture);
         glVertexAttribPointer(Attrib_TexCoord, 2, GL_FLOAT, GL_FALSE, sizeof(Rocket::Core::Vertex), OFFSET_OF(Rocket::Core::Vertex, tex_coord));
         glEnableVertexAttribArray(Attrib_TexCoord);
     }
 
     glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_INT, nullptr);
 
-    if (textureHandle)
+    if (texture)
     {
         glDisableVertexAttribArray(Attrib_TexCoord);
     }
 }
 
-
-Rocket::Core::CompiledGeometryHandle LibRocketRenderInterface::CompileGeometry(Rocket::Core::Vertex*, int, int*, int, Rocket::Core::TextureHandle)
+void LibRocketRenderInterface::RenderGeometry(Rocket::Core::Vertex* vertices, int numVertices,
+    int* indices, int numIndices, Rocket::Core::TextureHandle textureHandle,
+    const Rocket::Core::Vector2f& translation)
 {
-    // no obvious need to support this yet
-    return 0;
+    glBindBuffer(GL_ARRAY_BUFFER, m_immediateDrawBuffers.vertexBuffer);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_immediateDrawBuffers.indexBuffer);
+
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Rocket::Core::Vertex) * numVertices, vertices, GL_DYNAMIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int) * numIndices, indices, GL_DYNAMIC_DRAW);
+
+    Render(numIndices, reinterpret_cast<Texture*>(textureHandle), translation);
 }
-void LibRocketRenderInterface::RenderCompiledGeometry(Rocket::Core::CompiledGeometryHandle, const Rocket::Core::Vector2f&) {}
-void LibRocketRenderInterface::ReleaseCompiledGeometry(Rocket::Core::CompiledGeometryHandle) {}
+
+
+Rocket::Core::CompiledGeometryHandle LibRocketRenderInterface::CompileGeometry(Rocket::Core::Vertex* vertices, int numVertices,
+    int* indices, int numIndices, Rocket::Core::TextureHandle textureHandle)
+{
+    auto g = new CompiledGeometry;
+
+    glBindBuffer(GL_ARRAY_BUFFER, g->buf.vertexBuffer);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, g->buf.indexBuffer);
+    g->texture = reinterpret_cast<Texture*>(textureHandle);
+    g->numIndices = numIndices;
+
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Rocket::Core::Vertex) * numVertices, vertices, GL_DYNAMIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int) * numIndices, indices, GL_DYNAMIC_DRAW);
+
+    return reinterpret_cast<Rocket::Core::CompiledGeometryHandle>(g);
+}
+
+void LibRocketRenderInterface::RenderCompiledGeometry(Rocket::Core::CompiledGeometryHandle geometry,
+    const Rocket::Core::Vector2f& translation)
+{
+    auto g = reinterpret_cast<CompiledGeometry*>(geometry);
+
+    glBindBuffer(GL_ARRAY_BUFFER, g->buf.vertexBuffer);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, g->buf.indexBuffer);
+
+    Render(g->numIndices, g->texture, translation);
+}
+
+void LibRocketRenderInterface::ReleaseCompiledGeometry(Rocket::Core::CompiledGeometryHandle geometry)
+{
+    auto g = reinterpret_cast<CompiledGeometry*>(geometry);
+    delete g;
+}
 
 void LibRocketRenderInterface::EnableScissorRegion(bool enable)
 {

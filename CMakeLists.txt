@@ -79,8 +79,7 @@ elseif(CMAKE_COMPILER_IS_GNUCC OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 endif()
 
 # Local variables for shorter filenames
-set(SRC ${CMAKE_CURRENT_SOURCE_DIR}/src)
-set(INC ${CMAKE_CURRENT_SOURCE_DIR}/include/maibo)
+set(SRC ${CMAKE_CURRENT_SOURCE_DIR}/code/maibo)
 
 # Set platform specific sources, include dirs, library dirs, and link libraries
 set(platformSources)
@@ -94,96 +93,96 @@ set(sources)
 src_group(Maibo sources
     ${SRC}/EntryPoint.cpp
     ${SRC}/Application.cpp
-    ${INC}/Application.h
+    ${SRC}/Application.h
     ${SRC}/MaiBo.pch.h
     ${SRC}/MaiBo.pch.cpp
-    ${INC}/Dependencies.h
+    ${SRC}/Dependencies.h
     ${SRC}/MainWindow.cpp
-    ${INC}/MainWindow.h
+    ${SRC}/MainWindow.h
 )
 
 src_group(Resources sources
     ${SRC}/ResourceManager.cpp
-    ${INC}/ResourceManager.h
-    ${INC}/ResourceFuture.h
-    ${INC}/ResourceTask.h
+    ${SRC}/ResourceManager.h
+    ${SRC}/ResourceFuture.h
+    ${SRC}/ResourceTask.h
 )
 
 src_group(Lib sources
-    ${INC}/lib/ExplicitSingleton.h
-    ${INC}/lib/ImplicitSingleton.h
-    ${INC}/lib/high_res_clock.h
+    ${SRC}/lib/ExplicitSingleton.h
+    ${SRC}/lib/ImplicitSingleton.h
+    ${SRC}/lib/high_res_clock.h
     ${SRC}/lib/high_res_clock.cpp
-    ${INC}/lib/memory.h
-    ${INC}/lib/GLSentries.h
-    ${INC}/lib/Macros.h
-    ${INC}/lib/simplified_rng.h
-    ${INC}/lib/string.h
+    ${SRC}/lib/memory.h
+    ${SRC}/lib/GLSentries.h
+    ${SRC}/lib/Macros.h
+    ${SRC}/lib/simplified_rng.h
+    ${SRC}/lib/string.h
 )
 
 src_group(Lib~Signals sources
-    ${INC}/lib/Signals/Signal.h
-    ${INC}/lib/Signals/AutoSlot.h
-    ${INC}/lib/Signals/Slot.h
+    ${SRC}/lib/Signals/Signal.h
+    ${SRC}/lib/Signals/AutoSlot.h
+    ${SRC}/lib/Signals/Slot.h
 )
 
 src_group(Tasks sources
     ${SRC}/TaskManager.cpp
-    ${INC}/TaskManager.h
-    ${INC}/Task.h
-    ${INC}/Future.h
+    ${SRC}/TaskManager.h
+    ${SRC}/Task.h
+    ${SRC}/Future.h
 )
 
 src_group(States sources
-    ${INC}/AppState.h
+    ${SRC}/AppState.h
     ${SRC}/ResourceFutureState.cpp
-    ${INC}/ResourceFutureState.h
+    ${SRC}/ResourceFutureState.h
 )
 
 src_group(Rendering sources
     ${SRC}/Texture.cpp
-    ${INC}/Texture.h
-    ${INC}/TexturePtr.h
+    ${SRC}/Texture.h
+    ${SRC}/TexturePtr.h
 )
 
 src_group(Rendering~Material sources
     ${SRC}/Shader.cpp
-    ${INC}/Shader.h
-    ${INC}/ShaderPtr.h
-    ${INC}/ShaderType.h
+    ${SRC}/Shader.h
+    ${SRC}/ShaderPtr.h
+    ${SRC}/ShaderType.h
     ${SRC}/GPUProgram.cpp
-    ${INC}/GPUProgram.h
-    ${INC}/GPUProgramPtr.h
+    ${SRC}/GPUProgram.h
+    ${SRC}/GPUProgramPtr.h
 )
 
 src_group(Rendering~RenderTarget sources
     ${SRC}/RenderTarget.cpp
-    ${INC}/RenderTarget.h
+    ${SRC}/RenderTarget.h
     ${SRC}/RenderTargetManager.cpp
-    ${INC}/RenderTargetManager.h
+    ${SRC}/RenderTargetManager.h
 )
 
 src_group(Input sources
-    ${INC}/InputEventHandler.h
+    ${SRC}/InputEventHandler.h
 )
 
 if(MAIBO_USE_IMGUI)
     src_group(GUI~ImGui sources
-        ${SRC}/ImGuiManager.cpp
-        ${INC}/GUI/ImGui/ImGuiManager.h
+        ${SRC}/GUI/ImGui/ImGuiManager.cpp
+        ${SRC}/GUI/ImGui/ImGuiManager.h
     )
 endif(MAIBO_USE_IMGUI)
 
 if(MAIBO_USE_LIBROCKET)
     src_group(GUI~LibRocket sources
-        ${SRC}/LibRocketManager.cpp
-        ${INC}/GUI/LibRocket/LibRocketManager.h
-        ${SRC}/LibRocketSystemInterface.cpp
-        ${INC}/GUI/LibRocket/LibRocketSystemInterface.h
-        ${SRC}/LibRocketRenderInterface.cpp
-        ${INC}/GUI/LibRocket/LibRocketRenderInterface.h
-        ${SRC}/LibRocketLayer.cpp
-        ${INC}/GUI/LibRocket/LibRocketLayer.h
+        ${SRC}/GUI/LibRocket/LibRocketManager.cpp
+        ${SRC}/GUI/LibRocket/LibRocketManager.h
+        ${SRC}/GUI/LibRocket/LibRocketSystemInterface.cpp
+        ${SRC}/GUI/LibRocket/LibRocketSystemInterface.h
+        ${SRC}/GUI/LibRocket/LibRocketRenderInterface.cpp
+        ${SRC}/GUI/LibRocket/LibRocketRenderInterface.h
+        ${SRC}/GUI/LibRocket/LibRocketLayer.cpp
+        ${SRC}/GUI/LibRocket/LibRocketLayer.h
     )
 endif(MAIBO_USE_LIBROCKET)
 
@@ -191,7 +190,7 @@ endif(MAIBO_USE_LIBROCKET)
 add_subdirectory(third_party/lib)
 
 include_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/code
     ${THIRD_PARTY_INCLUDE_DIRS}
 )
 

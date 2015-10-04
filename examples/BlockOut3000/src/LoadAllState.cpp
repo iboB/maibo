@@ -82,6 +82,6 @@ void LoadAllState::onDone()
 
     maibo::LibRocketManager::instance().loadFont(MainFont_Filename);
 
-    //maibo::Application_Instance().setState(new PlayingState);
-    maibo::Application_Instance().setState(new MainMenuState);
+    maibo::Application_Instance().setState(new PlayingState);
+    //maibo::Application_Instance().setState(new MainMenuState);
 }

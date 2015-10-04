@@ -36,6 +36,27 @@ CubeTemplate::CubeTemplate()
     glBindBuffer(GL_ARRAY_BUFFER, m_wireBuffer);
     glBufferData(GL_ARRAY_BUFFER, data_size(m_wireSegments), m_wireSegments.data(), GL_STATIC_DRAW);
 
+    m_wideWireSegments = m_wireSegments;
+
+    for (auto& w : m_wideWireSegments)
+    {
+        for (auto& elem : w)
+        {
+            static const float e = 0.005f;
+            for (auto& c : elem)
+            {
+                if (c == 0)
+                {
+                    c -= e;
+                }
+                else
+                {
+                    c += e;
+                }
+            }
+        }
+    }
+
     m_triangles =
     {
         //bottom

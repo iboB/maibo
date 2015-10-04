@@ -124,15 +124,21 @@ void PlayingState::render()
     auto& mat = Resources::instance().uniformColorMaterial;
     mat.begin();
 
-    matrix proj = matrix::perspective_fov_rh(mathgp::constants<float>::PI() / 2.3f, 800.f/600.f, 1, 100);
-    matrix view = matrix::look_towards_rh(vc(0, 0, 1.3f), vc(0, 0, -1), vc(0, 1, 0));
+    // Draw main gameplay
+    matrix proj = matrix::perspective_fov_rh(mathgp::constants<float>::PI() / 2, 1, 1, 100);
+    matrix view = matrix::look_towards_rh(vc(0, 0, 0), vc(0, 0, -1), vc(0, 1, 0));
     matrix projView = proj * view * m_level->viewTransform();
 
     mat.setProjView(projView);
 
+    glViewport(10, 10, 580, 580);
+
     m_level->draw();
 
     m_currentFigure->draw();
+
+    // Draw helper preview
+
 
     mat.end();
 }

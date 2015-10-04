@@ -93,24 +93,11 @@ public:
                                 ++s;
                             }
 
-                            auto w = wireSegments.insert(wireSegments.end(), ct.wireSegments().begin(), ct.wireSegments().end());
+                            auto w = wireSegments.insert(wireSegments.end(), ct.wideWireSegments().begin(), ct.wideWireSegments().end());
                             while (w != wireSegments.end())
                             {
                                 for (auto& elem : *w)
                                 {
-                                    // first make the elements a tiny bit bigger in order to draw them with depth testing enabled
-                                    static const float e = 0.005f;
-                                    for (auto& c : elem)
-                                    {
-                                        if (c == 0)
-                                        {
-                                            c -= e;
-                                        }
-                                        else
-                                        {
-                                            c += e;
-                                        }
-                                    }
                                     elem += vc(float(x), float(y), 0);
                                 }
                                 ++w;
@@ -257,10 +244,7 @@ void Level::createBuffers()
     float h = float(m_size.y());
     float d = float(m_size.z());
 
-    // biggest size of w and h tobe trunkated to 1
-    float dim = max(w, h)/2;
-
-    m_viewTransfrosm = matrix::scaling_uniform(1/dim) * matrix::translation(-w / 2, -h / 2, -d);
+    m_viewTransfrosm = matrix::translation(0, 0, -1) * matrix::scaling(2/w, 2/h, 3/d) * matrix::translation(-w/2, -h/2, -d);
 
     point3 solidVertices[] =
     {
@@ -428,8 +412,13 @@ void Level::update(uint32_t dt)
         l->reset();
     }
 
+    m_numNonEmptyLevelLayers = 0;
     for (auto l : m_levelLayers)
     {
         l->update(dt);
+        if (l)
+        {
+            ++m_numNonEmptyLevelLayers;
+        }
     }
 }

@@ -50,6 +50,8 @@ endmacro(maibo_target_properties)
 #
 macro(configure_msvc_user_file TARGET_NAME WORKING_DIR)
     set(USERFILE_WORKING_DIR ${WORKING_DIR})
+    set(THIRD_PARTY_LIB)
+    file(TO_NATIVE_PATH "${MAIBO_ROOT_DIR}/third_party/lib" THIRD_PARTY_LIB)
 
     configure_file(
         "${MAIBO_ROOT_DIR}/build/tools/ExampleExe.template.user"

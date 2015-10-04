@@ -27,26 +27,31 @@ option(MAIBO_USE_LIBROCKET "Integrate the libRocket third party library" ON)
 
 # Options about example projects
 # All are enabled by default
-option(MAIBO_EXAMPLE_BLOCKOUT3000 "Also build the example BlockOut3000" ON)
+option(MAIBO_BUILD_EXAMPLES "Build MaiBo examples" ON)
+
+# Infividual example settings. Only relevant if MAIBO_BUILD_EXAMPLES is ON
+if(MAIBO_BUILD_EXAMPLES)
+    option(MAIBO_EXAMPLE_BLOCKOUT3000 "Also build the example BlockOut3000" ON)
+endif()
 
 # Set target platform
 if(EMSCRIPTEN)
-    set(MAIBO_PLATFORM_EMSCRIPTEN 1)
+    set(MAIBO_PLATFORM_EMSCRIPTEN 1 CACHE INTERNAL "Platform is Emscripten")
 elseif(CMAKE_HOST_WIN32)
-    set(MAIBO_PLATFORM_WINDOWS 1)
-    set(MAIBO_PLATFORM_DESKTOP 1)
+    set(MAIBO_PLATFORM_WINDOWS 1 CACHE INTERNAL "Platform is Windows")
+    set(MAIBO_PLATFORM_DESKTOP 1 CACHE INTERNAL "Platform is Desktop")
 elseif(CMAKE_HOST_UNIX)
-    set(MAIBO_PLATFORM_UNIX 1)
-    set(MAIBO_PLATFORM_DESKTOP 1)
+    set(MAIBO_PLATFORM_UNIX 1 CACHE INTERNAL "Platform is Unix")
+    set(MAIBO_PLATFORM_DESKTOP 1 CACHE INTERNAL "Platform is Desktop")
 else()
     message(FATAL_ERROR "Unknown target platform for the MAIBO build")
 endif()
 
 # Set target bitness
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-    set(MAIBO_64_BIT 1)
+    set(MAIBO_64_BIT 1 CACHE INTERNAL "Platform is 64-bit")
 else()
-    set(MAIBO_32_BIT 1)
+    set(MAIBO_32_BIT 1 CACHE INTERNAL "Platform is 32-bit")
 endif()
 
 # Set a default build type for non-multi build type platforms
@@ -58,25 +63,7 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 # Set platform-specific compiler settings
-if(MAIBO_PLATFORM_EMSCRIPTEN)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wno-warn-absolute-paths -s USE_SDL=2 -s USE_SDL_IMAGE=2 -s PRECISE_F32=1")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-warn-absolute-paths -s USE_SDL=2 -s USE_SDL_IMAGE=2 -s PRECISE_F32=1")
-
-    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0 -g4")
-    set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0 -g4")
-    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O2")
-    set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -O2")
-elseif(MSVC)
-    # Nothing for now
-elseif(CMAKE_COMPILER_IS_GNUCC OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c++11 -Wall")
-
-    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")
-    set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0")
-    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O2")
-    set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -O2")
-endif()
+maibo_set_c_cxx_flags()
 
 # Local variables for shorter filenames
 set(SRC ${CMAKE_CURRENT_SOURCE_DIR}/code/maibo)
@@ -214,7 +201,7 @@ maibo_target_properties(maibo)
 add_precompiled_header(maibo ${SRC}/MaiBo.pch.h ${SRC}/MaiBo.pch.cpp)
 
 set(MAIBO_INCLUDE_DIRS
-    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/code
     ${THIRD_PARTY_INCLUDE_DIRS}
     CACHE STRING "MaiBo include paths"
 )

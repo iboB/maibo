@@ -57,3 +57,29 @@ macro(configure_msvc_user_file TARGET_NAME WORKING_DIR)
         @ONLY
     )
 endmacro(configure_msvc_user_file)
+
+# maibo_set_c_cxx_flags
+#
+# sets the C and C++ compilation flags to ones appropriate for maibo
+#
+macro(maibo_set_c_cxx_flags)
+    if(MAIBO_PLATFORM_EMSCRIPTEN)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wno-warn-absolute-paths -s USE_SDL=2 -s USE_SDL_IMAGE=2 -s PRECISE_F32=1")
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-warn-absolute-paths -s USE_SDL=2 -s USE_SDL_IMAGE=2 -s PRECISE_F32=1")
+
+        set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0 -g4")
+        set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0 -g4")
+        set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O2")
+        set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -O2")
+    elseif(MSVC)
+        # Nothing for now
+    elseif(CMAKE_COMPILER_IS_GNUCC OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall")
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c++11 -Wall")
+
+        set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")
+        set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0")
+        set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O2")
+        set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -O2")
+    endif()
+endmacro(maibo_set_c_cxx_flags)

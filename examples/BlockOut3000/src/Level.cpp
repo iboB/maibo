@@ -244,7 +244,7 @@ void Level::createBuffers()
     float h = float(m_size.y());
     float d = float(m_size.z());
 
-    m_viewTransfrosm = matrix::translation(0, 0, -1) * matrix::scaling(2/w, 2/h, 3/d) * matrix::translation(-w/2, -h/2, -d);
+    m_viewTransfrosm = matrix::scaling(2/w, 2/h, 3/d) * matrix::translation(-w/2, -h/2, -d);
 
     point3 solidVertices[] =
     {
@@ -412,13 +412,13 @@ void Level::update(uint32_t dt)
         l->reset();
     }
 
-    m_numNonEmptyLevelLayers = 0;
+    m_topNonEmptyLayer = 0;
     for (auto l : m_levelLayers)
     {
         l->update(dt);
-        if (l)
+        if (!l->isEmpty())
         {
-            ++m_numNonEmptyLevelLayers;
+            ++m_topNonEmptyLayer;
         }
     }
 }

@@ -14,6 +14,7 @@
 #include "FigureTemplate.h"
 #include "Figure.h"
 #include "Random.h"
+#include "LevelLayerPreview.h"
 
 #include <maibo/GPUProgram.h>
 #include <maibo/lib/GLSentries.h>
@@ -39,6 +40,8 @@ bool PlayingState::initialize()
     m_nextFigure = new Figure(*m_figureSet->getRandomFigureTemplate(), *m_level);
     spawnNextFigure();
 
+    m_layerPreview = new LevelLayerPreview;
+
     return true;
 }
 
@@ -46,6 +49,7 @@ void PlayingState::deinitialize()
 {
     safe_delete(m_currentFigure);
     safe_delete(m_nextFigure);
+    safe_delete(m_layerPreview);
     safe_delete(m_level);
 }
 
@@ -126,12 +130,12 @@ void PlayingState::render()
 
     // Draw main gameplay
     matrix proj = matrix::perspective_fov_rh(mathgp::constants<float>::PI() / 2, 1, 1, 100);
-    matrix view = matrix::look_towards_rh(vc(0, 0, 0), vc(0, 0, -1), vc(0, 1, 0));
+    matrix view = matrix::look_towards_rh(vc(0, 0, 1), vc(0, 0, -1), vc(0, 1, 0));
     matrix projView = proj * view * m_level->viewTransform();
 
     mat.setProjView(projView);
 
-    glViewport(10, 10, 580, 580);
+    glViewport(80, 10, 580, 580);
 
     m_level->draw();
 
@@ -139,6 +143,12 @@ void PlayingState::render()
 
     // Draw helper preview
 
+    float w = 60;
+    float h = 580;
+
+    glViewport(10, 10, GLsizei(w), GLsizei(h));
+
+    m_layerPreview->draw(m_level->topNonEmptyLayer());
 
     mat.end();
 }

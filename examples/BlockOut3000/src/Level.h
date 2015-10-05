@@ -36,7 +36,7 @@ public:
     static const int MAX_SPEED = 10;
     int speed() const { return m_speed; }
 
-    uint32_t numNonEmptyLevelLayers() const { return m_numNonEmptyLevelLayers; }
+    uint32_t topNonEmptyLayer() const { return m_topNonEmptyLayer; }
 
 private:
     // logical data
@@ -44,7 +44,7 @@ private:
 
     //unsigned indexInData(unsigned layer, unsigned row, unsigned col) const { return layer * m_size.x() * m_size.y() + row * m_size.x() + col; }
     std::vector<LevelLayer*> m_levelLayers;
-    uint32_t m_numNonEmptyLevelLayers;
+    uint32_t m_topNonEmptyLayer = 0;
 
     int m_speed = 0;
 

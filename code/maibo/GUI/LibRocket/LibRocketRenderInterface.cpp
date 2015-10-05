@@ -199,8 +199,8 @@ Rocket::Core::CompiledGeometryHandle LibRocketRenderInterface::CompileGeometry(R
     g->texture = reinterpret_cast<Texture*>(textureHandle);
     g->numIndices = numIndices;
 
-    glBufferData(GL_ARRAY_BUFFER, sizeof(Rocket::Core::Vertex) * numVertices, vertices, GL_DYNAMIC_DRAW);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int) * numIndices, indices, GL_DYNAMIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Rocket::Core::Vertex) * numVertices, vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int) * numIndices, indices, GL_STATIC_DRAW);
 
     return reinterpret_cast<Rocket::Core::CompiledGeometryHandle>(g);
 }

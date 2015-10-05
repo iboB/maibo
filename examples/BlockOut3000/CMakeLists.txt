@@ -33,6 +33,8 @@ src_group(Game sources
     ${SRC}/PlayingState.h
     ${SRC}/Level.cpp
     ${SRC}/Level.h
+    ${SRC}/LevelLayerPreview.cpp
+    ${SRC}/LevelLayerPreview.h
     ${SRC}/MainMenuState.cpp
     ${SRC}/MainMenuState.h
     ${SRC}/Random.h

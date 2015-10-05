@@ -141,6 +141,16 @@ void PlayingState::render()
 
     m_currentFigure->draw();
 
+    // draw next figure preview
+
+    glViewport(670, 470, 120, 120);
+
+    view = matrix::look_towards_rh(vc(1, 1, 3.5), vc(0, 0, -1), vc(0, 1, 0));
+    projView = proj * view;
+    mat.setProjView(projView);
+
+    m_nextFigure->draw();
+
     // Draw helper preview
 
     float w = 60;

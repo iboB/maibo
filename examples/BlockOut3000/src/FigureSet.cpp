@@ -10,9 +10,15 @@
 #include "FigureSet.h"
 #include "Random.h"
 
+using namespace std;
+
 void FigureSet::addSet(const FigureSet* s)
 {
     m_figureTemplates.insert(m_figureTemplates.end(), s->m_figureTemplates.begin(), s->m_figureTemplates.end());
+
+    // erase duplicate figures
+    sort(m_figureTemplates.begin(), m_figureTemplates.end());
+    m_figureTemplates.erase(unique(m_figureTemplates.begin(), m_figureTemplates.end()), m_figureTemplates.end());
 }
 
 const FigureTemplate* FigureSet::getRandomFigureTemplate() const

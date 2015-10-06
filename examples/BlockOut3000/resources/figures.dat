@@ -1,14 +1,22 @@
-set "Flat" # the simple flat 2d set
+set "Common" # not really used as a set but has common figures
 {
-	desc "The simple flat set"
+	desc "Internal"
 
-	figure "Square"
+	figure "Angle"
 	{
 		e 0 0 0
 		e 1 0 0
 		e 0 1 0
+		c 0.5 0.5 0.5
+	}
+
+	figure "T"
+	{
+		e 0 0 0
+		e 1 0 0
+		e 2 0 0
 		e 1 1 0
-		c 1 1 0
+		c 1.5 0.5 0.5
 	}
 
 	# this is a 3d game... no need for a "reverse L"
@@ -29,8 +37,61 @@ set "Flat" # the simple flat 2d set
 		e 2 1 0
 		c 1.5 0.5 0.5
 	}
+}
 
-	# length is only 3. 4 is too long
+set "Basic"
+{
+	desc "The Soma 3x3x3 cube set"
+
+	include "Common"
+
+	figure "Right corner"
+	{
+		e 0 0 0
+		e 1 0 0
+		e 0 1 0
+		e 1 0 1
+		c 1 1 1
+	}
+
+	figure "Left corner"
+	{
+		e 0 0 0
+		e 1 0 0
+		e 0 1 0
+		e 0 1 1
+		c 1 1 1
+	}
+
+	figure "Three corner"
+	{
+		e 0 0 0
+		e 1 0 0
+		e 0 1 0
+		e 0 0 1
+		c 1 1 1
+	}
+}
+
+set "Flat" # the simple flat 2d set
+{
+	desc "The simple flat set"
+
+	include "Common"
+
+	figure "Dot"
+	{
+		e 0 0 0
+		c 0.5 0.5 0.5
+	}
+
+	figure "Short I"
+	{
+		e 0 0 0
+		e 0 1 0
+		c 0.5 0.5 0.5
+	}
+
 	figure "I"
 	{
 		e 0 0 0
@@ -39,23 +100,47 @@ set "Flat" # the simple flat 2d set
 		c 0.5 1.5 0.5
 	}
 
-	figure "T"
+	figure "Square"
 	{
 		e 0 0 0
 		e 1 0 0
-		e 2 0 0
+		e 0 1 0
 		e 1 1 0
-		c 1.5 0.5 0.5
+		c 1 1 0
 	}
 }
 
 set "Extended"
 {
 	include "Flat"
+	include "Basic"
 
-	figure "Experiment"
+	figure "4-I"
 	{
 		e 0 0 0
-		c 0.5 0.5 0.5
+		e 0 1 0
+		e 0 2 0
+		e 0 3 0
+		c 0.5 1.5 0.5
+	}
+
+	figure "5-I"
+	{
+		e 0 0 0
+		e 0 1 0
+		e 0 2 0
+		e 0 3 0
+		e 0 4 0
+		c 0.5 2.5 0.5
+	}
+
+	figure "Long L"
+	{
+		e 0 0 0
+		e 0 1 0
+		e 0 2 0
+		e 1 0 0
+		e 2 0 0
+		c 1.5 1.5 0.5
 	}
 }

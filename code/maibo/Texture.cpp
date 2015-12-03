@@ -48,17 +48,19 @@ void Texture::loadFromFile(const char* filename)
     {
     case SDL_PIXELFORMAT_RGB24:
     case SDL_PIXELFORMAT_RGB888:
-        internalFormat = GL_RGB8;
+        internalFormat = GL_RGB;
         glFormat = GL_RGB;
         break;
     case SDL_PIXELFORMAT_RGBA8888:
+    case SDL_PIXELFORMAT_BGRA8888:
+    case SDL_PIXELFORMAT_ARGB8888:
     case SDL_PIXELFORMAT_ABGR8888: // png-s come with this???
-        internalFormat = GL_RGBA8;
+        internalFormat = GL_RGBA;
         glFormat = GL_RGBA;
         break;
     default:
     {
-        internalFormat = GL_RGB8;
+        internalFormat = GL_RGB;
         glFormat = GL_RGB;
 
         cout << "unsupported texture format for " << filename << endl;

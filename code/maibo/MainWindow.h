@@ -9,7 +9,7 @@
 
 // the main window class
 
-#if defined(_MSC_VER)
+#if defined(_MSC_VER) || defined(MAIBO_PLATFORM_MOBILE)
 #   include <SDL_syswm.h>
 #else
 #   include <SDL2/SDL_syswm.h>

@@ -8,27 +8,29 @@
 
 # Third party libraries
 
+set(PREBUILT_LIBS ${CMAKE_CURRENT_SOURCE_DIR}/prebuilt)
+
 if(MSVC)
-    add_subdirectory(SDL2_win_main)
+    add_subdirectory(platform/Windows/SDL2_win_main)
 
     set(platformIncDirs
-        ${CMAKE_CURRENT_SOURCE_DIR}/glew-1.11.0/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/SDL2-2.0.3/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/SDL2_image-2.0.0/include
+        ${PREBUILT_LIBS}/Windows/glew-1.11.0/include
+        ${PREBUILT_LIBS}/Windows/SDL2-2.0.3/include
+        ${PREBUILT_LIBS}/Windows/SDL2_image-2.0.0/include
     )
 
     if(MAIBO_64_BIT)
         set(platformLinkDirs
-            ${CMAKE_CURRENT_SOURCE_DIR}/glew-1.11.0/lib/Release/x64
-            ${CMAKE_CURRENT_SOURCE_DIR}/SDL2_image-2.0.0/lib/x64
-            ${CMAKE_CURRENT_SOURCE_DIR}/SDL2-2.0.3/lib/x64
+            ${PREBUILT_LIBS}/Windows/glew-1.11.0/lib/Release/x64
+            ${PREBUILT_LIBS}/Windows/SDL2_image-2.0.0/lib/x64
+            ${PREBUILT_LIBS}/Windows/SDL2-2.0.3/lib/x64
             ${SDL2_MAIN_LINK_DIR}
         )
     else()
         set(platformLinkDirs
-            ${CMAKE_CURRENT_SOURCE_DIR}/glew-1.11.0/lib/Release/x86
-            ${CMAKE_CURRENT_SOURCE_DIR}/SDL2_image-2.0.0/lib/x86
-            ${CMAKE_CURRENT_SOURCE_DIR}/SDL2-2.0.3/lib/x86
+            ${PREBUILT_LIBS}/Windows/glew-1.11.0/lib/Release/x86
+            ${PREBUILT_LIBS}/Windows/SDL2_image-2.0.0/lib/x86
+            ${PREBUILT_LIBS}/Windows/SDL2-2.0.3/lib/x86
             ${SDL2_MAIN_LINK_DIR}
         )
     endif()
@@ -36,7 +38,7 @@ if(MSVC)
     set(platformLibs
         glew32.lib
         SDL2.lib
-        SDL2_Image.lib
+        SDL2_image.lib
         ${SDL2_MAIN_LIB}
 
         opengl32.lib
@@ -48,6 +50,22 @@ elseif(MAIBO_PLATFORM_UNIX)
     )
 elseif(MAIBO_PLATFORM_ANDROID)
 
+    set(platformIncDirs
+        ${PREBUILT_LIBS}/Android/include
+    )
+
+    set(platformLinkDirs
+        ${PREBUILT_LIBS}/Android/libs/${ANDROID_NDK_ABI_NAME}
+        ${SDL2_MAIN_LINK_DIR}
+    )
+
+    set(platformLibs
+        SDL2
+        SDL2_image
+        ${SDL2_MAIN_LIB}
+
+        GLESv2
+    )
 endif()
 
 if(MAIBO_USE_IMGUI)

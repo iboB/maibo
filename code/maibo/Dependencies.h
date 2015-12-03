@@ -23,6 +23,10 @@
 
 #if defined(_WIN32)
 #    include <GL/glew.h> //no extensions are available for Windows so use glew
+#elif defined(ANDROID)
+#   include <GLES2/gl2.h>
+#   include <GLES2/gl2ext.h>
+#   include <GLES2/gl2platform.h>
 #else
 #    define GL_GLEXT_PROTOTYPES
 #    include <GL/gl.h>

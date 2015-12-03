@@ -4,3 +4,5 @@ emcc_debug/
 emcc_release/
 makefile_debug/
 makefile_release/
+ndk_debug/
+ndk_release/

@@ -66,12 +66,16 @@ src_group(Rendering sources
 
 set(RES ${CMAKE_CURRENT_SOURCE_DIR}/resources)
 
-add_executable(BlockOut3000
+set(all_sources
     ${sources}
 
     ${RES}/u_color.frag
     ${RES}/pos.vert
     ${RES}/figures.dat
+)
+
+maibo_add_executable(BlockOut3000
+    "${all_sources}"
 )
 
 target_link_libraries(BlockOut3000 ${MAIBO_LIBS})

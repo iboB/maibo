@@ -4,7 +4,7 @@
 project(SDL2_main)
 
 include_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}/../SDL2-2.0.3/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../../prebuilt/Windows/SDL2-2.0.3/include
 )
 
 add_library(SDL2_main STATIC

@@ -1,3 +1,11 @@
+# MaiBo
+# Copyright (c) 2015 Borislav Stanimirov
+#
+# Distributed under the MIT Software License
+# See accompanying file LICENSE.txt or copy at
+# http://opensource.org/licenses/MIT
+#
+
 # Third party libraries
 
 if(MSVC)
@@ -38,6 +46,8 @@ elseif(MAIBO_PLATFORM_UNIX)
         SDL2.so
         GL
     )
+elseif(MAIBO_PLATFORM_ANDROID)
+
 endif()
 
 if(MAIBO_USE_IMGUI)

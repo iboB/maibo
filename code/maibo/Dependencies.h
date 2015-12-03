@@ -13,7 +13,7 @@
 
 // sdl is not situated in a specific folder for msvc
 // who knows why...
-#if defined(_MSC_VER)
+#if defined(_MSC_VER) || defined(MAIBO_PLATFORM_MOBILE)
 #   include <SDL.h>
 #else
 #   include <SDL2/SDL.h>

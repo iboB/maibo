@@ -37,6 +37,12 @@ endif()
 # Set target platform
 if(EMSCRIPTEN)
     set(MAIBO_PLATFORM_EMSCRIPTEN 1 CACHE INTERNAL "Platform is Emscripten")
+elseif(ANDROID)
+    set(MAIBO_PLATFORM_ANDROID 1 CACHE INTERNAL "Platform is Android")
+    set(MAIBO_PLATFORM_MOBILE 1 CACHE INTERNAL "Platform is mobile")
+elseif(IOS)
+    set(MAIBO_PLATFORM_IOS 1 CACHE INTERNAL "Platform is IOS")
+    set(MAIBO_PLATFORM_MOBILE 1 CACHE INTERNAL "Platform is mobile")
 elseif(CMAKE_HOST_WIN32)
     set(MAIBO_PLATFORM_WINDOWS 1 CACHE INTERNAL "Platform is Windows")
     set(MAIBO_PLATFORM_DESKTOP 1 CACHE INTERNAL "Platform is Desktop")
@@ -190,6 +196,8 @@ endif()
 
 if(MAIBO_PLATFORM_DESKTOP)
     add_definitions(-DMAIBO_PLATFORM_DESKTOP)
+elseif(MAIBO_PLATFORM_MOBILE)
+    add_definitions(-DMAIBO_PLATFORM_MOBILE)
 endif()
 
 add_library(maibo STATIC

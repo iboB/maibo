@@ -22,21 +22,19 @@
 using namespace maibo;
 using namespace std;
 
-#if defined(MAIBO_PLATFORM_DESKTOP) || defined(__EMSCRIPTEN__)
-
 int ResourceManager::checkFileExists(const string& path)
 {
-    auto f = fopen(path.c_str(), "rb");
-    if (!f)
+    auto io = SDL_RWFromFile(path.c_str(), "rb");
+    if (!io)
+    {
         return 1;
+    }
 
-    fclose(f);
+    SDL_RWclose(io);
     return 0;
 }
 
-#endif
-
-#if defined(MAIBO_PLATFORM_DESKTOP)
+#if !defined(__EMSCRIPTEN__)
 
 namespace
 {
@@ -74,7 +72,7 @@ ResourceFuturePtr<int> ResourceManager::getFileAsync(const string& path)
     return task->future;
 }
 
-#elif defined(__EMSCRIPTEN__)
+#else
 
 namespace
 {
@@ -188,21 +186,20 @@ namespace
 {
     int InternalReadFile(const char* path, vector<char>& outData)
     {
-        ifstream fin(path, ios::in | ios::binary);
+        auto io = SDL_RWFromFile(path, "rb");
 
-        if (!fin.is_open())
+        if (!io)
         {
             return 1;
         }
 
-        streamoff begin = fin.tellg();
-        fin.seekg(0, ios::end);
-        size_t fileSize = size_t(fin.tellg() - begin);
-        fin.seekg(0, ios::beg);
+        auto fileSize = SDL_RWseek(io, 0, RW_SEEK_END);
+
+        SDL_RWseek(io, 0, RW_SEEK_SET);
 
         outData.resize(fileSize);
 
-        fin.read(outData.data(), fileSize);
+        SDL_RWread(io, outData.data(), 1, fileSize);
 
         return 0;
     }

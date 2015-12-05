@@ -47,7 +47,7 @@ string Lexer::getNextToken()
 
             getline(m_input, m_currentLine);
             ++m_lineNumber;
-            
+
             // elliminate comments
             size_t i = m_currentLine.find('#');
             if(i != string::npos)
@@ -105,11 +105,11 @@ string Lexer::getQuotedString()
 int Lexer::getInt()
 {
     string token = getNextToken();
-    return stoi(token);
+    return strtol(token.c_str(), nullptr, 10);
 }
 
 float Lexer::getFloat()
 {
     string token = getNextToken();
-    return stof(token);
+    return strtof(token.c_str(), nullptr);
 }

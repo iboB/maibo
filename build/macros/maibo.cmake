@@ -85,7 +85,7 @@ macro(maibo_set_c_cxx_flags)
         # Nothing for now
     elseif(CMAKE_COMPILER_IS_GNUCC OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall")
-        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c++11 -Wall")
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall")
 
         set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0 -g")
         set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0 -g")

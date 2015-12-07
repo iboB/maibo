@@ -19,12 +19,12 @@ macro(maibo_target_properties TARGET_NAME)
         set_target_properties(${TARGET_NAME} PROPERTIES LINK_FLAGS "-s USE_SDL=2 -s USE_SDL_IMAGE=2")
         set(PLATFORM_PATH emscripten/${CMAKE_BUILD_TYPE})
     elseif(MAIBO_PLATFORM_ANDROID)
-        set(PLATFORM_PATH android/${ANDROID_NDK_ABI_NAME}/${CMAKE_BUILD_TYPE})
+        set(PLATFORM_PATH android/${CMAKE_BUILD_TYPE}/${ANDROID_NDK_ABI_NAME})
     elseif(MAIBO_PLATFORM_IOS)
         if(MAIBO_64_BIT)
-            set(PLATFORM_PATH ios/arm64-v8a/${CMAKE_BUILD_TYPE})
+            set(PLATFORM_PATH ios/${CMAKE_BUILD_TYPE}/arm64-v8a/)
         else()
-            set(PLATFORM_PATH ios/armeabi-v7a/${CMAKE_BUILD_TYPE})
+            set(PLATFORM_PATH ios/${CMAKE_BUILD_TYPE}/armeabi-v7a)
         endif()
     elseif(MAIBO_PLATFORM_WINDOWS)
         if(MAIBO_64_BIT)
@@ -42,7 +42,7 @@ macro(maibo_target_properties TARGET_NAME)
 
     set_target_properties(${TARGET_NAME}
         PROPERTIES
-        LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/lib/${PLATFORM_PATH}"
+        LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin/${PLATFORM_PATH}"
         # ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/lib/${PLATFORM_PATH}"
         RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin/${PLATFORM_PATH}"
     )
@@ -98,7 +98,7 @@ endmacro(maibo_set_c_cxx_flags)
 #
 # Wraps the add_executable() command.
 # Use this, instead of add_executable() to create an application.
-# * android: the executable is actually a shared library.
+# * android: the executable is actually a shared library. Also adds android main
 # * iOS: the executable needs additional parameter to mark it as a bundle.
 # * windows: the executable needs additional parameter to mark is as a windows application.
 # * unix and emscripten: nothing special. Just calls add_executable(${OUT_NAME} ${SOURCES})
@@ -112,7 +112,10 @@ endmacro(maibo_set_c_cxx_flags)
 #
 macro(maibo_add_executable OUT_NAME SOURCES)
     if(MAIBO_PLATFORM_ANDROID)
-        add_library(${OUT_NAME} SHARED ${SOURCES})
+        add_library(${OUT_NAME} SHARED
+            ${SOURCES}
+            "${MAIBO_ROOT_DIR}/third_party/lib/platform/Android/SDL2_android_main/SDL_android_main.cpp"
+        )
     elseif(MAIBO_PLATFORM_IOS)
         add_executable(${OUT_NAME} MACOSX_BUNDLE ${SOURCES})
     elseif(MAIBO_PLATFORM_WINDOWS)

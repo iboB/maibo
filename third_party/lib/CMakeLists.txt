@@ -49,20 +49,17 @@ elseif(MAIBO_PLATFORM_UNIX)
         GL
     )
 elseif(MAIBO_PLATFORM_ANDROID)
-
     set(platformIncDirs
         ${PREBUILT_LIBS}/Android/include
     )
 
     set(platformLinkDirs
         ${PREBUILT_LIBS}/Android/libs/${ANDROID_NDK_ABI_NAME}
-        ${SDL2_MAIN_LINK_DIR}
     )
 
     set(platformLibs
         SDL2
         SDL2_image
-        ${SDL2_MAIN_LIB}
 
         GLESv2
     )

@@ -24,12 +24,21 @@ bool MainWindow::create(const MainWindow::CreationParameters& params)
 {
     m_creationParameters = params;
 
-    const auto& size = params.clientAreaSize;
+#if MAIBO_PLATFORM_MOBILE
+    SDL_DisplayMode displayMode;
+    if (SDL_GetCurrentDisplayMode(0, &displayMode) == 0)
+    {
+        m_creationParameters.clientAreaSize.x() = unsigned(displayMode.w);
+        m_creationParameters.clientAreaSize.y() = unsigned(displayMode.h);
+    }
+#endif
 
-    int fullScreen = params.isFullScreen ? SDL_WINDOW_FULLSCREEN : 0;
+    const auto& size = m_creationParameters.clientAreaSize;
+
+    int fullScreen = m_creationParameters.isFullScreen ? SDL_WINDOW_FULLSCREEN : 0;
 
     m_sdlWindow = SDL_CreateWindow(
-        params.title,
+        m_creationParameters.title,
         SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
         size.x(), size.y(),
         SDL_WINDOW_OPENGL|fullScreen);

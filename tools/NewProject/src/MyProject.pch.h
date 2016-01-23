@@ -1,3 +1,5 @@
+#pragma once
+
 // Your custom precompiled header
 
 // You need to include this to link with MaiBo

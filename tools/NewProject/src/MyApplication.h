@@ -1,3 +1,5 @@
+#pragma once
+
 #include <maibo/Application.h>
 
 // main application class

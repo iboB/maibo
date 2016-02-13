@@ -23,7 +23,6 @@ include(src_group)
 # Options about components
 # All are enabled by default
 option(MAIBO_USE_IMGUI "Integrate the ImGui third party library" ON)
-option(MAIBO_USE_LIBROCKET "Integrate the libRocket third party library" ON)
 
 # Options about example projects
 # All are enabled by default
@@ -174,19 +173,6 @@ if(MAIBO_USE_IMGUI)
         ${SRC}/GUI/ImGui/ImGuiManager.h
     )
 endif(MAIBO_USE_IMGUI)
-
-if(MAIBO_USE_LIBROCKET)
-    src_group(GUI~LibRocket sources
-        ${SRC}/GUI/LibRocket/LibRocketManager.cpp
-        ${SRC}/GUI/LibRocket/LibRocketManager.h
-        ${SRC}/GUI/LibRocket/LibRocketSystemInterface.cpp
-        ${SRC}/GUI/LibRocket/LibRocketSystemInterface.h
-        ${SRC}/GUI/LibRocket/LibRocketRenderInterface.cpp
-        ${SRC}/GUI/LibRocket/LibRocketRenderInterface.h
-        ${SRC}/GUI/LibRocket/LibRocketLayer.cpp
-        ${SRC}/GUI/LibRocket/LibRocketLayer.h
-    )
-endif(MAIBO_USE_LIBROCKET)
 
 # third party libraries
 add_subdirectory(third_party/lib)

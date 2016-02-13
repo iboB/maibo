@@ -16,7 +16,6 @@
 #include "FigureManager.h"
 #include "LoadFigureSetsTask.h"
 #include <maibo/TaskManager.h>
-#include <maibo/GUI/LibRocket/LibRocketManager.h>
 
 namespace
 {
@@ -79,8 +78,6 @@ void LoadAllState::onDone()
     r.uniformColorMaterial.initialize();
 
     FigureManager::instance().prepareFigureTemplatesPhysicalData();
-
-    maibo::LibRocketManager::instance().loadFont(MainFont_Filename);
 
     maibo::Application_Instance().setState(new PlayingState);
     //maibo::Application_Instance().setState(new MainMenuState);

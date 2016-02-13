@@ -10,7 +10,6 @@
 #include <maibo/ResourceManager.h>
 #include <maibo/lib/high_res_clock.h>
 #include <maibo/GUI/ImGui/ImGuiManager.h>
-#include <maibo/GUI/LibRocket/LibRocketManager.h>
 
 #include "LoadAllState.h"
 #include "Resources.h"
@@ -44,7 +43,6 @@ bool BlockOut::initialize()
     setState(new LoadAllState);
 
     ImGuiManager::createInstance();
-    LibRocketManager::createInstance();
 
     startRunning();
 
@@ -53,7 +51,6 @@ bool BlockOut::initialize()
 
 void BlockOut::deinitialize()
 {
-    LibRocketManager::destroyInstance();
     ImGuiManager::destroyInstance();
     FigureManager::destroyInstance();
     CubeTemplate::destroyInstance();

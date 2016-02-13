@@ -15,7 +15,7 @@ public:
     virtual bool initialize() override;
     virtual void deinitialize() override;
 
-    bool handleEvent(const SDL_Event& event);
+    bool handleEvent(const SDL_Event& event) override;
 
     virtual void beginFrame() override;
     virtual void update(uint32_t dt) override;

@@ -18,7 +18,7 @@ namespace maibo
         Texture(const std::string& name);
         ~Texture();
 
-        void loadFromFile(const char* filename);
+        bool loadFromFile(const char* filename);
         void loadFromData(GLint internalFormat, GLsizei width, GLsizei height, GLenum format, GLenum type, const void* data);
 
         void setParameter(GLenum, GLint);

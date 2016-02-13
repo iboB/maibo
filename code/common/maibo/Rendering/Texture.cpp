@@ -30,13 +30,14 @@ Texture::~Texture()
     glDeleteTextures(1, &m_glHandle);
 }
 
-void Texture::loadFromFile(const char* filename)
+bool Texture::loadFromFile(const char* filename)
 {
     SDL_Surface* image = IMG_Load(filename);
     if (!image)
     {
         const char* err = IMG_GetError();
-        throw runtime_error(err);
+        cerr << "couldn't load " << filename << ": " << err << endl;
+        return false;
     }
 
     GLint internalFormat;
@@ -63,8 +64,11 @@ void Texture::loadFromFile(const char* filename)
         internalFormat = GL_RGB;
         glFormat = GL_RGB;
 
-        cout << "unsupported texture format for " << filename << endl;
-        assert(false);
+        m_width = image->w;
+        m_height = image->h;
+
+        cerr << "unsupported texture format for " << filename << endl;
+        return false;
     }
     break;
     }
@@ -72,6 +76,8 @@ void Texture::loadFromFile(const char* filename)
     loadFromData(internalFormat, image->w, image->h, glFormat, GL_UNSIGNED_BYTE, image->pixels);
 
     SDL_FreeSurface(image);
+
+    return true;
 }
 
 void Texture::loadFromData(GLint internalFormat, GLsizei width, GLsizei height, GLenum format, GLenum type, const void* data)

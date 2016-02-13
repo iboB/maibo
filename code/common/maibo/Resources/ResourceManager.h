@@ -15,6 +15,7 @@
 #include "maibo/Rendering/ShaderPtr.h"
 #include "maibo/Rendering/GPUProgramPtr.h"
 #include "maibo/Rendering/ShaderType.h"
+#include "maibo/Rendering/TexturePtr.h"
 
 namespace maibo
 {
@@ -22,11 +23,13 @@ namespace maibo
     {
     public:
 
-
         // Loads a shader from a file
         ResourceFuturePtr<ShaderPtr> loadShaderAsync(const std::string& path, ShaderType::Type type, bool alsoGetFile = false);
 
         // Loads a GPU program from two shader types
         ResourceFuturePtr<GPUProgramPtr> loadGPUProgramAsync(const std::string& vertexShaderPath, const std::string& fragmentShaderPath, bool alsoGetFiles = false);
+
+        // Loads a texture
+        ResourceFuturePtr<TexturePtr> loadTexture(const std::string& path, bool alsoGetFile = false);
     };
 }

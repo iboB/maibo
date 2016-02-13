@@ -32,10 +32,10 @@ bool LoadAllState::initialize()
 
     auto& fm = maibo::FileManager::instance();
 
-    m_figureDataFuture = fm.readFileAsync("resources/figures.dat", true);
-    addFuture(m_figureDataFuture);
+    auto figDataFuture = fm.readFileAsync("resources/figures.dat", true);
+    addFuture(figDataFuture);
 
-    auto task = new LoadFigureSetsTask(m_figureDataFuture);
+    auto task = new LoadFigureSetsTask(figDataFuture);
     maibo::TaskManager::instance().pushTask(task);
     addFuture(task->future);
 

@@ -27,5 +27,4 @@ class LoadAllState : public maibo::ResourceFutureState
     virtual void onDone() override;
 
     maibo::ResourceFuturePtr<maibo::GPUProgramPtr> m_uniformColorFuture;
-    maibo::ResourceFuturePtr<std::vector<char>> m_figureDataFuture;
 };

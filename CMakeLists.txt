@@ -78,7 +78,7 @@ endif()
 maibo_set_c_cxx_flags()
 
 # Local variables for shorter filenames
-set(SRC ${MAIBO_ROOT_DIR}/code/common/maibo)
+set(SRC code/common/maibo)
 
 # Set platform specific sources, include dirs, library dirs, and link libraries
 set(platformSources)
@@ -127,7 +127,7 @@ add_library(maibo STATIC
 )
 
 maibo_target_properties(maibo)
-add_precompiled_header(maibo ${SRC}/pch/MaiBo.pch.h ${SRC}/pch/MaiBo.pch.cpp)
+add_precompiled_header(maibo ${MAIBO_ROOT_DIR}/${SRC}/pch/MaiBo.pch.h ${MAIBO_ROOT_DIR}/${SRC}/pch/MaiBo.pch.cpp)
 
 set(MAIBO_INCLUDE_DIRS
     ${CMAKE_CURRENT_SOURCE_DIR}/code/common

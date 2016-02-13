@@ -14,6 +14,7 @@
 #include "maibo/TaskManager.h"
 #include "maibo/Rendering/Shader.h"
 #include "maibo/Rendering/GPUProgram.h"
+#include "maibo/Rendering/Texture.h"
 
 #include <fstream>
 
@@ -76,7 +77,11 @@ namespace
 
         bool safeExecute() override
         {
-            assert(m_vsFuture->isDone());
+            if (!m_vsFuture->isDone())
+            {
+                return false;
+            }
+
             assert(m_fsFuture->isDone());
 
             future->resource() = make_shared<GPUProgram>(m_programName);
@@ -105,6 +110,45 @@ ResourceFuturePtr<GPUProgramPtr> ResourceManager::loadGPUProgramAsync(const std:
     auto fsFuture = loadShaderAsync(fragmentShaderPath, ShaderType::Fragment, alsoGetFiles);
 
     auto task = new LoadGPUProgramTask(vertexShaderPath + fragmentShaderPath, vsFuture, fsFuture);
+    TaskManager::instance().pushTask(task);
+
+    return task->future;
+}
+
+namespace
+{
+class LoadTextureTask : public ResourceTask<TexturePtr, int>
+{
+public:
+    LoadTextureTask(const string& textureName, ConstResourceFuturePtr<int> getFileFuture)
+        : ResourceTask(getFileFuture)
+        , m_textureName(textureName)
+    {
+    }
+
+    bool safeExecute() override
+    {
+        future->resource() = make_shared<Texture>(m_textureName);
+
+        auto success = future->resource()->loadFromFile(m_textureName.c_str());
+
+        future->setErrorCode(!success);
+        future->setProgress(1.f);
+        future->setDone();
+
+        return true;
+    }
+
+private:
+    const string m_textureName;
+};
+}
+
+ResourceFuturePtr<TexturePtr> ResourceManager::loadTexture(const std::string& path, bool alsoGetFile)
+{
+    auto future = FileManager::instance().getFileAsync(path);
+
+    auto task = new LoadTextureTask(path, future);
     TaskManager::instance().pushTask(task);
 
     return task->future;

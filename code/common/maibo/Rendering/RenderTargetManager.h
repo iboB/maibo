@@ -7,7 +7,7 @@
 //
 #pragma once
 
-#include "lib/ImplicitSingleton.h"
+#include "maibo/Common/ImplicitSingleton.h"
 
 // render targer manager
 // provides basic info about the current render target

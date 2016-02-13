@@ -57,4 +57,4 @@
 
 #include <mathgp/mathgp.h>
 
-#include "lib/Macros.h"
+#include "Common/Macros.h"

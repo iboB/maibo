@@ -7,7 +7,7 @@
 //
 #pragma once
 
-#include <maibo/lib/ExplicitSingleton.h>
+#include <maibo/Common/ExplicitSingleton.h>
 #include "UniformColorMaterial.h"
 
 // class that contains all resources for the game

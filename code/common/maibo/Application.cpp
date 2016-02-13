@@ -5,13 +5,13 @@
 // See accompanying file LICENSE.txt or copy at
 // http://opensource.org/licenses/MIT
 //
-#include <maibo/Application.h>
+#include "Application.h"
 
-#include <maibo/TaskManager.h>
-#include <maibo/lib/high_res_clock.h>
-#include <maibo/MainWindow.h>
-#include <maibo/AppState.h>
-#include <maibo/InputEventHandler.h>
+#include "TaskManager.h"
+#include "Common/high_res_clock.h"
+#include "MainWindow.h"
+#include "AppState.h"
+#include "Input/InputEventHandler.h"
 
 #include <sstream>
 

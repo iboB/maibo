@@ -6,16 +6,13 @@
 // http://opensource.org/licenses/MIT
 //
 
-#include <maibo/ResourceManager.h>
-
-#include <maibo/ResourceTask.h>
-
-#include <maibo/ResourceFuture.h>
-#include <maibo/Task.h>
-#include <maibo/TaskManager.h>
-
-#include <maibo/Shader.h>
-#include <maibo/GPUProgram.h>
+#include "ResourceManager.h"
+#include "ResourceTask.h"
+#include "ResourceFuture.h"
+#include "maibo/Task.h"
+#include "maibo/TaskManager.h"
+#include "maibo/Rendering/Shader.h"
+#include "maibo/Rendering/GPUProgram.h"
 
 #include <fstream>
 

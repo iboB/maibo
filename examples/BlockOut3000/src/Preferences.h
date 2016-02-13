@@ -7,7 +7,7 @@
 //
 #pragma once
 
-#include <maibo/lib/ImplicitSingleton.h>
+#include <maibo/Common/ImplicitSingleton.h>
 
 // class that stores preferences, that the user may edit
 

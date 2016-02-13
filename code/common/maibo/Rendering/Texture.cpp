@@ -5,7 +5,7 @@
 // See accompanying file LICENSE.txt or copy at
 // http://opensource.org/licenses/MIT
 //
-#include <maibo/Texture.h>
+#include "Texture.h"
 
 //#include "ResourceConstants.h"
 

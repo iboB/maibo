@@ -10,7 +10,7 @@
 // a renderable cube template
 
 #include "Primitives.h"
-#include <maibo/lib/ExplicitSingleton.h>
+#include <maibo/Common/ExplicitSingleton.h>
 
 class CubeTemplate : public maibo::ExplicitSingleton<CubeTemplate>
 {

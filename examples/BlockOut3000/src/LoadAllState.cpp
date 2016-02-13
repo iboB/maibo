@@ -8,7 +8,7 @@
 #include "LoadAllState.h"
 
 #include <maibo/Application.h>
-#include <maibo/ResourceManager.h>
+#include <maibo/Resources/ResourceManager.h>
 
 #include "PlayingState.h"
 #include "MainMenuState.h"

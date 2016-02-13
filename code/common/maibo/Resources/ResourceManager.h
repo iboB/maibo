@@ -9,12 +9,12 @@
 
 // Resource manager singleton
 
-#include "lib/ImplicitSingleton.h"
+#include "maibo/Common/ImplicitSingleton.h"
 #include "ResourceFuture.h"
 
-#include "ShaderPtr.h"
-#include "GPUProgramPtr.h"
-#include "ShaderType.h"
+#include "maibo/Rendering/ShaderPtr.h"
+#include "maibo/Rendering/GPUProgramPtr.h"
+#include "maibo/Rendering/ShaderType.h"
 
 namespace maibo
 {

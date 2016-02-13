@@ -7,7 +7,7 @@
 //
 #pragma once
 
-#include <maibo/lib/Signals/Signal.h>
+#include "Common/Signals/Signal.h"
 
 // Main application class
 // Users must inherit from it and override its virtual methods

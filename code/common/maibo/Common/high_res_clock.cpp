@@ -6,7 +6,7 @@
 // See accompanying file LICENSE.txt or copy at
 // http://opensource.org/licenses/MIT
 //
-#include <maibo/lib/high_res_clock.h>
+#include "high_res_clock.h"
 
 #if defined(_MSC_VER)
 #define WIN32_LEAN_AND_MEAN

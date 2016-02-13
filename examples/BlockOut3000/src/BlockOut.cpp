@@ -7,8 +7,8 @@
 //
 #include "BlockOut.h"
 
-#include <maibo/ResourceManager.h>
-#include <maibo/lib/high_res_clock.h>
+#include <maibo/Resources/ResourceManager.h>
+#include <maibo/Common/high_res_clock.h>
 #include <maibo/GUI/ImGui/ImGuiManager.h>
 
 #include "LoadAllState.h"

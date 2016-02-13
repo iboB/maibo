@@ -11,8 +11,7 @@
 #include "CubeTemplate.h"
 #include "Preferences.h"
 
-#include <maibo/lib/GLSentries.h>
-#include <maibo/lib/memory.h>
+#include <maibo/Common/GLSentries.h>
 
 using namespace mathgp;
 using namespace std;

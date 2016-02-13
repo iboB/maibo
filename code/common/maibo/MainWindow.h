@@ -15,7 +15,7 @@
 #   include <SDL2/SDL_syswm.h>
 #endif
 
-#include "RenderTarget.h"
+#include "Rendering/RenderTarget.h"
 
 namespace maibo
 {

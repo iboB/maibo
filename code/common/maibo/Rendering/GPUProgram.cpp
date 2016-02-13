@@ -6,9 +6,9 @@
 // http://opensource.org/licenses/MIT
 //
 // class for a GPU program (effect)
-#include <maibo/GPUProgram.h>
-#include <maibo/Shader.h>
-#include <maibo/Texture.h>
+#include "GPUProgram.h"
+#include "Shader.h"
+#include "Texture.h"
 
 using namespace std;
 using namespace mathgp;

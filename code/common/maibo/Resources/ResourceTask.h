@@ -7,7 +7,7 @@
 //
 #pragma once
 
-#include "Task.h"
+#include "maibo/Task.h"
 #include "ResourceFuture.h"
 
 // Class used as a parent and shared functionality for resource-loading tasks

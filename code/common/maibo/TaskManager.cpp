@@ -5,8 +5,8 @@
 // See accompanying file LICENSE.txt or copy at
 // http://opensource.org/licenses/MIT
 //
-#include <maibo/TaskManager.h>
-#include <maibo/Task.h>
+#include "TaskManager.h"
+#include "Task.h"
 
 using namespace maibo;
 

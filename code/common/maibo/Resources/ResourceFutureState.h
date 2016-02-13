@@ -7,9 +7,9 @@
 //
 #pragma once
 
-#include "AppState.h"
+#include "maibo/AppState.h"
 
-#include "Future.h"
+#include "maibo/Common/Future.h"
 
 // base class for states that load a bunch of resources
 

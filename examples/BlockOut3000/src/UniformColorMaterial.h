@@ -7,7 +7,7 @@
 //
 #pragma once
 
-#include <maibo/GPUProgramPtr.h>
+#include <maibo/Rendering/GPUProgramPtr.h>
 
 // simple class for a Uniform color material
 

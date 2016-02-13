@@ -16,8 +16,8 @@
 #include "Random.h"
 #include "LevelLayerPreview.h"
 
-#include <maibo/GPUProgram.h>
-#include <maibo/lib/GLSentries.h>
+#include <maibo/Rendering/GPUProgram.h>
+#include <maibo/Common/GLSentries.h>
 
 // main gameplay state
 

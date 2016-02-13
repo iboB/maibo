@@ -7,11 +7,11 @@
 //
 #pragma once
 
-#include <maibo/GPUProgramPtr.h>
-#include <maibo/TexturePtr.h>
-#include <maibo/InputEventHandler.h>
-#include <maibo/lib/ExplicitSingleton.h>
-#include <maibo/lib/Signals/AutoSlot.h>
+#include "maibo/Rendering/GPUProgramPtr.h"
+#include "maibo/Rendering/TexturePtr.h"
+#include "maibo/Input/InputEventHandler.h"
+#include "maibo/Common/ExplicitSingleton.h"
+#include "maibo/Common/Signals/AutoSlot.h"
 
 struct ImDrawData;
 

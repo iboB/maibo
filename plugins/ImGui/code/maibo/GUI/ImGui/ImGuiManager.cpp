@@ -5,17 +5,17 @@
 // See accompanying file LICENSE.txt or copy at
 // http://opensource.org/licenses/MIT
 //
-#include <maibo/GUI/ImGui/ImGuiManager.h>
-#include <maibo/lib/GLSentries.h>
-#include <maibo/Application.h>
+#include "maibo/GUI/ImGui/ImGuiManager.h"
+#include "maibo/Common/GLSentries.h"
+#include "maibo/Application.h"
 #if defined(_WIN32)
 // required only to get the hwnd
-#   include <maibo/MainWindow.h>
+#   include "maibo/MainWindow.h"
 #endif
-#include <maibo/GPUProgram.h>
-#include <maibo/Texture.h>
-#include <maibo/Shader.h>
-#include <maibo/RenderTargetManager.h>
+#include "maibo/Rendering/GPUProgram.h"
+#include "maibo/Rendering/Texture.h"
+#include "maibo/Rendering/Shader.h"
+#include "maibo/Rendering/RenderTargetManager.h"
 
 #include <imgui.h>
 

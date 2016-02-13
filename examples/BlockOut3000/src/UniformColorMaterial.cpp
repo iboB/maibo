@@ -7,7 +7,7 @@
 //
 #include "UniformColorMaterial.h"
 
-#include <maibo/GPUProgram.h>
+#include <maibo/Rendering/GPUProgram.h>
 
 void UniformColorMaterial::initialize()
 {

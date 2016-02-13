@@ -10,7 +10,7 @@
 #include "CubeTemplate.h"
 #include "Resources.h"
 
-#include <maibo/lib/GLSentries.h>
+#include <maibo/Common/GLSentries.h>
 
 using namespace std;
 using namespace mathgp;

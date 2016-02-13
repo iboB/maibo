@@ -7,8 +7,8 @@
 //
 #pragma once
 
-#include <maibo/lib/ImplicitSingleton.h>
-#include <maibo/lib/simplified_rng.h>
+#include <maibo/Common/ImplicitSingleton.h>
+#include <maibo/Common/simplified_rng.h>
 
 class Random : public maibo::ImplicitSingleton<Random>
 {

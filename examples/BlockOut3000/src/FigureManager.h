@@ -9,8 +9,8 @@
 
 // management of figures. lifetime... generation,,,
 
-#include <maibo/lib/ExplicitSingleton.h>
-#include <maibo/Future.h>
+#include <maibo/Common/ExplicitSingleton.h>
+#include <maibo/Common/Future.h>
 
 class FigureTemplate;
 class FigureSet;
@@ -19,7 +19,7 @@ class Lexer;
 class FigureManager : public maibo::ExplicitSingleton<FigureManager>
 {
 public:
-    //const FigureSet* GetFigureSet(const std::string& setName) const;    
+    //const FigureSet* GetFigureSet(const std::string& setName) const;
 
     void prepareFigureTemplatesPhysicalData();
 

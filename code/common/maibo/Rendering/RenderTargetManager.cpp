@@ -5,8 +5,8 @@
 // See accompanying file LICENSE.txt or copy at
 // http://opensource.org/licenses/MIT
 //
-#include <maibo/RenderTargetManager.h>
-#include <maibo/RenderTarget.h>
+#include "RenderTargetManager.h"
+#include "RenderTarget.h"
 
 using namespace maibo;
 

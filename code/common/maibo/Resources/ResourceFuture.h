@@ -7,7 +7,7 @@
 //
 #pragma once
 
-#include "Future.h"
+#include "maibo/Common/Future.h"
 
 // The resource future is used in the asynchronous resource loading operations
 // All of those will return a resource future of a given type

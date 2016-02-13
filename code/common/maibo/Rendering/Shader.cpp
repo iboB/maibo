@@ -5,7 +5,7 @@
 // See accompanying file LICENSE.txt or copy at
 // http://opensource.org/licenses/MIT
 //
-#include <maibo/Shader.h>
+#include "Shader.h"
 
 using namespace std;
 using namespace maibo;

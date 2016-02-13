@@ -7,8 +7,8 @@
 //
 
 // the main window class definition
-#include <maibo/MainWindow.h>
-#include <maibo/RenderTargetManager.h>
+#include "MainWindow.h"
+#include "Rendering/RenderTargetManager.h"
 
 using namespace std;
 using namespace maibo;

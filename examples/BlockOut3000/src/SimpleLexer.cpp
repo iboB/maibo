@@ -9,7 +9,7 @@
 // a simple lexer class that gets tokes from an istream
 #include "SimpleLexer.h"
 
-#include <maibo/lib/string.h>
+#include <maibo/Common/string.h>
 
 using namespace std;
 using namespace maibo;

@@ -10,12 +10,16 @@
 
 using namespace maibo;
 
+TaskManager::TaskManager()
+{
+    m_taskIterator = m_tasks.begin();
+}
+
 TaskManager::~TaskManager()
 {
-    while (!m_tasks.empty())
+    for (auto task : m_tasks)
     {
-        delete m_tasks.front();
-        m_tasks.pop();
+        delete task;
     }
 }
 
@@ -26,15 +30,31 @@ void TaskManager::update()
         if (m_tasks.empty())
             break;
 
-        if (m_tasks.front()->execute())
+        auto task = *m_taskIterator;
+
+        if (task->execute())
         {
-            delete m_tasks.front();
-            m_tasks.pop();
+            delete task;
+            m_taskIterator = m_tasks.erase(m_taskIterator);
+        }
+        else
+        {
+            ++m_taskIterator;
+        }
+
+        if (m_taskIterator == m_tasks.end())
+        {
+            m_taskIterator = m_tasks.begin();
         }
     }
 }
 
 void TaskManager::pushTask(Task* t)
 {
-    m_tasks.push(t);
+    m_tasks.push_back(t);
+
+    if (m_taskIterator == m_tasks.end())
+    {
+        m_taskIterator = m_tasks.begin();
+    }
 }

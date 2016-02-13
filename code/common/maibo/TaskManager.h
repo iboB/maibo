@@ -15,27 +15,31 @@
 
 namespace maibo
 {
-    class Task;
 
-    class TaskManager : public ImplicitSingleton<TaskManager>
-    {
-    public:
-        ~TaskManager();
+class Task;
 
-        // sets how many calls of Task::execute should there ber per TaskManager::update
-        void setNumTasksPerUpdate(int numTasksPerUpdate) { m_numTasksPerUpdate = numTasksPerUpdate; }
+class TaskManager : public ImplicitSingleton<TaskManager>
+{
+public:
+    TaskManager();
+    ~TaskManager();
 
-        // called each frame to execute m_numTasksPerUpdate takss
-        void update();
+    // sets how many calls of Task::execute should there ber per TaskManager::update
+    void setNumTasksPerUpdate(int numTasksPerUpdate) { m_numTasksPerUpdate = numTasksPerUpdate; }
 
-        void pushTask(Task* task);
+    // called each frame to execute m_numTasksPerUpdate takss
+    void update();
 
-    private:
-        static TaskManager* m_instance;
+    void pushTask(Task* task);
 
-        std::queue<Task*> m_tasks;
+private:
+    static TaskManager* m_instance;
 
-        unsigned m_numTasksPerUpdate = 1;
+    std::list<Task*> m_tasks;
+    std::list<Task*>::iterator m_taskIterator;
 
-    };
+    unsigned m_numTasksPerUpdate = 1;
+
+};
+
 }

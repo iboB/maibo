@@ -78,7 +78,7 @@ endif()
 maibo_set_c_cxx_flags()
 
 # Local variables for shorter filenames
-set(SRC code/common/maibo)
+set(SRC ${MAIBO_ROOT_DIR}/code/common/maibo)
 
 # Set platform specific sources, include dirs, library dirs, and link libraries
 set(platformSources)

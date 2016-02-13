@@ -27,6 +27,9 @@ macro(add_precompiled_header TARGET_NAME PRECOMPILED_HEADER PRECOMPILED_SOURCE)
     get_filename_component(PRECOMPILED_HEADER_NAME ${PRECOMPILED_HEADER} NAME)
 
     if(MSVC)
+        get_filename_component(PRECOMPILED_HEADER_PATH ${PRECOMPILED_HEADER} DIRECTORY)
+        target_include_directories(${TARGET_NAME} PRIVATE ${PRECOMPILED_HEADER_PATH}) # fixes occasional IntelliSense glitches
+
         get_filename_component(PRECOMPILED_HEADER_WE ${PRECOMPILED_HEADER} NAME_WE)
         set(PRECOMPILED_BINARY "$(IntDir)/${PRECOMPILED_HEADER_WE}.pch")
 
@@ -35,7 +38,7 @@ macro(add_precompiled_header TARGET_NAME PRECOMPILED_HEADER PRECOMPILED_SOURCE)
         foreach(SOURCE_FILE ${SOURCE_FILES})
             set(PCH_COMPILE_FLAGS "")
             if(SOURCE_FILE MATCHES \\.\(c|cc|cxx|cpp\)$)
-                if(SOURCE_FILE STREQUAL ${PRECOMPILED_SOURCE})
+                if(${PRECOMPILED_SOURCE} MATCHES ${SOURCE_FILE})
                     # Set source file to generate header
                     set_source_files_properties(
                         ${SOURCE_FILE}

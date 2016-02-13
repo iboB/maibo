@@ -32,6 +32,7 @@ option(MAIBO_BUILD_EXAMPLES "Build MaiBo examples" ON)
 # Infividual example settings. Only relevant if MAIBO_BUILD_EXAMPLES is ON
 if(MAIBO_BUILD_EXAMPLES)
     option(MAIBO_EXAMPLE_BLOCKOUT3000 "Also build the example BlockOut3000" ON)
+    option(MAIBO_EXAMPLE_JOYPAD "Also build the example JoyPad" ON)
 endif()
 
 # Set target platform
@@ -159,6 +160,14 @@ src_group(Input sources
     ${SRC}/InputEventHandler.h
 )
 
+src_group(JoyPad sources
+    ${SRC}/joypad/Action.h
+    ${SRC}/joypad/JoyPad.cpp
+    ${SRC}/joypad/JoyPad.h
+    ${SRC}/joypad/RenderInterface.h
+    ${SRC}/joypad/RenderTypes.h
+)
+
 if(MAIBO_USE_IMGUI)
     src_group(GUI~ImGui sources
         ${SRC}/GUI/ImGui/ImGuiManager.cpp
@@ -228,4 +237,8 @@ set(MAIBO_LIBS
 
 if(MAIBO_EXAMPLE_BLOCKOUT3000)
     add_subdirectory(${MAIBO_ROOT_DIR}/examples/BlockOut3000)
+endif()
+
+if(MAIBO_EXAMPLE_JOYPAD)
+    add_subdirectory(${MAIBO_ROOT_DIR}/examples/JoyPad)
 endif()

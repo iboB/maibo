@@ -15,10 +15,16 @@ set(MAIBO_ROOT_DIR
     ${CMAKE_CURRENT_SOURCE_DIR}
     CACHE STRING "Root directory of MaiBo")
 
-set(CMAKE_MODULE_PATH ${MAIBO_ROOT_DIR}/build/macros)
+set(CMAKE_MODULE_PATH
+    ${CMAKE_MODULE_PATH}
+    ${MAIBO_ROOT_DIR}/build/macros
+    ${MAIBO_ROOT_DIR}/third_party/build/ucm/cmake
+)
+
 include(maibo)
 include(precompiled_header)
 include(src_group)
+include(ucm)
 
 # Options about components
 # All are enabled by default
@@ -72,7 +78,7 @@ endif()
 maibo_set_c_cxx_flags()
 
 # Local variables for shorter filenames
-set(SRC ${CMAKE_CURRENT_SOURCE_DIR}/code/maibo)
+set(SRC code/common/maibo)
 
 # Set platform specific sources, include dirs, library dirs, and link libraries
 set(platformSources)
@@ -83,102 +89,22 @@ endif()
 
 # common sources
 set(sources)
-src_group(Maibo sources
-    ${SRC}/EntryPoint.cpp
-    ${SRC}/Application.cpp
-    ${SRC}/Application.h
-    ${SRC}/MaiBo.pch.h
-    ${SRC}/MaiBo.pch.cpp
-    ${SRC}/Dependencies.h
-    ${SRC}/MainWindow.cpp
-    ${SRC}/MainWindow.h
-)
+ucm_add_dirs(${SRC} TO sources RECURSIVE FILTER_POP 3)
 
-src_group(Resources sources
-    ${SRC}/ResourceManager.cpp
-    ${SRC}/ResourceManager.h
-    ${SRC}/ResourceFuture.h
-    ${SRC}/ResourceTask.h
-)
-
-src_group(Lib sources
-    ${SRC}/lib/ExplicitSingleton.h
-    ${SRC}/lib/ImplicitSingleton.h
-    ${SRC}/lib/high_res_clock.h
-    ${SRC}/lib/high_res_clock.cpp
-    ${SRC}/lib/memory.h
-    ${SRC}/lib/GLSentries.h
-    ${SRC}/lib/Macros.h
-    ${SRC}/lib/simplified_rng.h
-    ${SRC}/lib/string.h
-)
-
-src_group(Lib~Signals sources
-    ${SRC}/lib/Signals/Signal.h
-    ${SRC}/lib/Signals/AutoSlot.h
-    ${SRC}/lib/Signals/Slot.h
-)
-
-src_group(Tasks sources
-    ${SRC}/TaskManager.cpp
-    ${SRC}/TaskManager.h
-    ${SRC}/Task.h
-    ${SRC}/Future.h
-)
-
-src_group(States sources
-    ${SRC}/AppState.h
-    ${SRC}/ResourceFutureState.cpp
-    ${SRC}/ResourceFutureState.h
-)
-
-src_group(Rendering sources
-    ${SRC}/Texture.cpp
-    ${SRC}/Texture.h
-    ${SRC}/TexturePtr.h
-)
-
-src_group(Rendering~Material sources
-    ${SRC}/Shader.cpp
-    ${SRC}/Shader.h
-    ${SRC}/ShaderPtr.h
-    ${SRC}/ShaderType.h
-    ${SRC}/GPUProgram.cpp
-    ${SRC}/GPUProgram.h
-    ${SRC}/GPUProgramPtr.h
-)
-
-src_group(Rendering~RenderTarget sources
-    ${SRC}/RenderTarget.cpp
-    ${SRC}/RenderTarget.h
-    ${SRC}/RenderTargetManager.cpp
-    ${SRC}/RenderTargetManager.h
-)
-
-src_group(Input sources
-    ${SRC}/InputEventHandler.h
-)
-
-src_group(JoyPad sources
-    ${SRC}/joypad/Action.h
-    ${SRC}/joypad/JoyPad.cpp
-    ${SRC}/joypad/JoyPad.h
-    ${SRC}/joypad/RenderInterface.h
-    ${SRC}/joypad/RenderTypes.h
-)
+ucm_add_dirs(plugins/JoyPad/code/maibo TO sources RECURSIVE FILTER_POP 4)
+set(PLUGIN_INCLUDE_DIRS plugins/JoyPad/code)
 
 if(MAIBO_USE_IMGUI)
-    src_group(GUI~ImGui sources
-        ${SRC}/GUI/ImGui/ImGuiManager.cpp
-        ${SRC}/GUI/ImGui/ImGuiManager.h
-    )
+    ucm_add_dirs(plugins/ImGui/code/maibo TO sources RECURSIVE FILTER_POP 4)
+    set(PLUGIN_INCLUDE_DIRS ${PLUGIN_INCLUDE_DIRS} plugins/ImGui/code)
 endif(MAIBO_USE_IMGUI)
 
 # third party libraries
 add_subdirectory(third_party/lib)
 
 include_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}/code
+    ${CMAKE_CURRENT_SOURCE_DIR}/code/common
+    ${CMAKE_CURRENT_SOURCE_DIR}/${PLUGIN_INCLUDE_DIRS}
     ${THIRD_PARTY_INCLUDE_DIRS}
 )
 
@@ -201,10 +127,11 @@ add_library(maibo STATIC
 )
 
 maibo_target_properties(maibo)
-add_precompiled_header(maibo ${SRC}/MaiBo.pch.h ${SRC}/MaiBo.pch.cpp)
+add_precompiled_header(maibo ${SRC}/pch/MaiBo.pch.h ${SRC}/pch/MaiBo.pch.cpp)
 
 set(MAIBO_INCLUDE_DIRS
-    ${CMAKE_CURRENT_SOURCE_DIR}/code
+    ${CMAKE_CURRENT_SOURCE_DIR}/code/common
+    ${CMAKE_CURRENT_SOURCE_DIR}/${PLUGIN_INCLUDE_DIRS}
     ${THIRD_PARTY_INCLUDE_DIRS}
     CACHE STRING "MaiBo include paths"
 )

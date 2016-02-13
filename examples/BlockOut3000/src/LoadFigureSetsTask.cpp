@@ -113,7 +113,7 @@ FigureTemplate* LoadFigureSetsTask::parseFigureTemplate(Lexer& lex)
         else if (token == "c")
         {
             auto c = parseFigureRotationCenter(lex);
-            theFigure->setRotationCenter(c);            
+            theFigure->setRotationCenter(c);
         }
         else if (token == "}")
         {

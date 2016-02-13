@@ -9,6 +9,7 @@
 
 #include <maibo/Application.h>
 #include <maibo/Resources/ResourceManager.h>
+#include <maibo/Assets/FileManager.h>
 
 #include "PlayingState.h"
 #include "MainMenuState.h"
@@ -29,16 +30,18 @@ bool LoadAllState::initialize()
     m_uniformColorFuture = rm.loadGPUProgramAsync("resources/pos.vert", "resources/u_color.frag", true);
     addFuture(m_uniformColorFuture);
 
-    m_figureDataFuture = rm.readFileAsync("resources/figures.dat", true);
+    auto& fm = maibo::FileManager::instance();
+
+    m_figureDataFuture = fm.readFileAsync("resources/figures.dat", true);
     addFuture(m_figureDataFuture);
 
     auto task = new LoadFigureSetsTask(m_figureDataFuture);
     maibo::TaskManager::instance().pushTask(task);
     addFuture(task->future);
 
-    rm.getFileAsync(MainFont_Filename);
-    rm.getFileAsync("resources/gui/main.css");
-    rm.getFileAsync("resources/gui/main.xml");
+    fm.getFileAsync(MainFont_Filename);
+    fm.getFileAsync("resources/gui/main.css");
+    fm.getFileAsync("resources/gui/main.xml");
 
     glClearColor(1, 0.1f, 0.4f, 1);
 

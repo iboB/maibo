@@ -8,7 +8,7 @@
 #pragma once
 
 #include <maibo/Task.h>
-#include <maibo/Resources/ResourceFuture.h>
+#include <maibo/Common/ResourceFuture.h>
 
 // Loads figure sets form a data buffer
 // Saves them to the figure manager

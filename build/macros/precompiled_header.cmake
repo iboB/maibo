@@ -27,7 +27,6 @@ macro(add_precompiled_header TARGET_NAME PRECOMPILED_HEADER PRECOMPILED_SOURCE)
     get_filename_component(PRECOMPILED_HEADER_NAME ${PRECOMPILED_HEADER} NAME)
 
     if(MSVC)
-        get_filename_component(PRECOMPILED_HEADER_INCLUDE ${PRECOMPILED_HEADER} NAME)
         get_filename_component(PRECOMPILED_HEADER_WE ${PRECOMPILED_HEADER} NAME_WE)
         set(PRECOMPILED_BINARY "$(IntDir)/${PRECOMPILED_HEADER_WE}.pch")
 
@@ -49,7 +48,7 @@ macro(add_precompiled_header TARGET_NAME PRECOMPILED_HEADER PRECOMPILED_SOURCE)
                     set_source_files_properties(
                         ${SOURCE_FILE}
                         PROPERTI
-                        COMPILE_FLAGS "/Yu\"${PRECOMPILED_HEADER_NAME}\" /Fp\"${PRECOMPILED_BINARY}\" /FI\"${PRECOMPILED_HEADER_INCLUDE}\""
+                        COMPILE_FLAGS "/Yu\"${PRECOMPILED_HEADER_NAME}\" /Fp\"${PRECOMPILED_BINARY}\" /FI\"${PRECOMPILED_HEADER_NAME}\""
                         OBJECT_DEPENDS "${PRECOMPILED_BINARY}")
                 endif()
             endif()
@@ -66,7 +65,6 @@ macro(add_precompiled_header TARGET_NAME PRECOMPILED_HEADER PRECOMPILED_SOURCE)
             )
     elseif(CMAKE_COMPILER_IS_GNUCC OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
         # Create and set output directory.
-        get_filename_component(PRECOMPILED_HEADER_NAME ${PRECOMPILED_HEADER} NAME)
         set(OUTPUT_DIR "${CMAKE_CURRENT_BINARY_DIR}/${PRECOMPILED_HEADER_NAME}.gch")
         make_directory(${OUTPUT_DIR})
         set(OUTPUT_NAME "${OUTPUT_DIR}/${PRECOMPILED_HEADER_NAME}.gch")

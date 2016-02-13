@@ -7,10 +7,10 @@
 //
 #pragma once
 
-#include <maibo/Resources/ResourceFutureState.h>
+#include <maibo/States/ResourceFutureState.h>
 
 #include <maibo/Rendering/GPUProgramPtr.h>
-#include <maibo/Resources/ResourceFuture.h>
+#include <maibo/Common/ResourceFuture.h>
 
 // game state that loads all resources for the game
 

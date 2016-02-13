@@ -19,7 +19,7 @@ namespace maibo
         Future(Future&&) = delete;
         virtual ~Future() {}
 
-        // Is the looading job done 
+        // Is the looading job done
         // (could be either because the resource is loaded or because of an error)
         bool isDone() const { return m_isDone; }
 

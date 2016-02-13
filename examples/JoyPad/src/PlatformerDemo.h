@@ -7,7 +7,7 @@
 //
 #pragma once
 
-#include <maibo/AppState.h>
+#include <maibo/States/AppState.h>
 
 class PlatformerDemo : public maibo::AppState
 {

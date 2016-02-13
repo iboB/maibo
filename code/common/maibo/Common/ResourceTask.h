@@ -31,7 +31,7 @@ namespace maibo
             {
                 if (!m_dependentFuture->isDone())
                 {
-                    // if there is a getFile async task associated with this one, we must wait for it
+                    // wait for dependent future
                     return false;
                 }
 

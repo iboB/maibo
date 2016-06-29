@@ -5,17 +5,17 @@
 // See accompanying file LICENSE.txt or copy at
 // http://opensource.org/licenses/MIT
 //
-#include "ResourceFutureState.h"
+#include "WaitForFuturesState.h"
 
 using namespace maibo;
 using namespace std;
 
-void ResourceFutureState::addFuture(ConstFuturePtr future)
+void WaitForFuturesState::addFuture(ConstFuturePtr future)
 {
     m_pendingFutures.push_back(future);
 }
 
-void ResourceFutureState::update(uint32_t dt)
+void WaitForFuturesState::update(uint32_t dt)
 {
     if (m_pendingFutures.empty())
         return;
@@ -40,7 +40,7 @@ void ResourceFutureState::update(uint32_t dt)
     }
 }
 
-float ResourceFutureState::calculateProgress() const
+float WaitForFuturesState::calculateProgress() const
 {
     float total = float(m_pendingFutures.size() + m_doneFutures.size());
     float current = float(m_doneFutures.size());

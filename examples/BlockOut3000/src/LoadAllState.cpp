@@ -60,7 +60,7 @@ void LoadAllState::beginFrame()
 
 void LoadAllState::update(uint32_t dt)
 {
-    maibo::ResourceFutureState::update(dt);
+    maibo::WaitForFuturesState::update(dt);
 }
 
 void LoadAllState::render()

@@ -11,11 +11,12 @@
 
 #include "maibo/Common/Future.h"
 
-// base class for states that load a bunch of resources
+// base class for states that wait for the completion of a bunch of futures
+// (typically when loading resources which are needed to continue)
 
 namespace maibo
 {
-    class ResourceFutureState : public AppState
+    class WaitForFuturesState : public AppState
     {
     public:
         virtual void update(uint32_t dt) override;

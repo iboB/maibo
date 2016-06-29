@@ -7,14 +7,14 @@
 //
 #pragma once
 
-#include <maibo/States/ResourceFutureState.h>
+#include <maibo/States/WaitForFuturesState.h>
 
 #include <maibo/Rendering/GPUProgramPtr.h>
 #include <maibo/Common/ResourceFuture.h>
 
 // game state that loads all resources for the game
 
-class LoadAllState : public maibo::ResourceFutureState
+class LoadAllState : public maibo::WaitForFuturesState
 {
     virtual bool initialize() override;
     virtual void deinitialize() override;

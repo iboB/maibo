@@ -1,5 +1,5 @@
-
 vs12x64/
+vs14x64/
 emcc_debug/
 emcc_release/
 makefile_debug/

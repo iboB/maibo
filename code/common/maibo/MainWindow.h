@@ -27,7 +27,7 @@ namespace maibo
             CreationParameters();
 
             const char* title;
-            mathgp::uvector2 clientAreaSize;
+            yama::uvector2 clientAreaSize;
             bool isFullScreen;
         };
 
@@ -37,14 +37,14 @@ namespace maibo
 
         void setTitle(const char* title);
 
-        const mathgp::uvector2& clientAreaSize() const { return m_creationParameters.clientAreaSize; }
+        const yama::uvector2& clientAreaSize() const { return m_creationParameters.clientAreaSize; }
 
         void swapBuffers();
 
         const SDL_SysWMinfo& sdlSysWMInfo() const { return m_sdlSysWMInfo; }
 
         // RenderTarget methods
-        virtual const mathgp::uvector2& surfaseSize() const override { return clientAreaSize(); }
+        virtual const yama::uvector2& surfaseSize() const override { return clientAreaSize(); }
         virtual void activate() override;
 
     protected:

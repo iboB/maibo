@@ -29,8 +29,8 @@ public:
 private:
 
     void readOpenBlock(Lexer& lex);
-    mathgp::ivector3 parseFigureElement(Lexer& lex);
-    mathgp::vector3 parseFigureRotationCenter(Lexer& lex);
+    yama::ivector3 parseFigureElement(Lexer& lex);
+    yama::vector3 parseFigureRotationCenter(Lexer& lex);
     FigureTemplate* parseFigureTemplate(Lexer& lex);
     FigureSet* parseSet(Lexer& lex);
 

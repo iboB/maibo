@@ -81,7 +81,7 @@ set(THIRD_PARTY_INCLUDE_DIRS
     ${platformIncDirs}
     ${IMGUI_INCLUDE_DIR}
     ${LIBROCKET_INCLUDE_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}/mathgp
+    ${CMAKE_CURRENT_SOURCE_DIR}/yama/include
     CACHE STRING "MaiBo third party include paths"
 )
 

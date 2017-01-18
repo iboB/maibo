@@ -7,3 +7,6 @@
 [submodule "third_party/build/ucm"]
 	path = third_party/build/ucm
 	url = https://github.com/onqtam/ucm.git
+[submodule "third_party/lib/yama"]
+	path = third_party/lib/yama
+	url = https://github.com/iboB/yama.git

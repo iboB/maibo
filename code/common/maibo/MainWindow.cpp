@@ -15,7 +15,7 @@ using namespace maibo;
 
 MainWindow::CreationParameters::CreationParameters()
     : title("Main Window")
-    , clientAreaSize(mathgp::v(1024u, 768u))
+    , clientAreaSize(yama::vt(1024u, 768u))
     , isFullScreen(false)
 {
 }
@@ -28,8 +28,8 @@ bool MainWindow::create(const MainWindow::CreationParameters& params)
     SDL_DisplayMode displayMode;
     if (SDL_GetCurrentDisplayMode(0, &displayMode) == 0)
     {
-        m_creationParameters.clientAreaSize.x() = unsigned(displayMode.w);
-        m_creationParameters.clientAreaSize.y() = unsigned(displayMode.h);
+        m_creationParameters.clientAreaSize.x = unsigned(displayMode.w);
+        m_creationParameters.clientAreaSize.y = unsigned(displayMode.h);
     }
 #endif
 
@@ -40,7 +40,7 @@ bool MainWindow::create(const MainWindow::CreationParameters& params)
     m_sdlWindow = SDL_CreateWindow(
         m_creationParameters.title,
         SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-        size.x(), size.y(),
+        size.x, size.y,
         SDL_WINDOW_OPENGL|fullScreen);
 
     if(!m_sdlWindow)

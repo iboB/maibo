@@ -32,8 +32,8 @@ public:
 
     // call only one of those after setting margin and spacing (if any)
     // both will calculate the texture coordinates for all tiles
-    void setTileSize(const mathgp::uvector2& size);
-    void setTilesPerSide(const mathgp::uvector2& tilesPerSide);
+    void setTileSize(const yama::uvector2& size);
+    void setTilesPerSide(const yama::uvector2& tilesPerSide);
 
     // tile indices are interpreted like this
     // 0 1 2 3

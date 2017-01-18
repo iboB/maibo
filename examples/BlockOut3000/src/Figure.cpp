@@ -14,9 +14,9 @@
 #include "Preferences.h"
 #include "Random.h"
 
-#include <mathgp/stdext.h>
+#include <yama/ext/ostream.hpp>
 
-using namespace mathgp;
+using namespace yama;
 using namespace std;
 
 // ms animations last
@@ -32,7 +32,7 @@ Figure::Figure(const FigureTemplate& tmpl, Level& level)
     , m_tryElements(m_template.elements())
     , m_fallTimer(fallTimeForSpeed(level.speed()))
     , m_transform(matrix::identity())
-    , m_currentPosition(vc(0, 0, 0))
+    , m_currentPosition(v(0, 0, 0))
     , m_currentRotation(quaternion::identity())
     , m_lastPosition(vector3::zero())
     , m_targetPosition(m_currentPosition)
@@ -73,7 +73,7 @@ void Figure::update(uint32_t dt)
         if (m_fallTimer <= 0)
         {
             m_fallTimer = fallTimeForSpeed(m_level.speed()) + m_fallTimer;
-            if (!tryMove(vc(0, 0, -1)))
+            if (!tryMove(v(0, 0, -1)))
             {
                 // if figgure cannot move down, it's fallen
                 m_level.adoptFigure(m_elements);
@@ -112,7 +112,7 @@ void Figure::draw() const
     UniformColorMaterial& m = Resources::instance().uniformColorMaterial;
     m.setModel(m_transform);
 
-    m_template.draw(vc(0.9f, 0.5f, 0.5f, 0.1f), vc(1, 1, 1, 1));
+    m_template.draw(v(0.9f, 0.5f, 0.5f, 0.1f), v(1, 1, 1, 1));
 }
 
 bool Figure::tryRotateX(float dir)
@@ -133,9 +133,9 @@ bool Figure::tryRotateZ(float dir)
 bool Figure::tryRotate(int axis, float dir, bool animate /*= true*/, bool force /*= false*/)
 {
     assert(!m_isFallen);
-    static vector3 axes[] = { vc(1, 0, 0), vc(0, 1, 0), vc(0, 0, 1) };
+    static vector3 axes[] = { v(1, 0, 0), v(0, 1, 0), v(0, 0, 1) };
 
-    quaternion rotation = quaternion::rotation_axis(axes[axis], dir * constants<float>::PI_HALF());
+    quaternion rotation = quaternion::rotation_axis(axes[axis], dir * constants::PI_HALF);
 
     // absolute transform for this rotation
     // based on it we will check if the figure can rotate like that
@@ -148,7 +148,7 @@ bool Figure::tryRotate(int axis, float dir, bool animate /*= true*/, bool force 
     for (size_t i = 0; i < m_elements.size(); ++i)
     {
         auto& e = m_elements[i];
-        felems[i] = v(float(e.x()), float(e.y()), float(e.z())) - m_targetPosition + vector3::uniform(0.5f);
+        felems[i] = v(float(e.x), float(e.y), float(e.z)) - m_targetPosition + vector3::uniform(0.5f);
     }
 
     for (auto& e : felems)
@@ -160,7 +160,7 @@ bool Figure::tryRotate(int axis, float dir, bool animate /*= true*/, bool force 
     for (size_t i = 0; i < m_elements.size(); ++i)
     {
         auto& e = felems[i];
-        m_tryElements[i] = v(int(round(e.x())), int(round(e.y())), int(round(e.z())));
+        m_tryElements[i] = vt(int(round(e.x)), int(round(e.y)), int(round(e.z)));
     }
 
     if (!force && !checkTryElementsWithLevel())
@@ -193,7 +193,7 @@ bool Figure::tryMove(const vector3& d, bool animate /*= true*/, bool force /*= f
     assert(!m_isFallen);
     for (size_t i = 0; i < m_elements.size(); ++i)
     {
-        m_tryElements[i] = m_elements[i] + v(int(round(d.x())), int(round(d.y())), int(round(d.z())));
+        m_tryElements[i] = m_elements[i] + vt(int(round(d.x)), int(round(d.y)), int(round(d.z)));
     }
 
     if (!force && !checkTryElementsWithLevel())
@@ -237,23 +237,23 @@ bool Figure::spawn()
     int top = 0;
     for (const auto& e : m_elements)
     {
-        if (e.z() > top)
-            top = e.z();
+        if (e.z > top)
+            top = e.z;
     }
 
-    float targetZ = float(m_level.size().z() - 1 - top);
+    float targetZ = float(m_level.size().z - 1 - top);
 
     // Fit rotation center of figure to center of level
-    auto levelCenter = vc(float(m_level.size().x()), float(m_level.size().y())) / 2;
+    auto levelCenter = v(float(m_level.size().x), float(m_level.size().y)) / 2.f;
 
     auto translation = levelCenter - m_template.rotationCenter().xy();
 
-    return tryMove(vc(round(translation.x()), round(translation.y()), targetZ), false);
+    return tryMove(v(round(translation.x), round(translation.y), targetZ), false);
 }
 
 void Figure::startDrop()
 {
-    tryMove(vc(0, 0, -1));
+    tryMove(v(0, 0, -1));
     m_fallTimer = Preferences::instance().figureDropTime();
     m_isDropped = true;
 }

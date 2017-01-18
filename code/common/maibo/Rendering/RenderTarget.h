@@ -15,7 +15,7 @@ namespace maibo
     {
     public:
         // you need to override this method to get the surface size
-        virtual const mathgp::uvector2& surfaseSize() const = 0;
+        virtual const yama::uvector2& surfaseSize() const = 0;
 
         // you need to call this implementation in your overrides
         // it sets itself as the current render target in the render target manager

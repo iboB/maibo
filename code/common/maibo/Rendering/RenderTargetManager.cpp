@@ -23,7 +23,7 @@ void RenderTargetManager::setScreenRenderTarget(RenderTarget* rt)
     m_screenRenderTarget = rt;
 }
 
-const mathgp::uvector2& RenderTargetManager::currentRenderTargetSize() const
+const yama::uvector2& RenderTargetManager::currentRenderTargetSize() const
 {
     assert(m_currentRenderTarget);
     return m_currentRenderTarget->surfaseSize();

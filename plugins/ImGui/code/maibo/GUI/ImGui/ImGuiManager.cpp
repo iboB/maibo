@@ -20,7 +20,7 @@
 #include <imgui.h>
 
 using namespace std;
-using namespace mathgp;
+using namespace yama;
 using namespace maibo;
 
 namespace
@@ -231,7 +231,7 @@ slot ImGuiManager::update(uint32_t dt)
     auto& io = ImGui::GetIO();
 
     auto screenSize = RenderTargetManager::instance().currentRenderTargetSize();
-    io.DisplaySize = ImVec2(float(screenSize.x()), float(screenSize.y()));
+    io.DisplaySize = ImVec2(float(screenSize.x), float(screenSize.y));
     io.DeltaTime = float(dt) / 1000;
 
     // mouse info

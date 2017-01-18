@@ -19,7 +19,7 @@ bool JoyPadApp::initialize()
     Application::CreationParameters params;
 
     params.desiredFrameTimeMs = 10;
-    params.mainWindowClientAreaSize = mathgp::v(800u, 480u);
+    params.mainWindowClientAreaSize = yama::vt(800u, 480u);
 
     if (!Application::initialize(params))
     {

@@ -13,7 +13,7 @@
 #include "FigureSet.h"
 
 using namespace std;
-using namespace mathgp;
+using namespace yama;
 using namespace maibo;
 
 LoadFigureSetsTask::LoadFigureSetsTask(ConstResourceFuturePtr<std::vector<char>> readFigureSets)
@@ -79,18 +79,18 @@ void LoadFigureSetsTask::readOpenBlock(Lexer& lex)
 ivector3 LoadFigureSetsTask::parseFigureElement(Lexer& lex)
 {
     ivector3 result;
-    result.x() = lex.getInt();
-    result.y() = lex.getInt();
-    result.z() = lex.getInt();
+    result.x = lex.getInt();
+    result.y = lex.getInt();
+    result.z = lex.getInt();
     return result;
 }
 
 vector3 LoadFigureSetsTask::parseFigureRotationCenter(Lexer& lex)
 {
     vector3 result;
-    result.x() = lex.getFloat();
-    result.y() = lex.getFloat();
-    result.z() = lex.getFloat();
+    result.x = lex.getFloat();
+    result.y = lex.getFloat();
+    result.z = lex.getFloat();
     return result;
 }
 

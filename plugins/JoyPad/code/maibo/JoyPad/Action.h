@@ -17,7 +17,7 @@ class Action
 public:
 
 private:
-    mathgp::vector3 m_data;
+    yama::vector3 m_data;
 };
 
 }

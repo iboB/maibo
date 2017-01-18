@@ -10,7 +10,7 @@
 // defines geometric primitives
 
 template <size_t N>
-using Primitive = std::array<mathgp::point3, N>;
+using Primitive = std::array<yama::point3, N>;
 
 typedef Primitive<2> LineSegment;
 typedef Primitive<3> Triangle;
@@ -18,14 +18,14 @@ typedef Primitive<3> Triangle;
 // A class that makes primitives avaialbale as keys for sets of maps
 // Warning! Using this class may be slow
 // In order to compensate for possible primitive winding this class sorts the input primitives
-// It doesn't change them, but it copies them to do the sorting. 
+// It doesn't change them, but it copies them to do the sorting.
 struct PrimitiveStrictWeakOrdering
 {
     template <size_t N>
-    bool operator()(const std::array<mathgp::point3, N>& a, const std::array<mathgp::point3, N>& b) const
+    bool operator()(const std::array<yama::point3, N>& a, const std::array<yama::point3, N>& b) const
     {
         // cannot just compare triangles a-a b-b c-c, because trignales with different windings must match
-        mathgp::strict_ordering o;
+        yama::strict_weak_ordering o;
 
         auto ca = a;
         std::sort(ca.begin(), ca.end(), o);

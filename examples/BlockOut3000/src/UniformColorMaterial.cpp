@@ -23,17 +23,17 @@ void UniformColorMaterial::initialize()
     m_vposAttribute = m_program->getAttributeLocation("v_pos");
 }
 
-void UniformColorMaterial::setProjView(const mathgp::matrix& pv)
+void UniformColorMaterial::setProjView(const yama::matrix& pv)
 {
     m_program->setParameter(m_projViewLocation, pv);
 }
 
-void UniformColorMaterial::setModel(const mathgp::matrix& model)
+void UniformColorMaterial::setModel(const yama::matrix& model)
 {
     m_program->setParameter(m_modelLocation, model);
 }
 
-void UniformColorMaterial::setColor(const mathgp::float4& color)
+void UniformColorMaterial::setColor(const yama::float4& color)
 {
     m_program->setParameter(m_colorLocation, color);
 }

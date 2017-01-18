@@ -27,10 +27,10 @@ struct Sprite
     struct TexCoord
     {
         // ccw order coincinding with vertex coordinates 00 10 01 11
-        mathgp::vector2 _01; // with texcoords equivalent to 01 on a normal texture
-        mathgp::vector2 _11;
-        mathgp::vector2 _00;
-        mathgp::vector2 _10;
+        yama::vector2 _01; // with texcoords equivalent to 01 on a normal texture
+        yama::vector2 _11;
+        yama::vector2 _00;
+        yama::vector2 _10;
 
         // initializes the texturecoordinates to cover a full texture
         void init01();

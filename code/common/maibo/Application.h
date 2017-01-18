@@ -70,7 +70,7 @@ namespace maibo
             // window creation
             bool createMainWindow = true; // will there be a main window?
             const char* mainWindowTitle = "MaiBo App";
-            mathgp::uvector2 mainWindowClientAreaSize = mathgp::v(800u, 600u);
+            yama::uvector2 mainWindowClientAreaSize = yama::vt(800u, 600u);
             bool isFullScreen = false;
 
             bool activateMainWindowAsRenderTarget = true;

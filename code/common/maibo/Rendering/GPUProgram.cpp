@@ -11,7 +11,7 @@
 #include "Texture.h"
 
 using namespace std;
-using namespace mathgp;
+using namespace yama;
 using namespace maibo;
 
 GPUProgram::GPUProgram()
@@ -115,22 +115,22 @@ void GPUProgram::setParameter(GLint handle, float value)
 
 void GPUProgram::setParameter(GLint param, const matrix& matrix)
 {
-    glUniformMatrix4fv(param, 1, false, matrix.as_array());
+    glUniformMatrix4fv(param, 1, false, matrix.as_ptr());
 }
 
 void GPUProgram::setParameter(GLint param, const vector2& vec)
 {
-    glUniform2fv(param, 1, vec.as_array());
+    glUniform2fv(param, 1, vec.as_ptr());
 }
 
 void GPUProgram::setParameter(GLint param, const vector3& vec)
 {
-    glUniform3fv(param, 1, vec.as_array());
+    glUniform3fv(param, 1, vec.as_ptr());
 }
 
 void GPUProgram::setParameter(GLint param, const vector4& vec)
 {
-    glUniform4fv(param, 1, vec.as_array());
+    glUniform4fv(param, 1, vec.as_ptr());
 }
 
 void GPUProgram::setParameter(GLint param, const Texture& tex)

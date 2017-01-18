@@ -9,7 +9,7 @@
 #include "FigureSet.h"
 
 using namespace std;
-using namespace mathgp;
+using namespace yama;
 using namespace maibo;
 
 FigureManager::FigureManager()

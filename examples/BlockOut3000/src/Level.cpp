@@ -13,7 +13,7 @@
 
 #include <maibo/Common/GLSentries.h>
 
-using namespace mathgp;
+using namespace yama;
 using namespace std;
 using namespace maibo;
 
@@ -22,7 +22,7 @@ class LevelLayer
 public:
     LevelLayer(const uvector2& size)
         : m_size(size)
-        , m_data(new bool[size.x() * size.y()])
+        , m_data(new bool[size.x * size.y])
     {
         reset();
         glGenBuffers(1, &m_solidBuffer);
@@ -43,20 +43,20 @@ public:
 
     bool isFull() const
     {
-        return m_numElements == m_size.x() * m_size.y();
+        return m_numElements == m_size.x * m_size.y;
     }
 
     bool at(unsigned x, unsigned y) const
     {
-        assert(x < m_size.x() && y < m_size.y());
-        return m_data[y * m_size.x() + x];
+        assert(x < m_size.x && y < m_size.y);
+        return m_data[y * m_size.x + x];
     }
 
     void setAt(unsigned x, unsigned y)
     {
-        assert(x < m_size.x() && y < m_size.y());
+        assert(x < m_size.x && y < m_size.y);
         assert(!at(x, y));
-        m_data[y * m_size.x() + x] = true;
+        m_data[y * m_size.x + x] = true;
         ++m_numElements;
         m_isDirty = true;
     }
@@ -76,9 +76,9 @@ public:
                 vector<LineSegment> wireSegments;
                 wireSegments.reserve(m_numElements * ct.wireSegments().size());
 
-                for (unsigned y = 0; y < m_size.y(); ++y)
+                for (unsigned y = 0; y < m_size.y; ++y)
                 {
-                    for (unsigned x = 0; x < m_size.x(); ++x)
+                    for (unsigned x = 0; x < m_size.x; ++x)
                     {
                         if (at(x, y))
                         {
@@ -87,7 +87,7 @@ public:
                             {
                                 for (auto& elem : *s)
                                 {
-                                    elem += vc(float(x), float(y), 0);
+                                    elem += v(float(x), float(y), 0);
                                 }
                                 ++s;
                             }
@@ -97,7 +97,7 @@ public:
                             {
                                 for (auto& elem : *w)
                                 {
-                                    elem += vc(float(x), float(y), 0);
+                                    elem += v(float(x), float(y), 0);
                                 }
                                 ++w;
                             }
@@ -150,7 +150,7 @@ public:
     // layer has been erased, to be pushed to the end
     void reset()
     {
-        zero_memory(m_data, m_size.x() * m_size.y());
+        zero_memory(m_data, m_size.x * m_size.y);
         m_isDirty = false;
         m_numElements = 0;
     }
@@ -177,7 +177,7 @@ private:
 
 Level::Level(const uvector3& size)
     : m_size(size)
-    , m_levelLayers(size.z())
+    , m_levelLayers(size.z)
 {
     for (auto& l : m_levelLayers)
     {
@@ -212,18 +212,18 @@ void Level::draw() const
 
         m.setModel(matrix::identity());
 
-        m.setColor(vc(0.066f, 0.066f, 0.15f, 1));
+        m.setColor(v(0.066f, 0.066f, 0.15f, 1));
         m.prepareBuffer(m_solidBuffer, sizeof(vector3), 0);
         glDrawArrays(GL_TRIANGLES, 0, m_numSolidVertices);
 
-        m.setColor(vc(0.13f, 0.30f, 0.15f, 1));
+        m.setColor(v(0.13f, 0.30f, 0.15f, 1));
         m.prepareBuffer(m_wireBuffer, sizeof(vector3), 0);
         glDrawArrays(GL_LINES, 0, m_numWireVertices);
     }
 
     //const auto& ct = CubeTemplate::instance();
     //m.setModel(matrix::translation(1, 1, 8));
-    //m.setColor(vc(1, 0, 1, 1));
+    //m.setColor(v(1, 0, 1, 1));
     //m.prepareBuffer(ct.solidBuffer(), sizeof(vector3), 0);
     //glDrawArrays(GL_TRIANGLES, 0, ct.triangles().size() * 3);
 
@@ -232,65 +232,65 @@ void Level::draw() const
         auto l = m_levelLayers[i];
         if (!l->isEmpty())
         {
-            l->draw(float(i), Preferences::instance().layerColor(i), vc(0, 0, 0, 1));
+            l->draw(float(i), Preferences::instance().layerColor(i), v(0, 0, 0, 1));
         }
     }
 }
 
 void Level::createBuffers()
 {
-    float w = float(m_size.x());
-    float h = float(m_size.y());
-    float d = float(m_size.z());
+    float w = float(m_size.x);
+    float h = float(m_size.y);
+    float d = float(m_size.z);
 
     m_viewTransfrosm = matrix::scaling(2/w, 2/h, 3/d) * matrix::translation(-w/2, -h/2, -d);
 
     point3 solidVertices[] =
     {
         //bottom
-        vc(0, 0, 0),
-        vc(w, 0, 0),
-        vc(w, h, 0),
+        v(0, 0, 0),
+        v(w, 0, 0),
+        v(w, h, 0),
 
-        vc(w, h, 0),
-        vc(0, h, 0),
-        vc(0, 0, 0),
+        v(w, h, 0),
+        v(0, h, 0),
+        v(0, 0, 0),
 
         //south
-        vc(0, 0, 0),
-        vc(0, 0, d),
-        vc(w, 0, 0),
+        v(0, 0, 0),
+        v(0, 0, d),
+        v(w, 0, 0),
 
-        vc(w, 0, 0),
-        vc(0, 0, d),
-        vc(w, 0, d),
+        v(w, 0, 0),
+        v(0, 0, d),
+        v(w, 0, d),
 
         //east
-        vc(w, 0, 0),
-        vc(w, 0, d),
-        vc(w, h, d),
+        v(w, 0, 0),
+        v(w, 0, d),
+        v(w, h, d),
 
-        vc(w, h, d),
-        vc(w, h, 0),
-        vc(w, 0, 0),
+        v(w, h, d),
+        v(w, h, 0),
+        v(w, 0, 0),
 
         // north
-        vc(0, h, 0),
-        vc(w, h, 0),
-        vc(w, h, d),
+        v(0, h, 0),
+        v(w, h, 0),
+        v(w, h, d),
 
-        vc(w, h, d),
-        vc(0, h, d),
-        vc(0, h, 0),
+        v(w, h, d),
+        v(0, h, d),
+        v(0, h, 0),
 
         // west
-        vc(0, 0, 0),
-        vc(0, h, 0),
-        vc(0, 0, d),
+        v(0, 0, 0),
+        v(0, h, 0),
+        v(0, 0, d),
 
-        vc(0, 0, d),
-        vc(0, h, 0),
-        vc(0, h, d),
+        v(0, 0, d),
+        v(0, h, 0),
+        v(0, h, d),
 
     };
 
@@ -300,42 +300,42 @@ void Level::createBuffers()
     m_numSolidVertices = _countof(solidVertices);
 
     vector<point3> wireVertices;
-    wireVertices.reserve(2 * 3 * (m_size.x() + 1) + 2 * 3 * (m_size.y() + 1) + 2 * 4 * (m_size.z() + 1));
+    wireVertices.reserve(2 * 3 * (m_size.x + 1) + 2 * 3 * (m_size.y + 1) + 2 * 4 * (m_size.z + 1));
 
     // concentric squares
-    for (unsigned i = 0; i<m_size.z() + 1; ++i)
+    for (unsigned i = 0; i<m_size.z + 1; ++i)
     {
         float d = float(i);
         wireVertices.insert(wireVertices.end(), {
-            vc(0, 0, d),
-            vc(w, 0, d), vc(w, 0, d),
-            vc(w, h, d), vc(w, h, d),
-            vc(0, h, d), vc(0, h, d),
-            vc(0, 0, d)
+            v(0, 0, d),
+            v(w, 0, d), v(w, 0, d),
+            v(w, h, d), v(w, h, d),
+            v(0, h, d), v(0, h, d),
+            v(0, 0, d)
         });
     }
 
     // vertical U
-    for (unsigned i = 0; i<m_size.x() + 1; ++i)
+    for (unsigned i = 0; i<m_size.x + 1; ++i)
     {
         float w = float(i);
         wireVertices.insert(wireVertices.end(), {
-            vc(w, 0, d),
-            vc(w, 0, 0), vc(w, 0, 0),
-            vc(w, h, 0), vc(w, h, 0),
-            vc(w, h, d)
+            v(w, 0, d),
+            v(w, 0, 0), v(w, 0, 0),
+            v(w, h, 0), v(w, h, 0),
+            v(w, h, d)
         });
     }
 
     // horizontal U
-    for (unsigned i = 0; i<m_size.y() + 1; ++i)
+    for (unsigned i = 0; i<m_size.y + 1; ++i)
     {
         float h = float(i);
         wireVertices.insert(wireVertices.end(), {
-            vc(0, h, d),
-            vc(0, h, 0), vc(0, h, 0),
-            vc(w, h, 0), vc(w, h, 0),
-            vc(w, h, d)
+            v(0, h, d),
+            v(0, h, 0), v(0, h, 0),
+            v(w, h, 0), v(w, h, 0),
+            v(w, h, d)
         });
     }
 
@@ -349,15 +349,15 @@ bool Level::canFitFigure(const vector<ivector3>& elements) const
 {
     for (const auto& e : elements)
     {
-        if (e.x() < 0 || e.x() >= int(m_size.x())
-            || e.y() < 0 || e.y() >= int(m_size.y())
-            || e.z() < 0 || e.z() >= int(m_size.z()))
+        if (e.x < 0 || e.x >= int(m_size.x)
+            || e.y < 0 || e.y >= int(m_size.y)
+            || e.z < 0 || e.z >= int(m_size.z))
         {
             // element is outside of level
             return false;
         }
 
-        if (m_levelLayers[e.z()]->at(e.x(), e.y()))
+        if (m_levelLayers[e.z]->at(e.x, e.y))
         {
             return false;
         }
@@ -370,11 +370,11 @@ void Level::adoptFigure(const vector<ivector3>& elements)
 {
     for (const auto& e : elements)
     {
-        assert(e.x() >= 0 && e.x() < int(m_size.x())
-            && e.y() >= 0 && e.y() < int(m_size.y())
-            && e.z() >= 0 && e.z() < int(m_size.z()));
+        assert(e.x >= 0 && e.x < int(m_size.x)
+            && e.y >= 0 && e.y < int(m_size.y)
+            && e.z >= 0 && e.z < int(m_size.z));
 
-        m_levelLayers[e.z()]->setAt(e.x(), e.y());
+        m_levelLayers[e.z]->setAt(e.x, e.y);
     }
 }
 

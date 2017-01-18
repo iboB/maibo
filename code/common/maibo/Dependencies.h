@@ -56,6 +56,14 @@
 #   include <emscripten.h>
 #endif
 
-#include <mathgp/mathgp.h>
+#include <yama/yama.hpp>
+
+namespace yama
+{
+typedef vector2_t<uint32_t> uvector2;
+typedef vector3_t<uint32_t> uvector3;
+typedef vector4_t<float> float4;
+typedef vector3_t<int32_t> ivector3;
+}
 
 #include "Common/Macros.h"

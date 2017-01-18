@@ -47,10 +47,10 @@ namespace maibo
         uint32_t numBoundAttribs() const { return m_boundAttribPtr; }
 
         void setParameter(GLint handle, float value);
-        void setParameter(GLint handle, const mathgp::vector2& vec);
-        void setParameter(GLint handle, const mathgp::vector3& vec);
-        void setParameter(GLint handle, const mathgp::vector4& vec);
-        void setParameter(GLint handle, const mathgp::matrix& matrix);
+        void setParameter(GLint handle, const yama::vector2& vec);
+        void setParameter(GLint handle, const yama::vector3& vec);
+        void setParameter(GLint handle, const yama::vector4& vec);
+        void setParameter(GLint handle, const yama::matrix& matrix);
 
         void setParameter(GLint handle, const Texture& tex);
 

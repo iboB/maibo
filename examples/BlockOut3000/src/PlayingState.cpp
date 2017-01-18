@@ -21,7 +21,7 @@
 
 // main gameplay state
 
-using namespace mathgp;
+using namespace yama;
 using namespace maibo;
 
 GLuint buffer;
@@ -32,7 +32,7 @@ bool PlayingState::initialize()
 
     glClearColor(0.05f, 0.05f, 0.05f, 1);
 
-    m_level = new Level(v(5u, 5u, 10u));
+    m_level = new Level(vt(5u, 5u, 10u));
     m_level->createBuffers();
 
     m_figureSet = FigureManager::instance().getFigureSet("Extended");
@@ -81,16 +81,16 @@ bool PlayingState::handleEvent(const SDL_Event& event)
                 m_currentFigure->tryRotateZ(-1);
                 return true;
             case SDLK_LEFT:
-                m_currentFigure->tryMove(vc(-1, 0, 0));
+                m_currentFigure->tryMove(v(-1, 0, 0));
                 return true;
             case SDLK_RIGHT:
-                m_currentFigure->tryMove(vc(1, 0, 0));
+                m_currentFigure->tryMove(v(1, 0, 0));
                 return true;
             case SDLK_UP:
-                m_currentFigure->tryMove(vc(0, 1, 0));
+                m_currentFigure->tryMove(v(0, 1, 0));
                 return true;
             case SDLK_DOWN:
-                m_currentFigure->tryMove(vc(0, -1, 0));
+                m_currentFigure->tryMove(v(0, -1, 0));
                 return true;
             case SDLK_SPACE:
                 m_currentFigure->startDrop();
@@ -129,8 +129,8 @@ void PlayingState::render()
     mat.begin();
 
     // Draw main gameplay
-    matrix proj = matrix::perspective_fov_rh(mathgp::constants<float>::PI() / 2, 1, 1, 100);
-    matrix view = matrix::look_towards_rh(vc(0, 0, 1), vc(0, 0, -1), vc(0, 1, 0));
+    matrix proj = matrix::perspective_fov_rh(yama::constants::PI / 2, 1, 1, 100);
+    matrix view = matrix::look_towards_rh(v(0, 0, 1), v(0, 0, -1), v(0, 1, 0));
     matrix projView = proj * view * m_level->viewTransform();
 
     mat.setProjView(projView);
@@ -145,7 +145,7 @@ void PlayingState::render()
 
     glViewport(670, 470, 120, 120);
 
-    view = matrix::look_towards_rh(vc(1, 1, 3.5), vc(0, 0, -1), vc(0, 1, 0));
+    view = matrix::look_towards_rh(v(1, 1, 3.5), v(0, 0, -1), v(0, 1, 0));
     projView = proj * view;
     mat.setProjView(projView);
 

@@ -16,9 +16,9 @@ typedef intptr_t TextureHandle;
 
 struct Vertex
 {
-    mathgp::point3 position;
-    mathgp::point2 texCoord;
-    mathgp::point4 color;
+    yama::point3 position;
+    yama::point2 texCoord;
+    yama::point4 color;
 };
 
 }

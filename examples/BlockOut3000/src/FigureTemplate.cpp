@@ -13,7 +13,7 @@
 #include <maibo/Common/GLSentries.h>
 
 using namespace std;
-using namespace mathgp;
+using namespace yama;
 using namespace maibo;
 
 FigureTemplate::FigureTemplate()
@@ -41,7 +41,7 @@ void FigureTemplate::preparePhysicalData()
     map<Triangle, int, PrimitiveStrictWeakOrdering> allTriangles;
     for(auto ielem : m_elements)
     {
-        point3 elem = vc(float(ielem.x()), float(ielem.y()), float(ielem.z()));
+        point3 elem = v(float(ielem.x), float(ielem.y), float(ielem.z));
 
         for(LineSegment seg : theCube.wireSegments())
         {
@@ -85,7 +85,7 @@ void FigureTemplate::preparePhysicalData()
     //    for(auto triNum : allTriangles)
     //    {
     //        auto tri = triNum.first;
-    //        sort(tri.begin(), tri.end(), mathgp::strict_ordering());
+    //        sort(tri.begin(), tri.end(), yama::strict_ordering());
     //        for(auto point : tri)
     //        {
     //            cout << point << ", ";

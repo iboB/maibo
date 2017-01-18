@@ -26,7 +26,7 @@ namespace maibo
         RenderTarget* currentRenderTarget() { return m_currentRenderTarget; }
 
         // shorthand to get the size without having to include RenderTarget.h
-        const mathgp::uvector2& currentRenderTargetSize() const;
+        const yama::uvector2& currentRenderTargetSize() const;
 
     private:
         friend class RenderTarget;

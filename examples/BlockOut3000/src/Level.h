@@ -16,7 +16,7 @@ class LevelLayer;
 class Level
 {
 public:
-    Level(const mathgp::uvector3& size);
+    Level(const yama::uvector3& size);
     ~Level();
 
     void createBuffers();
@@ -25,13 +25,13 @@ public:
 
     void draw() const;
 
-    const mathgp::uvector3& size() const { return m_size; }
+    const yama::uvector3& size() const { return m_size; }
 
-    const mathgp::matrix& viewTransform() const { return m_viewTransfrosm; }
+    const yama::matrix& viewTransform() const { return m_viewTransfrosm; }
 
-    bool canFitFigure(const std::vector<mathgp::ivector3>& elements) const;
+    bool canFitFigure(const std::vector<yama::ivector3>& elements) const;
 
-    void adoptFigure(const std::vector<mathgp::ivector3>& elements);
+    void adoptFigure(const std::vector<yama::ivector3>& elements);
 
     static const int MAX_SPEED = 10;
     int speed() const { return m_speed; }
@@ -40,9 +40,9 @@ public:
 
 private:
     // logical data
-    const mathgp::uvector3 m_size;
+    const yama::uvector3 m_size;
 
-    //unsigned indexInData(unsigned layer, unsigned row, unsigned col) const { return layer * m_size.x() * m_size.y() + row * m_size.x() + col; }
+    //unsigned indexInData(unsigned layer, unsigned row, unsigned col) const { return layer * m_size.x * m_size.y + row * m_size.x + col; }
     std::vector<LevelLayer*> m_levelLayers;
     uint32_t m_topNonEmptyLayer = 0;
 
@@ -58,5 +58,5 @@ private:
     // we wat the camera to look at 000
     // since the level takes dimensions from 000 to whd
     // we need this matrix to transform it to the appropriate place
-    mathgp::matrix m_viewTransfrosm;
+    yama::matrix m_viewTransfrosm;
 };

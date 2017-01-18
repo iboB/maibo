@@ -14,7 +14,7 @@
 #include <maibo/Common/GLSentries.h>
 
 using namespace std;
-using namespace mathgp;
+using namespace yama;
 using namespace maibo;
 
 LevelLayerPreview::LevelLayerPreview()
@@ -25,90 +25,90 @@ LevelLayerPreview::LevelLayerPreview()
     std::vector<Triangle> solidTriangles = {
         // front
         {
-            vc(0, 0, 0),
-            vc(1, 0, 0),
-            vc(1, 1, 0),
+            v(0, 0, 0),
+            v(1, 0, 0),
+            v(1, 1, 0),
         },
         {
-            vc(1, 1, 0),
-            vc(0, 1, 0),
-            vc(0, 0, 0),
+            v(1, 1, 0),
+            v(0, 1, 0),
+            v(0, 0, 0),
         },
         {
-            vc(1, 0, 0),
-            vc(2, 0, 0),
-            vc(2, 1, 0),
+            v(1, 0, 0),
+            v(2, 0, 0),
+            v(2, 1, 0),
         },
         {
-            vc(2, 1, 0),
-            vc(1, 1, 0),
-            vc(1, 0, 0),
+            v(2, 1, 0),
+            v(1, 1, 0),
+            v(1, 0, 0),
         },
 
 
         // side
         {
-            vc(2, 0, 0),
-            vc(2.5f, 0.5f, 0),
-            vc(2.5f, 1.5f, 0),
+            v(2, 0, 0),
+            v(2.5f, 0.5f, 0),
+            v(2.5f, 1.5f, 0),
         },
         {
-            vc(2.5f, 1.5f, 0),
-            vc(2, 1, 0),
-            vc(2, 0, 0),
+            v(2.5f, 1.5f, 0),
+            v(2, 1, 0),
+            v(2, 0, 0),
         },
         {
-            vc(2.5f, 0.5f, 0),
-            vc(3, 1, 0),
-            vc(3, 2, 0),
+            v(2.5f, 0.5f, 0),
+            v(3, 1, 0),
+            v(3, 2, 0),
         },
         {
-            vc(3, 2, 0),
-            vc(2.5f, 1.5f, 0),
-            vc(2.5f, 0.5f, 0),
+            v(3, 2, 0),
+            v(2.5f, 1.5f, 0),
+            v(2.5f, 0.5f, 0),
         },
 
         // top
         {
-            vc(0, 1, 0),
-            vc(1, 1, 0),
-            vc(1.5f, 1.5f, 0),
+            v(0, 1, 0),
+            v(1, 1, 0),
+            v(1.5f, 1.5f, 0),
         },
         {
-            vc(1.5f, 1.5f, 0),
-            vc(0.5f, 1.5f, 0),
-            vc(0, 1, 0),
+            v(1.5f, 1.5f, 0),
+            v(0.5f, 1.5f, 0),
+            v(0, 1, 0),
         },
         {
-            vc(1, 1, 0),
-            vc(2, 1, 0),
-            vc(2.5f, 1.5f, 0),
+            v(1, 1, 0),
+            v(2, 1, 0),
+            v(2.5f, 1.5f, 0),
         },
         {
-            vc(2.5f, 1.5f, 0),
-            vc(1.5f, 1.5f, 0),
-            vc(1, 1, 0),
+            v(2.5f, 1.5f, 0),
+            v(1.5f, 1.5f, 0),
+            v(1, 1, 0),
         },
 
         {
-            vc(0.5f, 1.5, 0),
-            vc(1.5f, 1.5, 0),
-            vc(2, 2, 0),
+            v(0.5f, 1.5, 0),
+            v(1.5f, 1.5, 0),
+            v(2, 2, 0),
         },
         {
-            vc(2, 2, 0),
-            vc(1, 2, 0),
-            vc(0.5f, 1.5f, 0),
+            v(2, 2, 0),
+            v(1, 2, 0),
+            v(0.5f, 1.5f, 0),
         },
         {
-            vc(1.5f, 1.5f, 0),
-            vc(2.5f, 1.5f, 0),
-            vc(3, 2, 0),
+            v(1.5f, 1.5f, 0),
+            v(2.5f, 1.5f, 0),
+            v(3, 2, 0),
         },
         {
-            vc(3, 2, 0),
-            vc(2, 2, 0),
-            vc(1.5f, 1.5f, 0),
+            v(3, 2, 0),
+            v(2, 2, 0),
+            v(1.5f, 1.5f, 0),
         },
 
     };
@@ -116,60 +116,60 @@ LevelLayerPreview::LevelLayerPreview()
     std::vector<LineSegment> wireSegments = {
         // horizontal
         {
-            vc(0, 0, 0),
-            vc(2, 0, 0)
+            v(0, 0, 0),
+            v(2, 0, 0)
         },
         {
-            vc(0, 1, 0),
-            vc(2, 1, 0)
+            v(0, 1, 0),
+            v(2, 1, 0)
         },
         {
-            vc(0.5f, 1.5f, 0),
-            vc(2.5f, 1.5f, 0)
+            v(0.5f, 1.5f, 0),
+            v(2.5f, 1.5f, 0)
         },
         {
-            vc(1, 2, 0),
-            vc(3, 2, 0)
+            v(1, 2, 0),
+            v(3, 2, 0)
         },
 
         // vertical
         {
-            vc(0, 0, 0),
-            vc(0, 1, 0)
+            v(0, 0, 0),
+            v(0, 1, 0)
         },
         {
-            vc(1, 0, 0),
-            vc(1, 1, 0)
+            v(1, 0, 0),
+            v(1, 1, 0)
         },
         {
-            vc(2, 0, 0),
-            vc(2, 1, 0)
+            v(2, 0, 0),
+            v(2, 1, 0)
         },
         {
-            vc(2.5f, 0.5f, 0),
-            vc(2.5f, 1.5f, 0)
+            v(2.5f, 0.5f, 0),
+            v(2.5f, 1.5f, 0)
         },
         {
-            vc(3, 1, 0),
-            vc(3, 2, 0)
+            v(3, 1, 0),
+            v(3, 2, 0)
         },
 
         // slanted
         {
-            vc(0, 1, 0),
-            vc(1, 2, 0)
+            v(0, 1, 0),
+            v(1, 2, 0)
         },
         {
-            vc(1, 1, 0),
-            vc(2, 2, 0)
+            v(1, 1, 0),
+            v(2, 2, 0)
         },
         {
-            vc(2, 1, 0),
-            vc(3, 2, 0)
+            v(2, 1, 0),
+            v(3, 2, 0)
         },
         {
-            vc(2, 0, 0),
-            vc(3, 1, 0)
+            v(2, 0, 0),
+            v(3, 1, 0)
         },
     };
 
@@ -203,7 +203,7 @@ void LevelLayerPreview::draw(size_t numLayers)
         m.prepareBuffer(m_solidBuffer, sizeof(vector3), 0);
         glDrawArrays(GL_TRIANGLES, 0, m_numSolidVertices);
 
-        m.setColor(vc(0.7f, 0.7f, 0.7f, 1));
+        m.setColor(v(0.7f, 0.7f, 0.7f, 1));
         m.prepareBuffer(m_wireBuffer, sizeof(vector3), 0);
         glDrawArrays(GL_LINES, 0, m_numWireVertices);
     }

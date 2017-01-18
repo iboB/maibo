@@ -15,9 +15,9 @@ class UniformColorMaterial
 {
 public:
 
-    void setProjView(const mathgp::matrix& pv);
-    void setModel(const mathgp::matrix& model);
-    void setColor(const mathgp::float4& color);
+    void setProjView(const yama::matrix& pv);
+    void setModel(const yama::matrix& model);
+    void setColor(const yama::float4& color);
 
     // call these before and after rendering with this material
     void begin();

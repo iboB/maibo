@@ -37,7 +37,7 @@ public:
     // axis is 0=x, 1=y, 2=z
     bool tryRotate(int axis, float dir, bool animate = true, bool force = false);
 
-    bool tryMove(const mathgp::vector3& dir, bool animate = true, bool force = false);
+    bool tryMove(const yama::vector3& dir, bool animate = true, bool force = false);
 
     bool isFallen() const { return m_isFallen; }
 
@@ -63,10 +63,10 @@ private:
     const FigureTemplate& m_template;
     Level& m_level;
 
-    std::vector<mathgp::ivector3> m_elements;
+    std::vector<yama::ivector3> m_elements;
 
     // used when a transformation is performed to check if it's possible on the level
-    std::vector<mathgp::ivector3> m_tryElements;
+    std::vector<yama::ivector3> m_tryElements;
 
     // is figure fallen?
     bool m_isFallen = false;
@@ -83,19 +83,19 @@ private:
 
     // model transformation matrix for drawing the figure
     // it is calculated every frame
-    mathgp::matrix m_transform;
+    yama::matrix m_transform;
 
     // current means including animations
     // m_transform is calculated from these
-    mathgp::point3 m_currentPosition;
-    mathgp::quaternion m_currentRotation;
+    yama::point3 m_currentPosition;
+    yama::quaternion m_currentRotation;
 
     // endpoints for animation
-    mathgp::point3 m_lastPosition;
-    mathgp::point3 m_targetPosition;
+    yama::point3 m_lastPosition;
+    yama::point3 m_targetPosition;
 
-    mathgp::quaternion m_lastRotation;
-    mathgp::quaternion m_targetRotation;
+    yama::quaternion m_lastRotation;
+    yama::quaternion m_targetRotation;
 
     // timers for animation, when they reach 0, current = target
     int m_positionAnimationTimer;

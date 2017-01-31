@@ -74,7 +74,7 @@ endmacro(configure_msvc_user_file)
 #
 macro(maibo_set_c_cxx_flags)
     if(MAIBO_PLATFORM_EMSCRIPTEN)
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -s USE_SDL=2 -s USE_SDL_IMAGE=2 -s PRECISE_F32=1")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -s USE_SDL=2 -s USE_SDL_IMAGE=2 -s PRECISE_F32=1")
         set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -s USE_SDL=2 -s USE_SDL_IMAGE=2 -s PRECISE_F32=1")
 
         set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0 -g4")

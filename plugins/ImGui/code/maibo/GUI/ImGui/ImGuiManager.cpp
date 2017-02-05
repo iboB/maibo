@@ -180,7 +180,7 @@ ImGuiManager::ImGuiManager()
     int width, height;
     io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height);
 
-    m_fontsTexture->loadFromData(GL_RGBA, width, height, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+    m_fontsTexture->loadFromData(width, height, GL_RGBA, pixels);
 
     io.Fonts->TexID = m_fontsTexture.get();
 

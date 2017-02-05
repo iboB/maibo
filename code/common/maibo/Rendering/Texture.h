@@ -19,7 +19,7 @@ namespace maibo
         ~Texture();
 
         bool loadFromFile(const char* filename);
-        void loadFromData(GLint internalFormat, GLsizei width, GLsizei height, GLenum format, GLenum type, const void* data);
+        void loadFromData(GLsizei width, GLsizei height, GLenum format, const void* data);
 
         void setParameter(GLenum, GLint);
 
@@ -30,10 +30,12 @@ namespace maibo
         uint32_t height() const { return m_height; }
 
     private:
-        std::string m_name;
         GLuint m_glHandle;
+        GLuint m_format; // opengl format of the texture
 
         uint32_t m_width;
         uint32_t m_height;
+
+        std::string m_name;
     };
 }

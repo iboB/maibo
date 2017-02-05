@@ -40,7 +40,6 @@ bool Texture::loadFromFile(const char* filename)
         return false;
     }
 
-    GLint internalFormat;
     GLenum glFormat;
 
     auto sdlFormat = image->format->format;
@@ -49,19 +48,16 @@ bool Texture::loadFromFile(const char* filename)
     {
     case SDL_PIXELFORMAT_RGB24:
     case SDL_PIXELFORMAT_RGB888:
-        internalFormat = GL_RGB;
         glFormat = GL_RGB;
         break;
     case SDL_PIXELFORMAT_RGBA8888:
     case SDL_PIXELFORMAT_BGRA8888:
     case SDL_PIXELFORMAT_ARGB8888:
     case SDL_PIXELFORMAT_ABGR8888: // png-s come with this???
-        internalFormat = GL_RGBA;
         glFormat = GL_RGBA;
         break;
     default:
     {
-        internalFormat = GL_RGB;
         glFormat = GL_RGB;
 
         m_width = image->w;
@@ -73,14 +69,14 @@ bool Texture::loadFromFile(const char* filename)
     break;
     }
 
-    loadFromData(internalFormat, image->w, image->h, glFormat, GL_UNSIGNED_BYTE, image->pixels);
+    loadFromData(image->w, image->h, glFormat, image->pixels);
 
     SDL_FreeSurface(image);
 
     return true;
 }
 
-void Texture::loadFromData(GLint internalFormat, GLsizei width, GLsizei height, GLenum format, GLenum type, const void* data)
+void Texture::loadFromData(GLsizei width, GLsizei height, GLenum format, const void* data)
 {
     glBindTexture(GL_TEXTURE_2D, m_glHandle);
     //glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
@@ -90,8 +86,9 @@ void Texture::loadFromData(GLint internalFormat, GLsizei width, GLsizei height, 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format, type, data);
+    glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
 
+    m_format = format;
     m_width = width;
     m_height = height;
 }

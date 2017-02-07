@@ -29,6 +29,8 @@ namespace maibo
         uint32_t width() const { return m_width; }
         uint32_t height() const { return m_height; }
 
+        const std::string& name() const { return m_name; }
+
     private:
         GLuint m_glHandle;
         GLuint m_format; // opengl format of the texture

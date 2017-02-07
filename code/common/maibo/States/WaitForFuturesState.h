@@ -26,12 +26,12 @@ namespace maibo
         // if you remove futures from m_doneFutures, the progress will fluctuate
         float calculateProgress() const;
 
+        // call this to add the future to the pending list
+        void addFuture(ConstFuturePtr future);
+
     protected:
         // called when all futures have been loaded
         virtual void onDone() = 0;
-
-        // call this to add the future to the pending list
-        void addFuture(ConstFuturePtr future);
 
         typedef std::vector<ConstFuturePtr> ResourceFutureBaseVector;
 

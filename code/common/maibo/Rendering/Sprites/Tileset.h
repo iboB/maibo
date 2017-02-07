@@ -21,7 +21,7 @@ class Tileset
 public:
     Tileset();
 
-    const Texture& texture() const { return *m_texture; }
+    ConstTexturePtr texture() const { return m_texture; }
     void setTexture(ConstTexturePtr tex) { m_texture = tex; }
 
     // an optional border around all of the tiles (can be negative)

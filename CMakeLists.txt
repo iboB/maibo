@@ -92,11 +92,11 @@ set(sources)
 ucm_add_dirs(${SRC} TO sources RECURSIVE FILTER_POP 3)
 
 ucm_add_dirs(plugins/JoyPad/code/maibo TO sources RECURSIVE FILTER_POP 4)
-set(PLUGIN_INCLUDE_DIRS plugins/JoyPad/code)
+set(PLUGIN_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/plugins/JoyPad/code)
 
 if(MAIBO_USE_IMGUI)
     ucm_add_dirs(plugins/ImGui/code/maibo TO sources RECURSIVE FILTER_POP 4)
-    set(PLUGIN_INCLUDE_DIRS ${PLUGIN_INCLUDE_DIRS} plugins/ImGui/code)
+    set(PLUGIN_INCLUDE_DIRS ${PLUGIN_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}/plugins/ImGui/code)
 endif(MAIBO_USE_IMGUI)
 
 # third party libraries
@@ -104,7 +104,7 @@ add_subdirectory(third_party/lib)
 
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/code/common
-    ${CMAKE_CURRENT_SOURCE_DIR}/${PLUGIN_INCLUDE_DIRS}
+    ${PLUGIN_INCLUDE_DIRS}
     ${THIRD_PARTY_INCLUDE_DIRS}
 )
 
@@ -131,7 +131,7 @@ add_precompiled_header(maibo ${MAIBO_ROOT_DIR}/${SRC}/pch/MaiBo.pch.h ${MAIBO_RO
 
 set(MAIBO_INCLUDE_DIRS
     ${CMAKE_CURRENT_SOURCE_DIR}/code/common
-    ${CMAKE_CURRENT_SOURCE_DIR}/${PLUGIN_INCLUDE_DIRS}
+    ${PLUGIN_INCLUDE_DIRS}
     ${THIRD_PARTY_INCLUDE_DIRS}
     CACHE STRING "MaiBo include paths"
 )

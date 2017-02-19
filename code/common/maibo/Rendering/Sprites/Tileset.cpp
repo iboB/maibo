@@ -59,8 +59,12 @@ void Tileset::setTileSize(const yama::uvector2& size)
     }
 }
 
-// not implemented yet
-//void Tileset::setTilesPerSide(yama::uvector2& tilesPerSide)
-//{
-//
-//}
+void Tileset::setTilesPerSide(const yama::uvector2& tilesPerSide)
+{
+    uvector2 size = vt(m_texture->width(), m_texture->height());
+    size -= uint32_t(m_spacing) * (tilesPerSide - vt(1u, 1u));
+    size -= uint32_t(m_margin) * tilesPerSide * 2u;
+    size = div(size, tilesPerSide);
+    if (size.product() == 0) return;
+    setTileSize(size);
+}

@@ -36,6 +36,8 @@ namespace maibo
 
         const MainWindow& mainWindow() const { return *m_mainWindow; }
 
+        const std::string& fileName() const { return m_fileName; }
+
     public:
 
         Signal<> OnBeginFrame;
@@ -89,6 +91,9 @@ namespace maibo
         // wireframe rendering
         // not supported on WebGL or GL ES platforms
         bool m_isWireframe = false;
+
+        // filename of the application with full path
+        std::string m_fileName;
 
         //////////////////////////////////////
         // states

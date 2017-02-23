@@ -19,6 +19,13 @@
 #   include <thread>
 #endif
 
+#if defined(_WIN32)
+#   include <Windows.h>
+#elif !defined(MAIBO_PLATFORM_MOBILE) && !defined(__EMSCRIPTEN__)
+#   include <dlfcn.h>
+#endif
+
+
 using namespace maibo;
 using namespace std;
 
@@ -28,6 +35,11 @@ Application::Application()
 
 Application::~Application()
 {
+}
+
+namespace
+{
+void getAddr() {}
 }
 
 bool Application::initialize(const Application::CreationParameters& cp)
@@ -64,6 +76,40 @@ bool Application::initialize(const Application::CreationParameters& cp)
     TaskManager::instance().setNumTasksPerUpdate(cp.numTasksPerUpdate);
 
     m_desiredFrameTime = cp.desiredFrameTimeMs;
+
+#if defined(_WIN32)
+    HMODULE engine;
+    GetModuleHandleExA(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS |
+        GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+        (LPCSTR)getAddr,
+        &engine);
+
+    char path[_MAX_PATH + _MAX_FNAME + 1];
+    GetModuleFileNameA(engine, path, _MAX_PATH + _MAX_FNAME);
+
+    // normalize path
+    char* p = path;
+    while (*p)
+    {
+        if (*p == '\\')
+        {
+            *p = '/';
+        }
+        ++p;
+    }
+
+    m_fileName = path;
+
+#elif !defined(MAIBO_PLATFORM_MOBILE) && !defined(__EMSCRIPTEN__)
+    void* p = reinterpret_cast<void*>(getAddr);
+
+    Dl_info info;
+    dladdr(p, &info);
+
+    m_fileName = info.dli_fname;
+#else
+    // nothing smart to do yet
+#endif
 
     return true;
 }

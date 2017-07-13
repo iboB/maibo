@@ -135,7 +135,7 @@ bool Figure::tryRotate(int axis, float dir, bool animate /*= true*/, bool force 
     assert(!m_isFallen);
     static vector3 axes[] = { v(1, 0, 0), v(0, 1, 0), v(0, 0, 1) };
 
-    quaternion rotation = quaternion::rotation_axis(axes[axis], dir * constants::PI_HALF);
+    quaternion rotation = quaternion::rotation_axis(axes[axis], dir * constants::PI_HALF());
 
     // absolute transform for this rotation
     // based on it we will check if the figure can rotate like that

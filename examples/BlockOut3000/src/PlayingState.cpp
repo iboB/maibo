@@ -129,7 +129,7 @@ void PlayingState::render()
     mat.begin();
 
     // Draw main gameplay
-    matrix proj = matrix::perspective_fov_rh(yama::constants::PI / 2, 1, 1, 100);
+    matrix proj = matrix::perspective_fov_rh(yama::constants::PI() / 2, 1, 1, 100);
     matrix view = matrix::look_towards_rh(v(0, 0, 1), v(0, 0, -1), v(0, 1, 0));
     matrix projView = proj * view * m_level->viewTransform();
 

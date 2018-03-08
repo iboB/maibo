@@ -60,7 +60,8 @@ bool GPUProgram::link()
         }
         else
         {
-            cerr << "unkown errors linking " << m_name;
+            cerr << "unknown errors linking " << m_name << endl;
+            return false;
         }
 
         return false;

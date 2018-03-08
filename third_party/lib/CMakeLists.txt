@@ -46,6 +46,7 @@ if(MSVC)
 elseif(MAIBO_PLATFORM_UNIX)
     set(platformLibs
         SDL2.so
+        SDL2_image
         GL
     )
 elseif(MAIBO_PLATFORM_ANDROID)

@@ -37,6 +37,7 @@ namespace
 
     const char* vertexShaderSource =
         "\
+        #version 100\n\
         uniform mat4 proj; \
         attribute vec2 v_pos; \
         attribute vec2 v_texCoord; \
@@ -53,7 +54,7 @@ namespace
 
     const char* fragmentShaderSource =
         "\
-        #version 100 \n\
+        #version 100\n\
         precision mediump float; \
         uniform sampler2D tex; \
         varying vec2 texCoord; \

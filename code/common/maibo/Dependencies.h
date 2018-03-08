@@ -15,11 +15,11 @@
 // who knows why...
 #if defined(_MSC_VER) || defined(MAIBO_PLATFORM_MOBILE)
 #   include <SDL.h>
+#   include <SDL_image.h>
 #else
 #   include <SDL2/SDL.h>
+#   include <SDL2/SDL_image.h>
 #endif
-
-#include <SDL_image.h>
 
 #if defined(_WIN32)
 #    include <GL/glew.h> //no extensions are available for Windows so use glew

@@ -6,8 +6,8 @@
 // http://opensource.org/licenses/MIT
 //
 #include "FileManager.h"
-#include "maibo/common/ResourceTask.h"
-#include "maibo/common/ResourceFuture.h"
+#include "maibo/Common/ResourceTask.h"
+#include "maibo/Common/ResourceFuture.h"
 #include "maibo/Task.h"
 #include "maibo/TaskManager.h"
 

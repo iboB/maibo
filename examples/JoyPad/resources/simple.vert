@@ -1,3 +1,4 @@
+#version 100
 // position only
 
 uniform mat4 projView; // projection view
